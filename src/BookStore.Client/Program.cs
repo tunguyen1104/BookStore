@@ -1,3 +1,9 @@
+using BookStore.Application.Services;
+using BookStore.Application.Services.Impl;
+using BookStore.Domain.Repositories;
+using BookStore.Infrastructure.Data;
+using BookStore.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 namespace BookStore.Client
 {
     public class Program
@@ -5,6 +11,16 @@ namespace BookStore.Client
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Register IService -> ServiceImpl
+            builder.Services.AddScoped<IService, ServiceImpl>();
+
+            // Register IRepository -> Repository
+            builder.Services.AddScoped<IRepository, Repository>();
+
+            // Change the connection string in appsettings.json to your local sql server
+            builder.Services.AddDbContext<BookStoreDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreConnection")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
