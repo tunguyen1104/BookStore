@@ -2,3 +2,4 @@
 src/BookStore.Infrastructure/obj
 src/BookStore.Domain/obj
 src/*/obj
+src/*/bin
