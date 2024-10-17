@@ -89,6 +89,7 @@ This solution follows **Clean Architecture** principles with an **N-Layered Arch
 
 4. Apply database migrations
     ```bash
+    cd BookStore.Infrastructure
     dotnet ef database update
 
 5. Run the client and admin projects:

@@ -1,6 +1,8 @@
-﻿namespace BookStore.Infrastructure.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BookStore.Infrastructure.Data
 {
-    public class BookStoreDbContext
+    public class BookStoreDbContext : DbContext
     {
     }
 }
