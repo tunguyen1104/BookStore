@@ -17,24 +17,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="hero__categories">
-                        <div class="hero__categories__all">
-                            <i class="fa fa-bars"></i>
-                            <span>Browse categories</span>
-                        </div>
-                        <ul>
-                            <li><a href="#">Fiction</a></li>
-                            <li><a href="#">Fantasy</a></li>
-                            <li><a href="#">Mystery</a></li>
-                            <li><a href="#">Biography</a></li>
-                            <li><a href="#">History</a></li>
-                            <li><a href="#">Self-Help</a></li>
-                            <li><a href="#">Romance</a></li>
-                            <li><a href="#">Children's Books</a></li>
-                            <li><a href="#">Graphic Novels</a></li>
-                        </ul>
-                    </div>
-
+                    @await Component.InvokeAsync("Categories")
                 </div>
                 <div class="col-lg-9">
                     @await Html.PartialAsync("_Search")
