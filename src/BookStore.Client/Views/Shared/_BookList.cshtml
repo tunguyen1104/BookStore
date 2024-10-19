@@ -1,8 +1,8 @@
-﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+﻿@model BookStore.Domain.Entities.Book
 <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
     <div class="featured__item">
         <div class="featured__item__pic set-bg"
-             data-setbg="img/featured/attack-on-titan.jpg">
+             data-setbg="@Url.Content(Model.Image)">
             <ul class="featured__item__pic__hover">
                 <li>
                     <a href="#"><i class="fa fa-shopping-cart"></i></a>
@@ -11,15 +11,14 @@
         </div>
         <div class="featured__item__text">
             <h6>
-                <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id=1>
-                    Combo Sách Giáo Trình Chuẩn HSK 1 - Sách Bài Học Và Bài Tập (Bộ
-                    2 Cuốn)
+                <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@Model.Id">
+                    @Model.Name
                 </a>
             </h6>
             <div class="inner-price">
-                <h5>$24.00</h5>
-                <span>$30.00</span>
-                <div class="discount">-22%</div>
+                <h5>@((Model.Price * (1 - @Model.Discount / 100)).ToString("C2"))</h5>
+                <span>@Model.Price.ToString("C2")</span>
+                <div class="discount">@Model.Discount</div>
             </div>
         </div>
     </div>

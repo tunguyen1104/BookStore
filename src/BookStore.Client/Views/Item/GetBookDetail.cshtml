@@ -26,7 +26,7 @@
                     </div>
                     <div class="featured__item__text">
                         <div class="inner-price">
-                            <h5>@(Model.Price * (1 - @Model.Discount / 100)).ToString("C2")</h5>
+                            <h5>@((Model.Price * (1 - @Model.Discount / 100)).ToString("C2"))</h5>
                             <span>@Model.Price.ToString("C2")</span>
                             <div class="discount">@Model.Discount</div>
                         </div>
