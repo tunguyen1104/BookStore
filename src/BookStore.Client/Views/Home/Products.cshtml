@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+@{
     ViewData["Title"] = "Products";
 }
 <section class="product spad">
@@ -146,24 +147,24 @@
                         <input class="form-check-input"
                                type="checkbox"
                                id="manufacturer-1"
-                               value="manufacturer-a" />
-                        <label class="form-check-label" for="manufacturer-1">Manufacturer A</label>
+                               value="kim-dong" />
+                        <label class="form-check-label" for="manufacturer-1">Kim Dong</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="checkbox"
                                id="manufacturer-2"
-                               value="manufacturer-b" />
-                        <label class="form-check-label" for="manufacturer-2">Manufacturer B</label>
+                               value="nha-nam" />
+                        <label class="form-check-label" for="manufacturer-2">Nha Nam</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="checkbox"
                                id="manufacturer-3"
-                               value="manufacturer-c" />
-                        <label class="form-check-label" for="manufacturer-3">Manufacturer C</label>
+                               value="nxb-tre" />
+                        <label class="form-check-label" for="manufacturer-3">NXB Tre</label>
                     </div>
                 </div>
                 <div class="sidebar" style="margin-top: 50px">
@@ -316,6 +317,31 @@
                                     </div>
                                 </div>
                             </div>
+                            @foreach (var item in Model)
+                            {
+                                <div class="product__item">
+                                    <div class="featured__item__pic set-bg"
+                                         data-setbg="@Url.Content(item.Image)">
+                                        <ul class="product__item__pic__hover">
+                                            <li>
+                                                <a href="#"><i class="fa fa-shopping-cart"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h6>
+                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@item.Id">
+                                                @item.Name
+                                            </a>
+                                        </h6>
+                                        <div class="inner-price">
+                                            <h5>@((item.Price * (1 - @item.Discount / 100)).ToString("C2"))</h5>
+                                            <span>@item.Price.ToString("C2")</span>
+                                            <div class="discount">@item.Discount</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="product__pagination">
