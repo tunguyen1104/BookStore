@@ -5,7 +5,7 @@
 }
 .inner-price h5 {
     font-size: 18px;
-    color: #333;
+    color: #28a745;
     margin: 0;
 }
 
@@ -49,4 +49,17 @@
 
 .product__item:hover {
     box-shadow: 0 0 5px #ccc;
+}
+
+.product__details__text {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+}
+.product__item__text {
+    font-family: Arial, sans-serif;
 }
