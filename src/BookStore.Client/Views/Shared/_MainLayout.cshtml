@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Store</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    @await Html.PartialAsync("_Styles")
+</head>
+<body>
+    <style>
+        .hero {
+            padding-bottom: 0px;
+        }
+    </style>
+    @await Html.PartialAsync("_Header")
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    @await Component.InvokeAsync("Categories")
+                </div>
+                <div class="col-lg-9">
+                    @await Html.PartialAsync("_Search")
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container"><h2>@ViewData["Title"]</h2></div>
+    
+    <!-- Hero Section End -->
+    @RenderBody()
+
+    @await Html.PartialAsync("_Footer")
+
+    @await Html.PartialAsync("_Scripts")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
