@@ -14,8 +14,7 @@ namespace BookStore.Client
             var builder = WebApplication.CreateBuilder(args);
 
             // Register IService -> ServiceImpl
-            builder.Services.AddScoped<IService<Book>, ServiceImpl<Book>>();
-
+            builder.Services.AddScoped(typeof(IService<>), typeof(ServiceImpl<>));
             // Register IRepository -> Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

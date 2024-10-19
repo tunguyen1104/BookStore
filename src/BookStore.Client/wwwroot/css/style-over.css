@@ -63,3 +63,6 @@
 .product__item__text {
     font-family: Arial, sans-serif;
 }
+.hero__categories ul li a:hover {
+    color: #7fad39;
+}
