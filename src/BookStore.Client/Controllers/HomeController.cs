@@ -15,12 +15,16 @@ namespace BookStore.Client.Controllers
             _bookService = bookService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var books = await _bookService.GetAllAsync();
             return View(books);
         }
-
+        public async Task<IActionResult> Products()
+        {
+            IEnumerable<Book> books = await _bookService.GetAllAsync();
+            return View(books);
+        }
         public IActionResult Privacy()
         {
             return View();
