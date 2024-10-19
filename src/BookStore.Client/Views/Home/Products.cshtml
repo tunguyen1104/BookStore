@@ -1,0 +1,331 @@
+﻿@{
+    ViewData["Title"] = "Products";
+}
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-5">
+                <div id="priceFilter">
+                    <div class="mb-2"><b>Price</b></div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="price-2"
+                               value="under-150" />
+                        <label class="form-check-label" for="price-2">0đ - 150.000đ</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="price-3"
+                               value="150-to-300" />
+                        <label class="form-check-label" for="price-3">150.000đ - 300.000đ</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="price-4"
+                               value="300-to-500" />
+                        <label class="form-check-label" for="price-4">300đ - 500đ</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="price-5"
+                               value="over-500" />
+                        <label class="form-check-label" for="price-5">Over 500đ</label>
+                    </div>
+                </div>
+
+                <div id="genreFilter">
+                    <div class="mb-2"><b>Genre</b></div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-1"
+                               value="fiction" />
+                        <label class="form-check-label" for="genre-1">Fiction</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-2"
+                               value="non-fiction" />
+                        <label class="form-check-label" for="genre-2">Non-fiction</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-3"
+                               value="fantasy" />
+                        <label class="form-check-label" for="genre-3">Fantasy</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-4"
+                               value="science-fiction" />
+                        <label class="form-check-label" for="genre-4">Science Fiction</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-5"
+                               value="mystery" />
+                        <label class="form-check-label" for="genre-5">Mystery</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-6"
+                               value="romance" />
+                        <label class="form-check-label" for="genre-6">Romance</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-7"
+                               value="thriller" />
+                        <label class="form-check-label" for="genre-7">Thriller</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-8"
+                               value="horror" />
+                        <label class="form-check-label" for="genre-8">Horror</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-9"
+                               value="biography" />
+                        <label class="form-check-label" for="genre-9">Biography</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-10"
+                               value="self-help" />
+                        <label class="form-check-label" for="genre-10">Self-help</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-11"
+                               value="historical" />
+                        <label class="form-check-label" for="genre-11">Historical</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="genre-12"
+                               value="poetry" />
+                        <label class="form-check-label" for="genre-12">Poetry</label>
+                    </div>
+                </div>
+
+                <div id="manufacturerFilter">
+                    <div class="mb-2"><b>Manufacturer</b></div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="manufacturer-1"
+                               value="manufacturer-a" />
+                        <label class="form-check-label" for="manufacturer-1">Manufacturer A</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="manufacturer-2"
+                               value="manufacturer-b" />
+                        <label class="form-check-label" for="manufacturer-2">Manufacturer B</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="manufacturer-3"
+                               value="manufacturer-c" />
+                        <label class="form-check-label" for="manufacturer-3">Manufacturer C</label>
+                    </div>
+                </div>
+                <div class="sidebar" style="margin-top: 50px">
+                    <div class="sidebar__item">
+                        <div class="latest-product__text">
+                            <h4>New Products</h4>
+                            <div class="latest-product__slider owl-carousel">
+                                <div class="latest-prdouct__slider__item">
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="latest-prdouct__slider__item">
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6>Crab Pool Security</h6>
+                                            <span>$30.00</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-7">
+                <div class="filter__item">
+                    <div class="section-title product__discount__title">
+                        <div class="filter-ajax">
+                            <div class="filter-text-header" style="display: block">
+                                Filter by:
+                            </div>
+
+                            <ol id="dislay_fillter_current" style="flex: 2;">
+                                <li>
+                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
+                                       title="delete"
+                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
+                                </li>
+                                <li>
+                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
+                                       title="delete"
+                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
+                                </li>
+                                <li>
+                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
+                                       title="delete"
+                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
+                                </li>
+                                <li>
+                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
+                                       title="delete"
+                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
+                                </li>
+                                <li>
+                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
+                                       title="delete"
+                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
+                                </li>
+                            </ol>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Sort By</span>
+                                    <select>
+                                        <option value="0">ASC</option>
+                                        <option value="0">DESC</option>
+                                        <option value="0">DEFAULT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>16</span> Products found</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg"
+                                     data-setbg="../img/featured/attack-on-titan.webp">
+                                    <ul class="product__item__pic__hover">
+                                        <li>
+                                            <a href="#"><i class="fa fa-shopping-cart"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>
+                                        <a asp-controller="Item"
+                                           asp-action="GetBookDetail"
+                                           asp-route-id="1">
+                                            Combo Sách Giáo Trình Chuẩn HSK 1 - Sách Bài Học Và Bài
+                                            Tập (Bộ 2 Cuốn)
+                                        </a>
+                                    </h6>
+                                    <div class="inner-price">
+                                        <h5>$24.00</h5>
+                                        <span>$30.00</span>
+                                        <div class="discount">-22%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product__pagination">
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
