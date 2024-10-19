@@ -7,17 +7,17 @@ namespace BookStore.Client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IService<Book> _service;
+        private readonly IService<Book> _bookService;
 
-        public HomeController(ILogger<HomeController> logger, IService<Book> service)
+        public HomeController(ILogger<HomeController> logger, IService<Book> bookService)
         {
             _logger = logger;
-            _service = service;
+            _bookService = bookService;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var books = await _service.GetAllAsync();
+            var books = await _bookService.GetAllAsync();
             return View(books);
         }
 
