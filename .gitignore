@@ -4,3 +4,6 @@ src/BookStore.Domain/obj
 src/*/obj
 src/*/bin
 appsettings.json
+src/BookStore.Client/appsettings.json
+src/BookStore.Admin/appsettings.json
+src/BookStore.Client/appsettings.json
