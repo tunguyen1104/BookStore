@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.Services;
+using BookStore.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Client.Controllers
@@ -6,17 +7,18 @@ namespace BookStore.Client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IService _service;
+        private readonly IService<Book> _service;
 
-        public HomeController(ILogger<HomeController> logger, IService service)
+        public HomeController(ILogger<HomeController> logger, IService<Book> service)
         {
             _logger = logger;
             _service = service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var books = await _service.GetAllAsync();
+            return View(books);
         }
 
         public IActionResult Privacy()

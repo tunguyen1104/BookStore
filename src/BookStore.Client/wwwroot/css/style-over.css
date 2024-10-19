@@ -1,0 +1,52 @@
+﻿.inner-price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.inner-price h5 {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+}
+
+.inner-price span {
+    font-size: 0.9em;
+    font-weight: 400;
+    text-decoration: line-through;
+}
+
+.inner-price .discount {
+    padding: 2px 4px;
+    border-radius: 4px;
+    background-color: #C92127;
+    color: #fff;
+}
+.mix.vegetables.fastfood:hover {
+    box-shadow: 0 0 5px #ccc;
+}
+.mix.vegetables.fastfood {
+    margin-bottom: 20px;
+    max-width: 22%;
+}
+.hero__categories {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 95%;
+}
+
+.hero__text {
+    margin-left: 500px;
+}
+.hero__categories ul {
+    display: none;
+}
+.product__item {
+    margin-bottom: 20px;
+    max-width: 95%;
+    padding: 0px 20px 10px 20px;
+}
+
+.product__item:hover {
+    box-shadow: 0 0 5px #ccc;
+}
