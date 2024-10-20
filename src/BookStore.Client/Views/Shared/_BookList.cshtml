@@ -1,24 +1,24 @@
 ﻿@model BookStore.Domain.Entities.Book
-<div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
-    <div class="featured__item">
-        <div class="featured__item__pic set-bg"
-             data-setbg="@Url.Content(Model.Image)">
-            <ul class="featured__item__pic__hover">
+<div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="product__item">
+        <div class="product__item__pic set-bg"
+             data-setbg="@Url.Content("~/img/product/" + Model.Image)">
+            <ul class="product__item__pic__hover">
                 <li>
                     <a href="#"><i class="fa fa-shopping-cart"></i></a>
                 </li>
             </ul>
         </div>
-        <div class="featured__item__text">
+        <div class="product__item__text">
             <h6>
                 <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@Model.Id">
                     @Model.Name
                 </a>
             </h6>
             <div class="inner-price">
-                <h5>@((Model.Price * (1 - @Model.Discount / 100)).ToString("C2"))</h5>
+                <h5>@((Model.Price * (1 - Model.Discount / 100)).ToString("C2"))</h5>
                 <span>@Model.Price.ToString("C2")</span>
-                <div class="discount">@Model.Discount</div>
+                <div class="discount">@Model.Discount%</div>
             </div>
         </div>
     </div>

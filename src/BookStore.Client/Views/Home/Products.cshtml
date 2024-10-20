@@ -291,37 +291,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-6">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg"
-                                     data-setbg="../img/featured/attack-on-titan.webp">
-                                    <ul class="product__item__pic__hover">
-                                        <li>
-                                            <a href="#"><i class="fa fa-shopping-cart"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6>
-                                        <a asp-controller="Item"
-                                           asp-action="GetBookDetail"
-                                           asp-route-id="1">
-                                            Combo Sách Giáo Trình Chuẩn HSK 1 - Sách Bài Học Và Bài
-                                            Tập (Bộ 2 Cuốn)
-                                        </a>
-                                    </h6>
-                                    <div class="inner-price">
-                                        <h5>$24.00</h5>
-                                        <span>$30.00</span>
-                                        <div class="discount">-22%</div>
-                                    </div>
-                                </div>
-                            </div>
-                            @foreach (var item in Model)
-                            {
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                            
                                 <div class="product__item">
                                     <div class="featured__item__pic set-bg"
-                                         data-setbg="@Url.Content(item.Image)">
+                                         data-setbg="@Url.Content("~/img/product/" + item.Image)">
                                         <ul class="product__item__pic__hover">
                                             <li>
                                                 <a href="#"><i class="fa fa-shopping-cart"></i></a>
@@ -335,14 +311,14 @@
                                             </a>
                                         </h6>
                                         <div class="inner-price">
-                                            <h5>@((item.Price * (1 - @item.Discount / 100)).ToString("C2"))</h5>
+                                            <h5>@((item.Price * (1 - item.Discount / 100)).ToString("C2"))</h5>
                                             <span>@item.Price.ToString("C2")</span>
-                                            <div class="discount">@item.Discount</div>
+                                            <div class="discount">@item.Discount%</div>
                                         </div>
                                     </div>
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                     <div class="product__pagination">
                         <a href="#">1</a>
