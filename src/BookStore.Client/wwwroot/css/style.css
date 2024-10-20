@@ -1876,7 +1876,7 @@ ol {
 -----------------------*/
 
 .shoping-cart {
-	padding-top: 80px;
+	padding-top: 32px;
 	padding-bottom: 80px;
 }
 
@@ -1971,9 +1971,7 @@ ol {
 }
 
 .primary-btn.cart-btn {
-	color: #6f6f6f;
 	padding: 14px 30px 12px;
-	background: #f5f5f5;
 }
 
 .primary-btn.cart-btn span {
