@@ -1,4 +1,6 @@
+using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
+using BookStore.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Admin
@@ -14,6 +16,7 @@ namespace BookStore.Admin
 
             // Register IRepository -> RepositoryImpl
             //builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             // Change the connection string in appsettings.json to your local sql server
             builder.Services.AddDbContext<BookStoreDbContext>(options =>
