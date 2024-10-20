@@ -12,14 +12,14 @@ namespace BookStore.Client.Controllers
         {
             _bookService = bookService;
         }
-        public async Task<IActionResult> GetBookDetail(long bookId)
+        public async Task<IActionResult> GetBookDetail(long id)
         {
-            Book book = await _bookService.GetByIdAsync(bookId);
+            Book book = await _bookService.GetByIdAsync(id);
 
-            /*if (book == null)
+            if (book == null)
             {
                 return NotFound("Book not found.");
-            }*/
+            }
 
             return View(book);
         }
