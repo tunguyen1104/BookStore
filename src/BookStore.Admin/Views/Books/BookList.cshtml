@@ -16,19 +16,21 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Book List</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="bookTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Id</th>
                             <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Sold</th>
+                            <th>Factory</th>
+                            <th>Image</th>
                         </tr>
                     </thead>
                    
@@ -38,10 +40,41 @@
     </div>
 </div>
 <!-- /.container-fluid -->
-<script>
-    $(document).ready(() => {
-        $('#bookTable').DataTable({
-
-        })
-    })
-</script>
+@section Scripts{
+    @await Html.PartialAsync("_Scripts")
+    <script>
+        $(document).ready(() => {
+            $('#bookTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "searching": true,            // Enable global search
+                "paging": true,               // Enable pagination
+                "pageLength": 10,             // Default page size
+                "lengthMenu": [5, 10, 25, 50], // Options for changing page size
+                "ajax": {
+                    "url": '@Url.Action("GetProducts", "Books")',  // Make sure this matches your action and controller
+                    "type": "GET",
+                    "data": function (d) {
+                        // You can add extra parameters here to send to the server if needed
+                    }
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "author" },
+                    { "data": "price", "render": $.fn.dataTable.render.number(',', '.', 2, '$') }, // Formatting price
+                    { "data": "quantity" },
+                    { "data": "sold" },
+                    { "data": "factory" },
+                    {
+                        "data": "image",
+                        "render": function (data, type, row) {
+                            return '<img src="' + data + '" alt="Book Image" style="width:50px;height:50px;"/>';
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]] // Order by the first column (Id) ascending by default
+            });
+        });
+    </script>
+}

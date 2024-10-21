@@ -40,5 +40,10 @@ namespace BookStore.Infrastructure.Repositories
         {
             _context.Set<T>().Remove(entity);
         }
+
+        public IQueryable<T> GetAll()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
     }
 }

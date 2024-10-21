@@ -2,7 +2,7 @@
 {
     public class BookDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
 
         public string DetailDesc { get; set; } = null!;
@@ -21,6 +21,5 @@
 
         public string Factory { get; set; } = null!;
 
-        public decimal Discount { get; set; }
     }
 }
