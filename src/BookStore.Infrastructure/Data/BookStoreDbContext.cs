@@ -12,6 +12,7 @@ namespace BookStore.Infrastructure.Data
         {
             _configuration = configuration;
         }
+
         public virtual DbSet<Book> Books { get; set; }
 
         public virtual DbSet<Cart> Carts { get; set; }
@@ -19,10 +20,6 @@ namespace BookStore.Infrastructure.Data
         public virtual DbSet<CartDetail> CartDetails { get; set; }
 
         public virtual DbSet<Category> Categories { get; set; }
-
-        public virtual DbSet<Customer> Customers { get; set; }
-
-        public virtual DbSet<Employee> Employees { get; set; }
 
         public virtual DbSet<Order> Orders { get; set; }
 
@@ -50,7 +47,7 @@ namespace BookStore.Infrastructure.Data
         {
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__books__3213E83FB46B716A");
+                entity.HasKey(e => e.Id).HasName("PK__books__3213E83F4C89C83B");
 
                 entity.ToTable("books");
 
@@ -95,14 +92,14 @@ namespace BookStore.Infrastructure.Data
                         r => r.HasOne<Category>().WithMany()
                             .HasForeignKey("CategoryId")
                             .OnDelete(DeleteBehavior.ClientSetNull)
-                            .HasConstraintName("FK__book_cate__categ__6E01572D"),
+                            .HasConstraintName("FK__book_cate__categ__6477ECF3"),
                         l => l.HasOne<Book>().WithMany()
                             .HasForeignKey("BookId")
                             .OnDelete(DeleteBehavior.ClientSetNull)
-                            .HasConstraintName("FK__book_cate__book___6D0D32F4"),
+                            .HasConstraintName("FK__book_cate__book___6383C8BA"),
                         j =>
                         {
-                            j.HasKey("BookId", "CategoryId").HasName("PK__book_cat__1459F47AF53B586B");
+                            j.HasKey("BookId", "CategoryId").HasName("PK__book_cat__1459F47AB0EFE0DB");
                             j.ToTable("book_categories");
                             j.IndexerProperty<long>("BookId").HasColumnName("book_id");
                             j.IndexerProperty<long>("CategoryId").HasColumnName("category_id");
@@ -111,7 +108,7 @@ namespace BookStore.Infrastructure.Data
 
             modelBuilder.Entity<Cart>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__carts__3213E83F78ED2A57");
+                entity.HasKey(e => e.Id).HasName("PK__carts__3213E83F79F76684");
 
                 entity.ToTable("carts");
 
@@ -122,12 +119,12 @@ namespace BookStore.Infrastructure.Data
                 entity.HasOne(d => d.User).WithMany(p => p.Carts)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__carts__user_id__5EBF139D");
+                    .HasConstraintName("FK__carts__user_id__5535A963");
             });
 
             modelBuilder.Entity<CartDetail>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__cart_det__3213E83F6409673C");
+                entity.HasKey(e => e.Id).HasName("PK__cart_det__3213E83F9AEF95B3");
 
                 entity.ToTable("cart_detail");
 
@@ -142,17 +139,17 @@ namespace BookStore.Infrastructure.Data
                 entity.HasOne(d => d.Book).WithMany(p => p.CartDetails)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__cart_deta__book___628FA481");
+                    .HasConstraintName("FK__cart_deta__book___59063A47");
 
                 entity.HasOne(d => d.Cart).WithMany(p => p.CartDetails)
                     .HasForeignKey(d => d.CartId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__cart_deta__cart___619B8048");
+                    .HasConstraintName("FK__cart_deta__cart___5812160E");
             });
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__categori__3213E83FE423EA6F");
+                entity.HasKey(e => e.Id).HasName("PK__categori__3213E83F7AC34821");
 
                 entity.ToTable("categories");
 
@@ -167,86 +164,30 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK__customer__3213E83FA96F4118");
-
-                entity.ToTable("customers");
-
-                entity.HasIndex(e => e.UserId, "UQ__customer__B9BE370E06240819").IsUnique();
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-                entity.Property(e => e.Points)
-                    .HasDefaultValue(0L)
-                    .HasColumnName("points");
-                entity.Property(e => e.UserId).HasColumnName("user_id");
-
-                entity.HasOne(d => d.User).WithOne(p => p.Customer)
-                    .HasForeignKey<Customer>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__customers__user___5070F446");
-            });
-
-            modelBuilder.Entity<Employee>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK__employee__3213E83F96F2727D");
-
-                entity.ToTable("employees");
-
-                entity.HasIndex(e => e.UserId, "UQ__employee__B9BE370EE42C34DB").IsUnique();
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-                entity.Property(e => e.BirthDate).HasColumnName("birth_date");
-                entity.Property(e => e.Gender)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("gender");
-                entity.Property(e => e.Position)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("position");
-                entity.Property(e => e.UserId).HasColumnName("user_id");
-
-                entity.HasOne(d => d.User).WithOne(p => p.Employee)
-                    .HasForeignKey<Employee>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__employees__user___5441852A");
-            });
-
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FF633A05F");
+                entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FBB119652");
 
                 entity.ToTable("orders");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.CustomerId).HasColumnName("customer_id");
-                entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
                 entity.Property(e => e.OrderDate)
                     .HasDefaultValueSql("(getdate())")
                     .HasColumnName("order_date");
                 entity.Property(e => e.TotalPrice)
                     .HasColumnType("decimal(10, 2)")
                     .HasColumnName("total_price");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
 
-                entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustomerId)
+                entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__orders__customer__5AEE82B9");
-
-                entity.HasOne(d => d.Employee).WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__orders__employee__5BE2A6F2");
+                    .HasConstraintName("FK__orders__user_id__52593CB8");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__order_de__3213E83F8211B8D1");
+                entity.HasKey(e => e.Id).HasName("PK__order_de__3213E83F013C6BDF");
 
                 entity.ToTable("order_detail");
 
@@ -261,17 +202,17 @@ namespace BookStore.Infrastructure.Data
                 entity.HasOne(d => d.Book).WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__order_det__book___66603565");
+                    .HasConstraintName("FK__order_det__book___5CD6CB2B");
 
                 entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__order_det__order__656C112C");
+                    .HasConstraintName("FK__order_det__order__5BE2A6F2");
             });
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__roles__3213E83F29EBD87B");
+                entity.HasKey(e => e.Id).HasName("PK__roles__3213E83F593785AB");
 
                 entity.ToTable("roles");
 
@@ -290,12 +231,11 @@ namespace BookStore.Infrastructure.Data
 
             modelBuilder.Entity<StockImport>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__stock_im__3213E83F2D75BE0C");
+                entity.HasKey(e => e.Id).HasName("PK__stock_im__3213E83FE6AFC046");
 
                 entity.ToTable("stock_imports");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
                 entity.Property(e => e.ImportDate)
                     .HasDefaultValueSql("(getdate())")
                     .HasColumnName("import_date");
@@ -304,20 +244,15 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnType("decimal(10, 2)")
                     .HasColumnName("total_cost");
 
-                entity.HasOne(d => d.Employee).WithMany(p => p.StockImports)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__stock_imp__emplo__72C60C4A");
-
                 entity.HasOne(d => d.Supplier).WithMany(p => p.StockImports)
                     .HasForeignKey(d => d.SupplierId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__stock_imp__suppl__71D1E811");
+                    .HasConstraintName("FK__stock_imp__suppl__68487DD7");
             });
 
             modelBuilder.Entity<StockImportDetail>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__stock_im__3213E83FB3C74451");
+                entity.HasKey(e => e.Id).HasName("PK__stock_im__3213E83F39FB200D");
 
                 entity.ToTable("stock_import_details");
 
@@ -332,17 +267,17 @@ namespace BookStore.Infrastructure.Data
                 entity.HasOne(d => d.Book).WithMany(p => p.StockImportDetails)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__stock_imp__book___76969D2E");
+                    .HasConstraintName("FK__stock_imp__book___6C190EBB");
 
                 entity.HasOne(d => d.StockImport).WithMany(p => p.StockImportDetails)
                     .HasForeignKey(d => d.StockImportId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__stock_imp__stock__75A278F5");
+                    .HasConstraintName("FK__stock_imp__stock__6B24EA82");
             });
 
             modelBuilder.Entity<Supplier>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__supplier__3213E83FC1B8A092");
+                entity.HasKey(e => e.Id).HasName("PK__supplier__3213E83F033D9E5E");
 
                 entity.ToTable("suppliers");
 
@@ -367,7 +302,7 @@ namespace BookStore.Infrastructure.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__users__3213E83FC7AEE2AD");
+                entity.HasKey(e => e.Id).HasName("PK__users__3213E83F945A9790");
 
                 entity.ToTable("users");
 
