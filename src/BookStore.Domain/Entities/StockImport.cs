@@ -9,13 +9,9 @@ public partial class StockImport
 
     public long SupplierId { get; set; }
 
-    public long EmployeeId { get; set; }
-
     public DateTime? ImportDate { get; set; }
 
     public decimal TotalCost { get; set; }
-
-    public virtual Employee Employee { get; set; } = null!;
 
     public virtual ICollection<StockImportDetail> StockImportDetails { get; set; } = new List<StockImportDetail>();
 
