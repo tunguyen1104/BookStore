@@ -221,20 +221,15 @@
         $button.parent().find('input').val(newVal);
     });
     $(document).ready(function () {
-        $('#cartIcon').click(function (event) {
+        $('#userIcon').click(function (event) {
             event.preventDefault();
             $('#menuLink').toggle();
         });
 
-        // Đóng menu khi click ra ngoài
         $(document).click(function (event) {
-            if (!$(event.target).closest('#cartIcon, #menuLink').length) {
+            if (!$(event.target).closest('#userIcon, #menuLink').length) {
                 $('#menuLink').hide();
             }
-        });
-        $('#menu-tunguyen li a').click(function () {
-            $('#menu-tunguyen li').removeClass('active');
-            $(this).parent().addClass('active');
         });
     });
 })(jQuery);
