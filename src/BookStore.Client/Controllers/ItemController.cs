@@ -6,9 +6,9 @@ namespace BookStore.Client.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly IService<Book> _bookService;
+        private readonly IBookService _bookService;
 
-        public ItemController(IService<Book> bookService)
+        public ItemController(IBookService bookService)
         {
             _bookService = bookService;
         }

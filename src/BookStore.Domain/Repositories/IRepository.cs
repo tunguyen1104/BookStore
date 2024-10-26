@@ -4,5 +4,6 @@
     {
         Task<T> GetByIdAsync(long id);
         Task<IEnumerable<T>> GetAllAsync();
+        Task AddAsync(T entity);
     }
 }
