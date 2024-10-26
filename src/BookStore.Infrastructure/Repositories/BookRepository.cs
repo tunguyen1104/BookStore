@@ -1,7 +1,6 @@
 ﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
-using System.Linq.Expressions;
 
 namespace BookStore.Infrastructure.Repositories
 {

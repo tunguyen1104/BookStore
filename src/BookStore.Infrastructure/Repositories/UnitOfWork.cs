@@ -1,5 +1,4 @@
-﻿using BookStore.Domain.Entities;
-using BookStore.Domain.Repositories;
+﻿using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
 
 namespace BookStore.Infrastructure.Repositories

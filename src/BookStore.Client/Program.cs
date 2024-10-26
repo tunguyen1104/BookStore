@@ -13,9 +13,6 @@ namespace BookStore.Client
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-
             // Register IService -> ServiceImpl
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IBookService, BookService>();
@@ -27,7 +24,7 @@ namespace BookStore.Client
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
