@@ -26,9 +26,14 @@ namespace BookStore.Application.Services.Impl
         public async Task AddUser(RegisterDto account)
         {
             var user = _mapper.Map<User>(account);
+            user.Password = await HashPassword(account.Password);
             user.RoleId = (long)RoleEnum.USER;
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.CompleteAsync();
+        }
+        public Task<string> HashPassword(string value)
+        {
+            return Task.FromResult(BCrypt.Net.BCrypt.HashPassword(value, BCrypt.Net.BCrypt.GenerateSalt(12)));
         }
     }
 }

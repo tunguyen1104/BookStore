@@ -6,5 +6,6 @@ namespace BookStore.Application.Services
     {
         Task AddUser(RegisterDto account);
         Task<bool> RegisterUserAsync(RegisterDto account);
+        Task<string> HashPassword(string value);
     }
 }
