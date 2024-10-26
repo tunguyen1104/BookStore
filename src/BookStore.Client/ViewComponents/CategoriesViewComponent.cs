@@ -6,9 +6,9 @@ namespace BookStore.Client.ViewComponents
 {
     public class CategoriesViewComponent : ViewComponent
     {
-        private readonly IService<Category> _categoryService;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesViewComponent(IService<Category> categoryService)
+        public CategoriesViewComponent(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }

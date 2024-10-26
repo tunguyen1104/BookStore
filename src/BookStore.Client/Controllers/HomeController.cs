@@ -7,9 +7,9 @@ namespace BookStore.Client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IService<Book> _bookService;
+        private readonly IBookService _bookService;
 
-        public HomeController(ILogger<HomeController> logger, IService<Book> bookService)
+        public HomeController(ILogger<HomeController> logger, IBookService bookService)
         {
             _logger = logger;
             _bookService = bookService;

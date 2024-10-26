@@ -1,6 +1,5 @@
 using BookStore.Application.Services;
 using BookStore.Application.Services.Impl;
-using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
 using BookStore.Infrastructure.Repositories;
@@ -14,9 +13,9 @@ namespace BookStore.Client
             var builder = WebApplication.CreateBuilder(args);
 
             // Register IService -> ServiceImpl
-            builder.Services.AddScoped(typeof(IService<>), typeof(ServiceImpl<>));
-            // Register IRepository -> Repository
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             // Change the connection string in appsettings.json to your local sql server
             builder.Services.AddDbContext<BookStoreDbContext>(options =>
