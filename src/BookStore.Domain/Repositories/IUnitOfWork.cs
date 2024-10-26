@@ -10,6 +10,8 @@ namespace BookStore.Domain.Repositories
     {
         IBookRepository Books { get; }
         ICategoryRepository Categories { get; }
+        IUserRepository Users { get; }
         int Complete();
+        Task<int> CompleteAsync();
     }
 }
