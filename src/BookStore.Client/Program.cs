@@ -1,3 +1,4 @@
+using BookStore.Application.Mappers;
 using BookStore.Application.Services;
 using BookStore.Application.Services.Impl;
 using BookStore.Domain.Repositories;
@@ -11,6 +12,9 @@ namespace BookStore.Client
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // Register IService -> ServiceImpl
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
