@@ -2,7 +2,7 @@
 
 namespace BookStore.Application.DTOs
 {
-    public class RegisterDTO
+    public class RegisterDto
     {
         [RegularExpression(@"^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", ErrorMessage = "Email is not valid")]
         public string Email { get; set; }
