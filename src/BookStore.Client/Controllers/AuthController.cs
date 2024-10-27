@@ -39,5 +39,11 @@ namespace BookStore.Client.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginDto account)
+        {
+            return View(account);
+        }
     }
 }
