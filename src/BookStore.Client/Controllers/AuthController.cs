@@ -35,8 +35,9 @@ namespace BookStore.Client.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
         [HttpPost]
