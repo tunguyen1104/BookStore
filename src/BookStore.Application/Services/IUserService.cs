@@ -12,5 +12,6 @@ namespace BookStore.Application.Services
         Task<bool> ValidateHashPassword(string value, string hash);
         Task<bool> AuthenticateAndSignIn(LoginDto account);
         Task LogoutAsync();
+        bool IsAuthorizedRole(long roleType);
     }
 }
