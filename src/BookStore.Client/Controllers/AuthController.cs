@@ -41,8 +41,9 @@ namespace BookStore.Client.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginDto account)
+        public IActionResult Login(LoginDto account, string? returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View(account);
         }
     }
