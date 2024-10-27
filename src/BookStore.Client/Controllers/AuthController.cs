@@ -7,6 +7,7 @@ namespace BookStore.Client.Controllers
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
+        private const string AdminDashboardUrl = "http://localhost:5118/";
         public AuthController(IUserService userService)
         {
             _userService = userService;
@@ -35,8 +36,9 @@ namespace BookStore.Client.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
         [HttpPost]
@@ -66,6 +68,7 @@ namespace BookStore.Client.Controllers
             }
             else
             {
+                if(_userService.IsAuthorizedRole(0)) return Redirect(AdminDashboardUrl);
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -73,6 +76,11 @@ namespace BookStore.Client.Controllers
         {
             await _userService.LogoutAsync();
             return RedirectToAction("Login", "Auth");
+        }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace BookStore.Application.Services.Impl
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(user)),
-                new Claim(ClaimTypes.Role, user.RoleId == (long)RoleEnum.ADMIN ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString())
+                new Claim(ClaimTypes.Role, IsAuthorizedRole(user.RoleId) ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -99,6 +99,14 @@ namespace BookStore.Application.Services.Impl
             {
                 await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
+        }
+        public bool IsAuthorizedRole(long roleType)
+        {
+            if (roleType == 0)
+            {
+                return _httpContextAccessor.HttpContext.User.IsInRole(RoleEnum.ADMIN.ToString());
+            }
+            return roleType == (long)RoleEnum.ADMIN;
         }
     }
 }
