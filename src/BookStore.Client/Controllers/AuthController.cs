@@ -75,5 +75,10 @@ namespace BookStore.Client.Controllers
             await _userService.LogoutAsync();
             return RedirectToAction("Login", "Auth");
         }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

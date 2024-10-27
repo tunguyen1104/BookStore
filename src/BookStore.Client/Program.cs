@@ -37,6 +37,7 @@ namespace BookStore.Client
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.LoginPath = "/auth/login";
                 options.LogoutPath = "/auth/logout";
+                options.AccessDeniedPath = "/auth/accessdenied";
                 options.SlidingExpiration = true;
             });
 
