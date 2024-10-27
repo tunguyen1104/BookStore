@@ -7,8 +7,8 @@
 <div class="humberger__menu__overlay"></div>
 <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
-        <a href="#!">
-            <img src="@Url.Content("~/img/logo.png")" alt="logo" />
+        <a asp-controller="Home" asp-action="Index">
+            <img src="~/img/logo.png" alt="logo" />
         </a>
     </div>
     <div class="humberger__menu__cart">
@@ -89,7 +89,7 @@
               </ul>
             </div>
             <div class="header__top__right__auth">
-              <a href="#" id="cartIcon"><i class="fa fa-user"></i> Login</a>
+              <a href="#" id="userIcon"><i class="fa fa-user"></i> Login</a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
                 id="menuLink"
@@ -153,7 +153,7 @@
             <li class="active">
               <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li><a asp-controller="Home" asp-action="Products">Product</a></li>
+            <li><a asp-controller="Home" asp-action="Products">Products</a></li>
             <li><a asp-controller="Home" asp-action="Blog">Blog</a></li>
             <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
           </ul>

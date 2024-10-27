@@ -1,11 +1,10 @@
-﻿using BookStore.Application.DTOs;
+﻿using BookStore.Domain.Entities;
 
 namespace BookStore.Application.Services
 {
     public interface IBookService
     {
-        public IEnumerable<BookDto> findAll();
-        public IEnumerable<BookDto> find(string search, int page, int pageSize);
-        public int getTotal();
+        Task<Book> GetByIdAsync(long id);
+        Task<IEnumerable<Book>> GetAllAsync();
     }
 }

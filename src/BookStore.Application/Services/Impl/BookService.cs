@@ -1,5 +1,4 @@
-﻿using BookStore.Application.DTOs;
-using BookStore.Domain.Entities;
+﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 
 namespace BookStore.Application.Services.Impl
@@ -12,6 +11,16 @@ namespace BookStore.Application.Services.Impl
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Book> GetByIdAsync(long id)
+        {
+            return await _unitOfWork.Books.GetByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Book>> GetAllAsync()
+        {
+            return await _unitOfWork.Books.GetAllAsync();
+
+        }
         public int getTotal()
         {
             return _unitOfWork.Books.count();

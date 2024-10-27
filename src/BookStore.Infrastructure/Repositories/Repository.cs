@@ -22,6 +22,9 @@ namespace BookStore.Infrastructure.Repositories
         {
             return await _context.Set<T>().ToListAsync();
         }
+        public async Task AddAsync(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
 
         public void Add(T entity)
         {
