@@ -38,6 +38,7 @@
                                     </div>
                                     @using (Html.BeginForm("Login", "Auth", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "user", role = "form" }))
                                     {
+                                        @Html.AntiForgeryToken()
                                         <div class="form-group">
                                             @Html.TextBoxFor(m => m.Email, new { @class = $"form-control form-control-user{(ViewData.ModelState["Email"]?.Errors.Count > 0 ? " is-invalid" : "")}", @required = "required", @placeholder = "Enter Email Address..." })
                                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
