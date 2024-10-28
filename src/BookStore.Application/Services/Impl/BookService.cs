@@ -1,4 +1,5 @@
-﻿using BookStore.Domain.Entities;
+﻿using BookStore.Application.DTOs;
+using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 
 namespace BookStore.Application.Services.Impl
@@ -41,15 +42,16 @@ namespace BookStore.Application.Services.Impl
                 Quantity = book.Quantity,
                 ShortDesc = book.ShortDesc,
                 Sold = book.Sold,
+                Discount = book.Discount,
+                CategoryIds = book.Categories.Select(c => c.Id).ToList()
             });
             return bookList;
         }
 
-        public IEnumerable<BookDto> find(string search, int page, int pageSize)
+        public IEnumerable<BookDto> Find(string search, int page, int pageSize)
         {
-            // Start with an empty queryable
             if (page < 1) page = 1;
-            IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll(); // Assuming this returns an IQueryable<Book>
+            IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll();
 
             // Apply filtering if search term is provided
             if (!string.IsNullOrWhiteSpace(search))
@@ -79,6 +81,11 @@ namespace BookStore.Application.Services.Impl
             });
 
             return bookDtos;
+        }
+
+        public IEnumerable<Category> GetAllBookCategories()
+        {
+            return _unitOfWork.Categories.GetAll();
         }
     }
 }

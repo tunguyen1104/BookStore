@@ -1,5 +1,7 @@
-﻿using BookStore.Application.Services;
+﻿using BookStore.Application.DTOs;
+using BookStore.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookStore.Admin.Controllers
 {
@@ -15,19 +17,76 @@ namespace BookStore.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult GetProducts(string search, int start, int length)
+        public ActionResult GetProducts(int draw, string searchValue, int start, int length)
         {
-            var books = _bookService.find(search, start, length);
+            var books = _bookService.Find(searchValue, start, length);
             var totalCount = books.Count();
 
-            var filteredData = books; // For demonstration purposes
+            var filteredData = books;
             return Json(new
             {
-                draw = Request.Query["draw"],
+                draw = draw,
                 recordsTotal = totalCount,
                 recordsFiltered = filteredData.Count(),
                 data = filteredData
             });
+        }
+        public IActionResult CreateBook()
+        {
+            var categories = _bookService.GetAllBookCategories()
+                .Select(category => new SelectListItem
+                {
+                    Text = category.Name,
+                    Value = category.Id.ToString(),
+                });
+            ViewBag.Categories = categories;
+            return View();
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetBook(long id)
+        {
+            var book = await _bookService.GetByIdAsync(id);
+            if (book == null)
+            {
+                return Json(new { success = false, message = "Book not found" });
+            }
+
+            return Json(new
+            {
+                success = true,
+                id = book.Id,
+                name = book.Name,
+                author = book.Author,
+                shortDesc = book.ShortDesc,
+                detailDesc = book.DetailDesc,
+                price = book.Price,
+                quantity = book.Quantity,
+                image = book.Image,
+                factory = book.Factory,
+                discount = book.Discount,
+            });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EditBookAsync([FromBody] BookDto bookDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var book = await _bookService.GetByIdAsync(bookDto.Id);
+                if (book == null)
+                {
+                    return Json(new { success = false, message = "Book not found" });
+                }
+
+                book.Name = bookDto.Name;
+                book.Author = bookDto.Author;
+
+                //_bookService.Update(book);
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Invalid data" });
         }
     }
 }

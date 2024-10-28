@@ -1,0 +1,65 @@
+﻿@model BookStore.Application.DTOs.BookDto
+
+@{
+    ViewData["Title"] = "Create New Book";
+}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">@ViewData["Title"]</h1>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Name" class="control-label">Tên Sách</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Author" class="control-label">Tác giả</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ShortDesc" class="control-label"></label>
+            <textarea asp-for="ShortDesc" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="ShortDesc" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DetailDesc" class="control-label"></label>
+            <textarea asp-for="DetailDesc" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="DetailDesc" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Quantity" class="control-label"></label>
+            <input asp-for="Quantity" class="form-control" type="number" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Image" class="control-label"></label>
+            <input asp-for="Image" class="form-control" type="file" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Factory" class="control-label"></label>
+            <input asp-for="Factory" class="form-control" />
+            <span asp-validation-for="Factory" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm mới sách</button>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

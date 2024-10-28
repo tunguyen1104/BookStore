@@ -27,6 +27,9 @@
             @RenderBody()
         </main>
     </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
     @await Html.PartialAsync("_Scripts")
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -7,6 +7,5 @@
         IUserRepository Users { get; }
         int Complete();
         Task<int> CompleteAsync();
-        int Complete();
     }
 }
