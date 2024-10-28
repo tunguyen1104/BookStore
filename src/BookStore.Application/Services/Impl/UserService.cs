@@ -108,5 +108,25 @@ namespace BookStore.Application.Services.Impl
             }
             return roleType == (long)RoleEnum.ADMIN;
         }
+        public User GetCurrentUser()
+        {
+            if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
+
+            var userDataClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.UserData)?.Value;
+            var user = string.IsNullOrEmpty(userDataClaim)
+                ? null
+                : JsonConvert.DeserializeObject<User>(userDataClaim);
+
+            return new User
+            {
+                Email = user.Email,
+                FullName = user.FullName,
+                Avatar = user?.Avatar ?? "/img/avatar/default.png"
+            };
+        }
+
     }
 }
