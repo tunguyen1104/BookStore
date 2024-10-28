@@ -72,6 +72,8 @@ namespace BookStore.Client.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _userService.LogoutAsync();

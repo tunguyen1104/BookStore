@@ -13,5 +13,6 @@ namespace BookStore.Application.Services
         Task<bool> AuthenticateAndSignIn(LoginDto account);
         Task LogoutAsync();
         bool IsAuthorizedRole(long roleType);
+        User GetCurrentUser();
     }
 }
