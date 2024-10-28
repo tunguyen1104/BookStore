@@ -7,6 +7,7 @@ namespace BookStore.Client.Controllers
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
+        private const string AdminDashboardUrl = "http://localhost:5118/";
         public AuthController(IUserService userService)
         {
             _userService = userService;
@@ -33,6 +34,53 @@ namespace BookStore.Client.Controllers
             {
                 return RedirectToAction("Login");
             }
+        }
+        [HttpGet]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginDto account, string? returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (!ModelState.IsValid)
+            {
+                return View(account);
+            }
+
+            if (await _userService.AuthenticateAndSignIn(account))
+            {
+                return DetermineRedirectUrl(returnUrl);
+            }
+
+            ModelState.AddModelError("Email", "User not found.");
+            return View(account);
+        }
+        private IActionResult DetermineRedirectUrl(string? returnUrl)
+        {
+            if (returnUrl != null)
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                if(_userService.IsAuthorizedRole(0)) return Redirect(AdminDashboardUrl);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await _userService.LogoutAsync();
+            return RedirectToAction("Login", "Auth");
+        }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
