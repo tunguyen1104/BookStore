@@ -125,3 +125,8 @@
     padding: 10px 16px 0px 16px;
     display: table-cell;
 }
+
+#userIcon:hover {
+    cursor: pointer;
+}
+
