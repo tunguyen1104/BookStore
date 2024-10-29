@@ -55,8 +55,8 @@
     </div>
 </div>
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg animated--grow-in">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Book</h5>
@@ -97,18 +97,6 @@
                     <div class="form-group">
                         <label for="bookPrice">Price</label>
                         <input type="number" class="form-control" id="bookPrice" step="0.01" required />
-                    </div>
-
-                    <!-- Quantity -->
-                    <div class="form-group">
-                        <label for="bookQuantity">Quantity</label>
-                        <input type="number" class="form-control" id="bookQuantity" required />
-                    </div>
-
-                    <!-- Sold -->
-                    <div class="form-group">
-                        <label for="bookSold">Sold</label>
-                        <input type="number" class="form-control" id="bookSold" />
                     </div>
 
                     <!-- Image URL -->
@@ -230,8 +218,6 @@
                     $("#bookShortDesc").val(data.shortDesc);
                     $("#bookDetailDesc").val(data.detailDesc);
                     $("#bookPrice").val(data.price);
-                    $("#bookQuantity").val(data.quantity);
-                    $("#bookSold").val(data.sold);
                     $("#bookImage").val(data.image);
                     $("#bookFactory").val(data.factory);
                     $("#bookDiscount").val(data.discount);

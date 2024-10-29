@@ -19,16 +19,15 @@ namespace BookStore.Admin.Controllers
         [HttpGet]
         public ActionResult GetProducts(int draw, string searchValue, int start, int length)
         {
-            var books = _bookService.Find(searchValue, start, length);
-            var totalCount = books.Count();
-
-            var filteredData = books;
+            int page = (start / length) + 1;
+            var (books, filterCount) = _bookService.Find(searchValue, page, length);
+            var totalCount = _bookService.getTotal();
             return Json(new
             {
                 draw = draw,
                 recordsTotal = totalCount,
-                recordsFiltered = filteredData.Count(),
-                data = filteredData
+                recordsFiltered = filterCount,
+                data = books
             });
         }
         public IActionResult CreateBook()
