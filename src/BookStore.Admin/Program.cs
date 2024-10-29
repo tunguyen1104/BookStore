@@ -1,9 +1,8 @@
-using BookStore.Application.Services;
-using BookStore.Application.Services.Impl;
-using BookStore.Domain.Repositories;
+using BookStore.Application;
+using BookStore.Infrastructure;
 using BookStore.Infrastructure.Data;
-using BookStore.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace BookStore.Admin
 {
@@ -13,11 +12,8 @@ namespace BookStore.Admin
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register IRepository -> RepositoryImpl
-            //builder.Services.AddScoped<IRepository, Repository>();
-            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IBookService, BookService>();
-
+            builder.Services.AddInfrastructure();
+            builder.Services.AddApplication();
             // Change the connection string in appsettings.json to your local sql server
             builder.Services.AddDbContext<BookStoreDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreConnection")));
@@ -33,7 +29,11 @@ namespace BookStore.Admin
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "../Assets")),
+                RequestPath = "/assets"
+            });
 
             app.UseRouting();
 

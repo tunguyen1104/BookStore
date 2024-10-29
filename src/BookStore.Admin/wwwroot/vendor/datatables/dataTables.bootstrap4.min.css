@@ -1,111 +1,77 @@
+/* Main DataTable Style */
 table.dataTable {
     clear: both;
-    margin-top: 6px !important;
-    margin-bottom: 6px !important;
+    margin: 6px 0 !important;
     max-width: none !important;
     border-collapse: separate !important;
-    border-spacing: 0
+    border-spacing: 0;
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove borders */
 }
 
     table.dataTable td, table.dataTable th {
-        -webkit-box-sizing: content-box;
-        box-sizing: content-box
+        box-sizing: content-box;
+        border-bottom: 1px solid #e0e0e0; /* Thin separator line */
+        padding: 12px 8px; /* Padding for cells */
+        cursor: pointer;
+    }
+    table.dataTable tr.selected {
+        background-color: var(--bs-primary) !important;
+        color: white !important;
     }
 
         table.dataTable td.dataTables_empty, table.dataTable th.dataTables_empty {
-            text-align: center
+            text-align: center;
         }
 
     table.dataTable.nowrap th, table.dataTable.nowrap td {
-        white-space: nowrap
+        white-space: nowrap;
     }
 
-div.dataTables_wrapper div.dataTables_length label {
+/* DataTable Controls Styling */
+div.dataTables_wrapper div.dataTables_length label,
+div.dataTables_wrapper div.dataTables_filter label {
     font-weight: normal;
-    text-align: left;
-    white-space: nowrap
-}
-
-div.dataTables_wrapper div.dataTables_length select {
-    width: auto;
-    display: inline-block
-}
-
-div.dataTables_wrapper div.dataTables_filter {
-    text-align: right
-}
-
-    div.dataTables_wrapper div.dataTables_filter label {
-        font-weight: normal;
-        white-space: nowrap;
-        text-align: left
-    }
-
-    div.dataTables_wrapper div.dataTables_filter input {
-        margin-left: .5em;
-        display: inline-block;
-        width: auto
-    }
-
-div.dataTables_wrapper div.dataTables_info {
-    padding-top: .85em
-}
-
-div.dataTables_wrapper div.dataTables_paginate {
-    margin: 0;
     white-space: nowrap;
-    text-align: right
+    color: #333; /* Custom text color */
 }
 
-    div.dataTables_wrapper div.dataTables_paginate ul.pagination {
-        margin: 2px 0;
-        white-space: nowrap;
-        justify-content: flex-end
-    }
-/*
+div.dataTables_wrapper div.dataTables_length select,
+div.dataTables_wrapper div.dataTables_filter input {
+    width: auto;
+    display: inline-block;
+}
 
+/* Processing Overlay Styling */
 div.dataTables_wrapper div.dataTables_processing {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 200px;
-    margin-left: -100px;
-    margin-top: -26px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
     text-align: center;
-    padding: 1em 0
-}
-    */
-div.dataTables_wrapper div.dataTables_processing {
-    position: absolute; /* Use absolute positioning within the DataTable wrapper */
-    top: 50%;
-    left: 50%;
-    width: 200px; /* Fixed width for the processing message */
-    height: auto; /* Allow height to adjust based on content */
-    transform: translate(-50%, -50%); /* Center the overlay */
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    color: white; /* Text color */
-    text-align: center;
-    padding: 1em 0; /* Padding for content */
-    border-radius: 8px; /* Rounded corners */
-    z-index: 1000; /* Ensure it appears above the DataTable */
-    font-size: 1.2em; /* Font size */
-    transition: opacity 0.3s ease; /* Fade-in effect */
+    padding: 1em 0;
+    border-radius: 8px;
+    z-index: 1000;
+    font-size: 1.2em;
+    transition: opacity 0.3s ease;
 }
 
-    /* Adding an animation for the loading text */
     div.dataTables_wrapper div.dataTables_processing:before {
         content: '';
         display: inline-block;
-        width: 40px; /* Size of spinner */
-        height: 40px; /* Size of spinner */
-        border: 6px solid rgba(255, 255, 255, 0.3); /* Light spinner color */
-        border-top-color: white; /* Spinner color */
+        width: 40px;
+        height: 40px;
+        border: 6px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
         border-radius: 50%;
-        animation: spin 0.8s linear infinite; /* Spinner animation */
-        margin-right: 10px; /* Space between spinner and text */
+        animation: spin 0.8s linear infinite;
+        margin-right: 10px;
     }
 
-/* Spinner animation */
+/* Spinner Animation */
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -116,122 +82,48 @@ div.dataTables_wrapper div.dataTables_processing {
     }
 }
 
-table.dataTable > thead > tr > th:active, table.dataTable > thead > tr > td:active {
-    outline: none
+/* Sorting Arrow Styling */
+table.dataTable > thead .sorting:before,
+table.dataTable > thead .sorting:after,
+table.dataTable > thead .sorting_asc:before,
+table.dataTable > thead .sorting_desc:after {
+    opacity: 0.3;
+    font-size: 12px; /* Smaller arrows */
 }
 
-table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thead > tr > td:not(.sorting_disabled) {
-    padding-right: 30px
-}
-
-table.dataTable > thead .sorting, table.dataTable > thead .sorting_asc, table.dataTable > thead .sorting_desc, table.dataTable > thead .sorting_asc_disabled, table.dataTable > thead .sorting_desc_disabled {
-    cursor: pointer;
-    position: relative
-}
-
-    table.dataTable > thead .sorting:before, table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:before, table.dataTable > thead .sorting_desc_disabled:after {
-        position: absolute;
-        bottom: .9em;
-        display: block;
-        opacity: .3
-    }
-
-    table.dataTable > thead .sorting:before, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_desc_disabled:before {
-        right: 1em;
-        content: "↑"
-    }
-
-    table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:after {
-        right: .5em;
-        content: "↓"
-    }
-
-    table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:after {
-        opacity: 1
-    }
-
-    table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_desc_disabled:after {
-        opacity: 0
-    }
-
-div.dataTables_scrollHead table.dataTable {
-    margin-bottom: 0 !important
-}
-
-div.dataTables_scrollBody table {
-    border-top: none;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important
-}
-
-    div.dataTables_scrollBody table thead .sorting:before, div.dataTables_scrollBody table thead .sorting_asc:before, div.dataTables_scrollBody table thead .sorting_desc:before, div.dataTables_scrollBody table thead .sorting:after, div.dataTables_scrollBody table thead .sorting_asc:after, div.dataTables_scrollBody table thead .sorting_desc:after {
-        display: none
-    }
-
-    div.dataTables_scrollBody table tbody tr:first-child th, div.dataTables_scrollBody table tbody tr:first-child td {
-        border-top: none
-    }
-
-div.dataTables_scrollFoot > .dataTables_scrollFootInner {
-    box-sizing: content-box
-}
-
-    div.dataTables_scrollFoot > .dataTables_scrollFootInner > table {
-        margin-top: 0 !important;
-        border-top: none
-    }
-
+/* Responsive Adjustments */
 @media screen and (max-width: 767px) {
-    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate {
-        text-align: center
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_info,
+    div.dataTables_wrapper div.dataTables_paginate {
+        text-align: center;
     }
 
         div.dataTables_wrapper div.dataTables_paginate ul.pagination {
-            justify-content: center !important
+            justify-content: center !important;
         }
 }
 
-table.dataTable.table-sm > thead > tr > th:not(.sorting_disabled) {
-    padding-right: 20px
+/* Remove Outer Borders */
+table.table-bordered.dataTable,
+table.table-bordered.dataTable th,
+table.table-bordered.dataTable td {
+    border: none;
 }
-
-table.dataTable.table-sm .sorting:before, table.dataTable.table-sm .sorting_asc:before, table.dataTable.table-sm .sorting_desc:before {
-    top: 5px;
-    right: .85em
-}
-
-table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:after, table.dataTable.table-sm .sorting_desc:after {
-    top: 5px
-}
-
-table.table-bordered.dataTable {
-    border-right-width: 0
-}
-
-    table.table-bordered.dataTable th, table.table-bordered.dataTable td {
-        border-left-width: 0
-    }
-
-        table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
-            border-right-width: 1px
-        }
-
-    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
-        border-bottom-width: 0
-    }
 
 div.dataTables_scrollHead table.table-bordered {
-    border-bottom-width: 0
+    border-bottom-width: 0;
 }
 
 div.table-responsive > div.dataTables_wrapper > div.row {
-    margin: 0
+    margin: 0;
 }
 
     div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:first-child {
-        padding-left: 0
+        padding-left: 0;
     }
 
     div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-child {
-        padding-right: 0
+        padding-right: 0;
     }
