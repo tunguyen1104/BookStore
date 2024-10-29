@@ -6,8 +6,8 @@ using BookStore.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using Newtonsoft.Json;
+using System.Security.Claims;
 namespace BookStore.Application.Services.Impl
 {
     public class UserService : IUserService
