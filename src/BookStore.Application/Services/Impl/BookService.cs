@@ -48,11 +48,10 @@ namespace BookStore.Application.Services.Impl
             return bookList;
         }
 
-        public IEnumerable<BookDto> Find(string search, int page, int pageSize)
+        public (IEnumerable<BookDto> Books, int TotalCount) Find(string search, int page, int pageSize)
         {
             if (page < 1) page = 1;
             IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll();
-
             // Apply filtering if search term is provided
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -80,7 +79,7 @@ namespace BookStore.Application.Services.Impl
                 Sold = book.Sold,
             });
 
-            return bookDtos;
+            return (bookDtos, totalCount);
         }
 
         public IEnumerable<Category> GetAllBookCategories()
