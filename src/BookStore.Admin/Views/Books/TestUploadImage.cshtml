@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        #progressBarContainer { width: 100%; background-color: #ddd; margin-top: 10px; }
+        #progressBar { width: 0%; height: 20px; background-color: #4caf50; }
+        #placeholder { width: 150px; height: 150px; object-fit: cover; display: block; margin: 20px auto; }
+    </style>
+</head>
+<body>
+    <h2>Upload Image</h2>
+    <img id="placeholder" src="https://via.placeholder.com/150" alt="Image preview">
+    <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" accept=".jpg,.jpeg,.png,.gif" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="progressBarContainer">
+        <div id="progressBar"></div>
+    </div>
+    <p id="status"></p>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const progressBar = document.getElementById('progressBar');
+        const placeholder = document.getElementById('placeholder');
+        const statusText = document.getElementById('status');
+
+        uploadForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch('/api/file/upload', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' },
+                    onUploadProgress: updateProgress
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    placeholder.src = result.url;
+                    statusText.textContent = "Upload successful!";
+                } else {
+                    statusText.textContent = result.message || "Upload failed.";
+                }
+            } catch (error) {
+                console.error("Error uploading file:", error);
+                statusText.textContent = "Upload failed.";
+            }
+        });
+
+        function updateProgress(event) {
+            if (event.lengthComputable) {
+                const percent = (event.loaded / event.total) * 100;
+                progressBar.style.width = percent + "%";
+                progressBar.textContent = Math.round(percent) + "%";
+            }
+        }
+    </script>
+</body>
+</html>

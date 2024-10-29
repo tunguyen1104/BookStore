@@ -16,6 +16,10 @@ namespace BookStore.Admin.Controllers
         {
             return View();
         }
+        public IActionResult TestUploadImage()
+        {
+            return View();
+        }
         [HttpGet]
         public ActionResult GetProducts(int draw, string searchValue, int start, int length)
         {
