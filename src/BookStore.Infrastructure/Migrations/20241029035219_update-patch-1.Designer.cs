@@ -4,6 +4,7 @@ using BookStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Infrastructure.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class BookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029035219_update-patch-1")]
+    partial class updatepatch1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -705,7 +707,7 @@ namespace BookStore.Infrastructure.Migrations
                             Avatar = "admin.png",
                             Email = "admin@bookstore.com",
                             FullName = "Admin User",
-                            Password = "$2a$12$xkaiydj8kcvoyFJdTL.5ou.rJYRERXSymin4pTLikQ6dA3F8uJPxK",
+                            Password = "$2a$12$vDQrTy3RH5flY7Zm5lrXDemGEDIozW48kCf9vsAk.LdKmCGa7MO.S",
                             Phone = "123456789",
                             RoleId = 1L
                         });

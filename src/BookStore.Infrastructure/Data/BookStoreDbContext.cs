@@ -1,4 +1,5 @@
 ﻿using BookStore.Domain.Entities;
+using BookStore.Infrastructure.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -338,7 +339,7 @@ namespace BookStore.Infrastructure.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__users__role_id__4BAC3F29");
             });
-
+            BookStoreSeeder.Seed(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 
