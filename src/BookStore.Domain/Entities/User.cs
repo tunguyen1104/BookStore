@@ -19,6 +19,8 @@ public partial class User
 
     public string? Phone { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public long RoleId { get; set; }
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();

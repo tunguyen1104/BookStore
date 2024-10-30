@@ -71,6 +71,9 @@ namespace BookStore.Infrastructure.Data
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("image");
+                entity.Property(e => e.IsDeleted)
+                    .HasDefaultValue(true)
+                    .HasColumnName("is_deleted");
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
                     .IsUnicode(false)
@@ -332,6 +335,9 @@ namespace BookStore.Infrastructure.Data
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("phone");
+                entity.Property(e => e.IsDeleted)
+                    .HasDefaultValue(true)
+                    .HasColumnName("is_deleted");
                 entity.Property(e => e.RoleId).HasColumnName("role_id");
 
                 entity.HasOne(d => d.Role).WithMany(p => p.Users)

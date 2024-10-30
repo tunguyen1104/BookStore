@@ -28,6 +28,8 @@ public partial class Book
 
     public decimal Discount { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
