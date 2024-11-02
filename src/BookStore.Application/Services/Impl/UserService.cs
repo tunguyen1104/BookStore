@@ -122,6 +122,7 @@ namespace BookStore.Application.Services.Impl
 
             return new User
             {
+                Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
                 Avatar = user?.Avatar ?? "/img/avatar/default.png"
