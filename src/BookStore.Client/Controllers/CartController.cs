@@ -1,12 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookStore.Application.DTOs;
+using BookStore.Application.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Client.Controllers
 {
     public class CartController : Controller
     {
-        public IActionResult ShoppingCart()
+        private readonly IBookService _bookService;
+        public CartController(IBookService bookService)
         {
-            return View();
+            _bookService = bookService;
+        }
+        public async Task<IActionResult> ShoppingCart()
+        {
+            var cartSummary = await _bookService.HandleGetCartPageAsync();
+
+            if (cartSummary == null)
+            {
+                return NotFound("Cart summary could not be retrieved.");
+            }
+
+            return View(cartSummary);
         }
     }
 }

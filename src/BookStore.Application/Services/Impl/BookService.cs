@@ -7,12 +7,14 @@ namespace BookStore.Application.Services.Impl
     public class BookService : IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BookService(IUnitOfWork unitOfWork)
+        private readonly IUserService _userService;
+        public BookService(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
-        public async Task<Book> GetByIdAsync(long id)
+        public async Task<Book?> GetByIdAsync(long id)
         {
             return await _unitOfWork.Books.GetByIdAsync(id);
         }
@@ -85,6 +87,30 @@ namespace BookStore.Application.Services.Impl
         public IEnumerable<Category> GetAllBookCategories()
         {
             return _unitOfWork.Categories.GetAll();
+        }
+
+        public async Task<CartSummaryDto?> HandleGetCartPageAsync()
+        {
+            User currentUser = _userService.GetCurrentUser();
+            if (currentUser != null)
+            {
+                Cart? cart = await _unitOfWork.Carts.FetchByUserIdAsync(currentUser.Id);
+                List<CartDetail> cartDetails = cart == null ? new List<CartDetail>() : cart.CartDetails.ToList();
+
+                double totalPrice = 0;
+                double totalDiscount = 0;
+
+                foreach (var cartDetail in cartDetails)
+                {
+                    totalPrice += (double)(cartDetail.Price * cartDetail.Quantity);
+                    var discount = await _unitOfWork.Books.FetchBookDiscountByIdAsync(cartDetail.BookId) / 100;
+                    totalDiscount += (double)(cartDetail.Price * discount * cartDetail.Quantity);
+                }
+
+                return new CartSummaryDto(totalPrice, totalDiscount, cartDetails);
+            }
+
+            return null;
         }
     }
 }
