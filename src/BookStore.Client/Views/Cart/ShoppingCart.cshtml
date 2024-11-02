@@ -43,11 +43,15 @@
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
                                                 <div class="pro-qty">
-                                                    <input type="text" value="1">
+                                                    <input type="text" value="@cartDetail.Quantity"
+                                                           data-cart-detail-id="@cartDetail.Id"
+                                                           data-cart-detail-price="@cartDetail.Price"
+                                                           data-cart-detail-discount="@cartDetail.Book.Discount"
+                                                           data-cart-detail-index="@index">
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="shoping__cart__total">
+                                        <td class="shoping__cart__total" data-cart-detail-id="@cartDetail.Id">
                                             @((cartDetail.Price * cartDetail.Quantity).ToString("N0"))
                                         </td>
                                         <td class="shoping__cart__item__close">

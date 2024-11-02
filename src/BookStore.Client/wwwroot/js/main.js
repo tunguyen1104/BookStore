@@ -216,5 +216,51 @@
                 $('#menuLink').hide();
             }
         });
+
+        $('.quantity .pro-qty span').on('click', function () {
+            const button = $(this);
+            const input = button.closest('.quantity').find('input');
+            const oldValue = parseFloat(input.val());
+            const index = input.data("cart-detail-index");
+            const price = parseFloat(input.data("cart-detail-price"));
+            const discountRate = parseFloat(input.data("cart-detail-discount") / 100);
+            const id = input.data("cart-detail-id");
+            let newVal = oldValue;
+            let change = 0;
+
+            if (button.hasClass('dec') && oldValue > 1) {
+                newVal = oldValue - 1;
+                change = -1;
+            } else if (!button.hasClass('dec')) {
+                newVal = oldValue + 1;
+                change = 1;
+            }
+            input.val(newVal);
+            $(`#CartDetails_${index}__Quantity`).val(newVal);
+
+            const priceTotalElement = $(`td[data-cart-detail-id='${id}']`);
+            priceTotalElement.text(formatCurrency(price * newVal));
+
+            const totalPriceElement = $("span[data-cart-total-price]");
+            const totalDiscountElement = $("span[data-cart-total-discount]");
+            let totalPrice = parseFloat(totalPriceElement.attr("data-cart-total-price"));
+            let totalDiscount = parseFloat(totalDiscountElement.attr("data-cart-total-discount"));
+
+            if (change !== 0) {
+                totalPrice += change * price;
+                totalDiscount += change * price * discountRate;
+            }
+
+            totalPriceElement.text(formatCurrency(totalPrice)).attr("data-cart-total-price", totalPrice);
+            totalDiscountElement.text(`- ${formatCurrency(totalDiscount)}`).attr("data-cart-total-discount", totalDiscount);
+
+            $("#total").text(formatCurrency(totalPrice - totalDiscount));
+        });
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
     });
 })(jQuery);
