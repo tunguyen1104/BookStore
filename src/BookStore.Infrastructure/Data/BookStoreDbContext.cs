@@ -55,17 +55,14 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.Author)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("author");
                 entity.Property(e => e.DetailDesc)
-                    .IsUnicode(false)
                     .HasColumnName("detail_desc");
                 entity.Property(e => e.Discount)
                     .HasColumnType("decimal(5, 2)")
                     .HasColumnName("discount");
                 entity.Property(e => e.Factory)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("factory");
                 entity.Property(e => e.Image)
                     .HasMaxLength(255)
@@ -76,7 +73,6 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnName("is_deleted");
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("name");
                 entity.Property(e => e.Price)
                     .HasColumnType("decimal(10, 2)")
@@ -84,7 +80,6 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
                 entity.Property(e => e.ShortDesc)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("short_desc");
                 entity.Property(e => e.Sold)
                     .HasDefaultValue(0L)
@@ -160,11 +155,9 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.Description)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("description");
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("name");
             });
 
@@ -225,7 +218,6 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnName("id");
                 entity.Property(e => e.Description)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("description");
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -288,7 +280,6 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.Address)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("address");
                 entity.Property(e => e.ContactEmail)
                     .HasMaxLength(255)
@@ -300,7 +291,6 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnName("contact_phone");
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("name");
             });
 
@@ -313,7 +303,6 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.Address)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("address");
                 entity.Property(e => e.Avatar)
                     .HasMaxLength(255)
@@ -321,11 +310,9 @@ namespace BookStore.Infrastructure.Data
                     .HasColumnName("avatar");
                 entity.Property(e => e.Email)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("email");
                 entity.Property(e => e.FullName)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("full_name");
                 entity.Property(e => e.Password)
                     .HasMaxLength(255)
