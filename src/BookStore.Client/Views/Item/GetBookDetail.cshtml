@@ -26,20 +26,26 @@
                     </div>
                     <div class="featured__item__text">
                         <div class="inner-price">
-                            <h5>@((Model.Price * (1 - Model.Discount / 100)).ToString("C2"))</h5>
-                            <span>@Model.Price.ToString("C2")</span>
+                            <h5>@((Model.Price * (1 - Model.Discount / 100)).ToString("N0"))</h5>
+                            <span>@Model.Price.ToString("N0")</span>
                             <div class="discount">@Model.Discount%</div>
                         </div>
                     </div>
                     <p>@Model.ShortDesc</p>
-                    <div class="product__details__quantity">
+                    <div class="product__details__quantity no-select">
                         <div class="quantity">
                             <div class="pro-qty">
-                                <input type="text" value="1">
+                                <input type="text" value="1"
+                                       data-cart-detail-index="0">
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="primary-btn">ADD TO CART</a>
+                    <input class="form-control d-none" type="text" name="quantity"
+                           id="CartDetails_0__Quantity" value="1" />
+                    <a data-book-id="@Model.Id"
+                       class="btnAddToCartDetail primary-btn">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
                     <ul>
                         <li><b>Availability</b> <span>@(Model.Quantity > 0 ? "In Stock" : "Out of Stock")</span></li>
                         <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
