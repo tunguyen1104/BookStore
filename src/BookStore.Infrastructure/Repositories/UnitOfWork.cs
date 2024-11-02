@@ -10,6 +10,7 @@ namespace BookStore.Infrastructure.Repositories
         public ICategoryRepository Categories { get; private set; }
         public IUserRepository Users { get; private set; }
         public ICartRepository Carts { get; private set; }
+        public ICartDetailRepository CartDetails { get; private set; }
         public UnitOfWork(BookStoreDbContext context)
         {
             _context = context;
@@ -17,6 +18,7 @@ namespace BookStore.Infrastructure.Repositories
             Categories = new CategoryRepository(_context);
             Users = new UserRepository(_context);
             Carts = new CartRepository(_context);
+            CartDetails = new CartDetailRepository(_context);
         }
         public int Complete()
         {
