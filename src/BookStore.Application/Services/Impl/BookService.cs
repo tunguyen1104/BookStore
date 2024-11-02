@@ -1,17 +1,20 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace BookStore.Application.Services.Impl
 {
     public class BookService : IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
-        public BookService(IUnitOfWork unitOfWork, IUserService userService)
+        public BookService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Book?> GetByIdAsync(long id)
@@ -111,6 +114,50 @@ namespace BookStore.Application.Services.Impl
             }
 
             return null;
+        }
+        public async Task AddBookToCartAsync(long bookId, long quantity)
+        {
+            User user = _userService.GetCurrentUser();
+            if (user != null)
+            {
+                Cart? cart = await _unitOfWork.Carts.FetchByUserIdAsync(user.Id);
+                if (cart == null)
+                {
+                    cart = new Cart { UserId = user.Id, Sum = 0 };
+                    await _unitOfWork.Carts.AddAsync(cart);
+                    await _unitOfWork.CompleteAsync();
+                }
+
+                Book? book = await _unitOfWork.Books.GetByIdAsync(bookId);
+                if (book != null)
+                {
+                    var oldCartDetail = await _unitOfWork.CartDetails.GetCartDetailByCartAndBookAsync(cart.Id, bookId);
+
+                    if (oldCartDetail != null)
+                    {
+                        oldCartDetail.Quantity += quantity;
+                        _unitOfWork.CartDetails.Update(oldCartDetail);
+                    }
+                    else
+                    {
+                        var newCartDetail = new CartDetail
+                        {
+                            Cart = cart,
+                            Book = book,
+                            Price = book.Price,
+                            Quantity = quantity
+                        };
+                        await _unitOfWork.CartDetails.AddAsync(newCartDetail);
+                        if (_httpContextAccessor.HttpContext != null)
+                        {
+                            int sum = cart.Sum + 1;
+                            cart.Sum = sum;
+                            _unitOfWork.Carts.Update(cart);
+                        }
+                    }
+                }
+                await _unitOfWork.CompleteAsync();
+            }
         }
     }
 }

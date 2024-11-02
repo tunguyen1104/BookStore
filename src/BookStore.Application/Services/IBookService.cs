@@ -11,5 +11,6 @@ namespace BookStore.Application.Services
         IEnumerable<Category> GetAllBookCategories();
         int getTotal();
         Task<CartSummaryDto?> HandleGetCartPageAsync();
+        Task AddBookToCartAsync(long bookId, long quantity);
     }
 }
