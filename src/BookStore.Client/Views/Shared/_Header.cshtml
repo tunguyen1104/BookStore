@@ -89,7 +89,7 @@
                 <li><a href="#!">English</a></li>
               </ul>
             </div>
-                <div class="header__top__right__auth">
+                <div class="header__top__right__auth no-select" id="navbarCheck">
                 @inject IUserService UserService
                 @{
                     var user = UserService.GetCurrentUser();
@@ -117,7 +117,7 @@
                 }
                 else
                 {
-                    <a asp-controller="Auth" asp-action="Login"><i class="fa fa-user"></i> Login</a>
+                    <a asp-controller="Auth" asp-action="Login" class="check-login"><i class="fa fa-user"></i>Login</a>
                 }
             </div>
           </div>
@@ -150,8 +150,11 @@
         <div class="header__cart">
           <ul>
             <li>
-              <a asp-controller="Cart" asp-action="ShoppingCart"
-                ><i class="fa fa-shopping-bag"></i> <span>3</span></a>
+              <a asp-controller="Cart" asp-action="ShoppingCart"><i class="fa fa-shopping-bag"></i>
+                  <span id="sumCart">
+                      0
+                  </span>
+              </a>
             </li>
           </ul>
           <div class="header__cart__price">item: <span>$150.00</span></div>

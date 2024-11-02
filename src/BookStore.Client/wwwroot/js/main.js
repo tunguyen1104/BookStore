@@ -262,5 +262,62 @@
                 maximumFractionDigits: 0
             }).format(value);
         }
+
+        $('.btnAddToCartHomepage').click(function (event) {
+            event.preventDefault();
+
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'You need to log in to your account',
+                    position: 'top-right',
+                    icon: 'error'
+                })
+                return;
+            }
+
+            const bookId = $(this).attr('data-book-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                url: `${window.location.origin}/api/CartApi/add-book-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ Quantity: 1, BookId: bookId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    console.log(response)
+                    const sum = +response;
+                    //update cart
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Cart',
+                        text: 'Product added to cart successfully',
+                        position: 'top-right',
+
+                    })
+
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        });
+
+        function isLogin() {
+            const navElement = $("#navbarCheck");
+            const childLogin = navElement.find('.check-login');
+            if (childLogin.length > 0) {
+                return false;
+            }
+            return true;
+        }
     });
 })(jQuery);
