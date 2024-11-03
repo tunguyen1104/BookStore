@@ -22,5 +22,6 @@ namespace BookStore.Infrastructure.Repositories
                  .Skip(pageSize * (pageNumber))
                  .Take(pageSize);
         }
+        public async Task<decimal?> FetchBookDiscountByIdAsync(long bookId) => bookId > 0 ? (await _context.Books.FindAsync(bookId))?.Discount : null;
     }
 }
