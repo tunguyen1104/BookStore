@@ -197,5 +197,17 @@ namespace BookStore.Application.Services.Impl
             }
             await _unitOfWork.CompleteAsync();
         }
+        public async Task<CheckoutDto?> GetUserCheckoutDataAsync()
+        {
+            var userId = _userService.GetCurrentUser().Id;
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+
+            return user == null ? null : new CheckoutDto
+            {
+                ReceivedName = user.FullName ?? string.Empty,
+                ReceivedPhone = user.Phone ?? string.Empty,
+                ReceivedAddress = user.Address ?? string.Empty
+            };
+        }
     }
 }

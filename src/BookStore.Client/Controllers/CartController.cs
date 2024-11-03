@@ -40,5 +40,16 @@ namespace BookStore.Client.Controllers
 
             return RedirectToAction("Checkout");
         }
+        public async Task<IActionResult> Checkout()
+        {
+            CartSummaryDto? cartSummary = await _bookService.HandleGetCartPageAsync();
+            CheckoutDto? checkout = await _bookService.GetUserCheckoutDataAsync();
+            if (checkout == null || cartSummary == null)
+            {
+                throw new Exception("Cart summary could not be retrieved.");
+            }
+            checkout.CartSummary = cartSummary;
+            return View(checkout);
+        }
     }
 }
