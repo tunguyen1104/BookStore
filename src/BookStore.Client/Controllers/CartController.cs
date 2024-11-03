@@ -51,5 +51,16 @@ namespace BookStore.Client.Controllers
             checkout.CartSummary = cartSummary;
             return View(checkout);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder(CheckoutDto checkoutDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Checkout", checkoutDto);
+            }
+            await _bookService.HandleAddOrderAndOrderDetail(checkoutDto.ReceivedName, checkoutDto.ReceivedPhone, checkoutDto.ReceivedAddress, checkoutDto.OrderNotes);
+            return RedirectToAction("ThankYou");
+        }
     }
 }
