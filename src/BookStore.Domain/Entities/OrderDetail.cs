@@ -11,8 +11,6 @@ public partial class OrderDetail
 
     public long BookId { get; set; }
 
-    public decimal Price { get; set; }
-
     public long Quantity { get; set; }
 
     public virtual Book Book { get; set; } = null!;

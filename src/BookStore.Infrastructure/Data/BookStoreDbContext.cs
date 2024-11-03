@@ -188,9 +188,6 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.BookId).HasColumnName("book_id");
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
-                entity.Property(e => e.Price)
-                    .HasColumnType("decimal(10, 2)")
-                    .HasColumnName("price");
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
                 entity.HasOne(d => d.Book).WithMany(p => p.OrderDetails)
