@@ -236,8 +236,7 @@
                 change = 1;
             }
             input.val(newVal);
-            $(`#CartDetails_${index}__Quantity`).val(newVal);
-
+            $(`#CartDetailDtos_${index}__Quantity`).val(newVal);
             const priceTotalElement = $(`td[data-cart-detail-id='${id}']`);
             priceTotalElement.text(formatCurrency(price * newVal));
 
