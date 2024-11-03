@@ -209,5 +209,55 @@ namespace BookStore.Application.Services.Impl
                 ReceivedAddress = user.Address ?? string.Empty
             };
         }
+        public async Task HandleAddOrderAndOrderDetail(string receivedName, string receivedPhone,
+            string receivedAddress, string orderNotes)
+        {
+            long userId = _userService.GetCurrentUser().Id;
+            User? currentUser = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser), "User cannot be null."); }
+            Cart? cart = await _unitOfWork.Carts.FetchByUserIdAsync(currentUser.Id);
+            if (cart != null)
+            {
+                List<CartDetail> cartDetails = cart.CartDetails.ToList();
+                if (cartDetails != null)
+                {
+                    // create new order
+                    Order order = new Order();
+                    order.UserId = currentUser.Id;
+                    order.User = currentUser;
+                    order.ReceivedName = receivedName;
+                    order.ReceivedPhone = receivedPhone;
+                    order.ReceivedAddress = receivedAddress;
+                    order.OrderNotes = orderNotes;
+                    order.Status = "PENDING";
+                    decimal totalPrice = 0;
+                    foreach (CartDetail cartDetail in cartDetails)
+                    {
+                        totalPrice += cartDetail.Book.Price * cartDetail.Quantity;
+                    }
+                    order.TotalPrice = totalPrice;
+                    await _unitOfWork.Orders.AddAsync(order);
+
+                    // create new order_detail
+                    foreach (CartDetail cartDetail in cartDetails)
+                    {
+                        OrderDetail orderDetail = new OrderDetail();
+                        orderDetail.Order = order;
+                        orderDetail.Book = cartDetail.Book;
+                        orderDetail.Quantity = cartDetail.Quantity;
+                        await _unitOfWork.OrderDetails.AddAsync(orderDetail);
+                    }
+
+                    // delete cart
+                    foreach (CartDetail cartDetail in cartDetails)
+                    {
+                        _unitOfWork.CartDetails.Delete(cartDetail);
+                    }
+                    _unitOfWork.Carts.Delete(cart);
+                    await _unitOfWork.CompleteAsync();
+                    _sessionService.UpdateCartSum(0);
+                }
+            }
+        }
     }
 }
