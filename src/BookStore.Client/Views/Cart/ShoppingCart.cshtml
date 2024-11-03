@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model == null || Model.CartDetails == null || Model.CartDetails.Count == 0)
+                            @if (Model == null || Model.CartDetailDtos == null || Model.CartDetailDtos.Count == 0)
                             {
                                 <tr>
                                     <td colspan="5" class="text-center">Your cart is empty.</td>
@@ -28,34 +28,34 @@
                             else
                             {
                                 int index = 0;
-                                foreach (var cartDetail in Model.CartDetails)
+                                foreach (var cartDetailDto in Model.CartDetailDtos)
                                 {
                                     <tr>
                                         <td class="shoping__cart__item">
-                                            <img src="~/img/product/@cartDetail.Book.Image" alt="@cartDetail.Book.Name" style="max-width: 24%">
-                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@cartDetail.Book.Id" target="_blank">
-                                                <h5>@cartDetail.Book.Name</h5>
+                                            <img src="~/img/product/@cartDetailDto.BookImage" alt="@cartDetailDto.BookName" style="max-width: 24%">
+                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@cartDetailDto.BookId" target="_blank">
+                                                <h5>@cartDetailDto.BookName</h5>
                                             </a>
                                         </td>
                                         <td class="shoping__cart__price">
-                                            @cartDetail.Price.ToString("N0")
+                                            @cartDetailDto.BookPrice.ToString("N0")
                                         </td>
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
                                                 <div class="pro-qty">
-                                                    <input type="text" value="@cartDetail.Quantity"
-                                                           data-cart-detail-id="@cartDetail.Id"
-                                                           data-cart-detail-price="@cartDetail.Price"
-                                                           data-cart-detail-discount="@cartDetail.Book.Discount"
+                                                    <input type="text" value="@cartDetailDto.Quantity"
+                                                           data-cart-detail-id="@cartDetailDto.Id"
+                                                           data-cart-detail-price="@cartDetailDto.BookPrice"
+                                                           data-cart-detail-discount="@cartDetailDto.BookDiscount"
                                                            data-cart-detail-index="@index">
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="shoping__cart__total" data-cart-detail-id="@cartDetail.Id">
-                                            @((cartDetail.Price * cartDetail.Quantity).ToString("N0"))
+                                        <td class="shoping__cart__total" data-cart-detail-id="@cartDetailDto.Id">
+                                            @((cartDetailDto.BookPrice * cartDetailDto.Quantity).ToString("N0"))
                                         </td>
                                         <td class="shoping__cart__item__close">
-                                            <form asp-controller="Cart" asp-action="DeleteCartDetail" asp-route-cartDetailId="@cartDetail.Id" method="post">
+                                            <form asp-controller="Cart" asp-action="DeleteCartDetail" asp-route-cartDetailId="@cartDetailDto.Id" method="post">
                                                 @Html.AntiForgeryToken()
                                                 <button style="all: unset;">
                                                     <span class="icon_close"></span>
@@ -71,7 +71,7 @@
                 </div>
             </div>
         </div>
-        @if (Model != null && Model.CartDetails != null && Model.CartDetails.Count > 0)
+        @if (Model != null && Model.CartDetailDtos != null && Model.CartDetailDtos.Count > 0)
         {
             <div class="row">
                 <div class="col-lg-6">
