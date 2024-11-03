@@ -7,6 +7,8 @@
         IUserRepository Users { get; }
         ICartRepository Carts { get; }
         ICartDetailRepository CartDetails { get; }
+        IOrderRepository Orders { get; }
+        IOrderDetailRepository OrderDetails { get; }
         int Complete();
         Task<int> CompleteAsync();
     }

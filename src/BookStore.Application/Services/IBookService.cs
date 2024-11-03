@@ -13,5 +13,9 @@ namespace BookStore.Application.Services
         Task<CartSummaryDto?> HandleGetCartPageAsync();
         Task AddBookToCartAsync(long bookId, long quantity);
         Task HandleRemoveCartDetail(long cartDetailId);
+        Task HandleUpdateCartBeforeCheckout(List<CartDetailDto> cartDetailDtos);
+        Task<CheckoutDto?> GetUserCheckoutDataAsync();
+        Task HandleAddOrderAndOrderDetail(string receivedName, string receivedPhone,
+            string receivedAddress, string orderNotes);
     }
 }
