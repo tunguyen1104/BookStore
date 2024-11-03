@@ -191,7 +191,7 @@ namespace BookStore.Application.Services.Impl
                 CartDetail? cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(cartDetailDto.Id);
                 if (cartDetail != null)
                 {
-                    cartDetail.Quantity = cartDetail.Quantity;
+                    cartDetail.Quantity = cartDetailDto.Quantity;
                     _unitOfWork.CartDetails.Update(cartDetail);
                 }
             }
