@@ -130,3 +130,17 @@
     cursor: pointer;
 }
 
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.shoping__cart__table table tbody tr td.shoping__cart__item h5:hover {
+    color: #7fad39;
+}
+
+button:hover {
+    color: azure;
+}
