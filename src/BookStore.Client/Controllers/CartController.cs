@@ -1,10 +1,12 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Application.Services;
 using BookStore.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Client.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IBookService _bookService;
