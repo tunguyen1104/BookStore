@@ -1,21 +1,19 @@
-﻿using BookStore.Domain.Entities;
-
-namespace BookStore.Application.DTOs
+﻿namespace BookStore.Application.DTOs
 {
     public class CartSummaryDto
     {
         public double TotalPrice { get; set; }
         public double TotalDiscount { get; set; }
-        public List<CartDetail> CartDetails { get; set; }
+        public List<CartDetailDto> CartDetailDtos { get; set; }
         public CartSummaryDto()
         {
-            CartDetails = new List<CartDetail>();
+            CartDetailDtos = new List<CartDetailDto>();
         }
-        public CartSummaryDto(double totalPrice, double totalDiscount, List<CartDetail> cartDetails)
+        public CartSummaryDto(double totalPrice, double totalDiscount, List<CartDetailDto> cartDetailDtos)
         {
             TotalPrice = totalPrice;
             TotalDiscount = totalDiscount;
-            CartDetails = cartDetails;
+            CartDetailDtos = cartDetailDtos;
         }
     }
 }

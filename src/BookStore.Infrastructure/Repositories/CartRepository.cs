@@ -14,6 +14,7 @@ namespace BookStore.Infrastructure.Repositories
         {
             return await _context.Carts
                 .Include(c => c.CartDetails)
+                .ThenInclude(cd => cd.Book)
                 .FirstOrDefaultAsync(c => c.User.Id == id);
         }
         public int GetSumByUserId(long userId)

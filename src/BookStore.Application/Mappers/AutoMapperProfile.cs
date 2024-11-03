@@ -18,6 +18,12 @@ namespace BookStore.Application.Mappers
             .ForMember(dest => dest.Carts, opt => opt.Ignore())
             .ForMember(dest => dest.Orders, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore());
+
+            CreateMap<CartDetail, CartDetailDto>()
+            .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Name))
+            .ForMember(dest => dest.BookPrice, opt => opt.MapFrom(src => src.Book.Price))
+            .ForMember(dest => dest.BookImage, opt => opt.MapFrom(src => src.Book.Image))
+            .ForMember(dest => dest.BookDiscount, opt => opt.MapFrom(src => src.Book.Discount));
         }
     }
 }

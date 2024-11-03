@@ -1,4 +1,5 @@
-﻿using BookStore.Application.DTOs;
+﻿using AutoMapper;
+using BookStore.Application.DTOs;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 
@@ -8,12 +9,14 @@ namespace BookStore.Application.Services.Impl
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISessionService _sessionService;
+        private readonly IMapper _mapper;
         private readonly IUserService _userService;
-        public BookService(IUnitOfWork unitOfWork, ISessionService sessionService, IUserService userService)
+        public BookService(IUnitOfWork unitOfWork, ISessionService sessionService, IUserService userService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
             _sessionService = sessionService;
+            _mapper = mapper;
         }
 
         public async Task<Book?> GetByIdAsync(long id)
@@ -97,21 +100,19 @@ namespace BookStore.Application.Services.Impl
             if (currentUser != null)
             {
                 Cart? cart = await _unitOfWork.Carts.FetchByUserIdAsync(currentUser.Id);
-                List<CartDetail> cartDetails = cart == null ? new List<CartDetail>() : cart.CartDetails.ToList();
-
+                List<CartDetailDto> cartDetailDtos = cart == null
+                        ? new List<CartDetailDto>()
+                        : _mapper.Map<List<CartDetailDto>>(cart.CartDetails.ToList());
                 double totalPrice = 0;
                 double totalDiscount = 0;
-
-                foreach (var cartDetail in cartDetails)
+                foreach (var cartDetailDto in cartDetailDtos)
                 {
-                    totalPrice += (double)(cartDetail.Price * cartDetail.Quantity);
-                    var discount = await _unitOfWork.Books.FetchBookDiscountByIdAsync(cartDetail.BookId) / 100;
-                    totalDiscount += (double)(cartDetail.Price * discount * cartDetail.Quantity);
+                    totalPrice += (double)(cartDetailDto.BookPrice * cartDetailDto.Quantity);
+                    totalDiscount += (double)(cartDetailDto.BookPrice * (cartDetailDto.BookDiscount / 100) * cartDetailDto.Quantity);
                 }
 
-                return new CartSummaryDto(totalPrice, totalDiscount, cartDetails);
+                return new CartSummaryDto(totalPrice, totalDiscount, cartDetailDtos);
             }
-
             return null;
         }
         public async Task AddBookToCartAsync(long bookId, long quantity)
@@ -143,7 +144,6 @@ namespace BookStore.Application.Services.Impl
                         {
                             Cart = cart,
                             Book = book,
-                            Price = book.Price,
                             Quantity = quantity
                         };
                         await _unitOfWork.CartDetails.AddAsync(newCartDetail);
