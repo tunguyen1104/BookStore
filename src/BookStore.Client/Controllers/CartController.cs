@@ -22,5 +22,11 @@ namespace BookStore.Client.Controllers
 
             return View(cartSummary);
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCartDetail(long cartDetailId)
+        {
+            await _bookService.HandleRemoveCartDetail(cartDetailId);
+            return RedirectToAction("ShoppingCart");
+        }
     }
 }

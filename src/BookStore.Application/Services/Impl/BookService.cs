@@ -160,5 +160,29 @@ namespace BookStore.Application.Services.Impl
                 await _unitOfWork.CompleteAsync();
             }
         }
+        public async Task HandleRemoveCartDetail(long cartDetailId)
+        {
+            var cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(cartDetailId)
+                     ?? throw new InvalidOperationException("CartDetail not exit.");
+
+            var currentCart = await _unitOfWork.Carts.GetByIdAsync(cartDetail.CartId)
+                             ?? throw new InvalidOperationException("Cart not exit.");
+
+            _unitOfWork.CartDetails.Delete(cartDetail);
+
+            if (currentCart.Sum > 1)
+            {
+                currentCart.Sum--;
+                _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", currentCart.Sum);
+                _unitOfWork.Carts.Update(currentCart);
+            }
+            else
+            {
+                _unitOfWork.Carts.Delete(currentCart);
+                _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", 0);
+            }
+
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }
