@@ -1,20 +1,19 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
-using Microsoft.AspNetCore.Http;
 
 namespace BookStore.Application.Services.Impl
 {
     public class BookService : IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISessionService _sessionService;
         private readonly IUserService _userService;
-        public BookService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IUserService userService)
+        public BookService(IUnitOfWork unitOfWork, ISessionService sessionService, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
-            _httpContextAccessor = httpContextAccessor;
+            _sessionService = sessionService;
         }
 
         public async Task<Book?> GetByIdAsync(long id)
@@ -148,17 +147,38 @@ namespace BookStore.Application.Services.Impl
                             Quantity = quantity
                         };
                         await _unitOfWork.CartDetails.AddAsync(newCartDetail);
-                        if (_httpContextAccessor.HttpContext != null)
-                        {
-                            int sum = cart.Sum + 1;
-                            _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", sum);
-                            cart.Sum = sum;
-                            _unitOfWork.Carts.Update(cart);
-                        }
+                        int sum = cart.Sum + 1;
+                        _sessionService.UpdateCartSum(sum);
+                        cart.Sum = sum;
+                        _unitOfWork.Carts.Update(cart);
                     }
                 }
                 await _unitOfWork.CompleteAsync();
             }
+        }
+        public async Task HandleRemoveCartDetail(long cartDetailId)
+        {
+            var cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(cartDetailId)
+                     ?? throw new InvalidOperationException("CartDetail not exit.");
+
+            var currentCart = await _unitOfWork.Carts.GetByIdAsync(cartDetail.CartId)
+                             ?? throw new InvalidOperationException("Cart not exit.");
+
+            _unitOfWork.CartDetails.Delete(cartDetail);
+
+            if (currentCart.Sum > 1)
+            {
+                currentCart.Sum--;
+                _sessionService.UpdateCartSum(currentCart.Sum);
+                _unitOfWork.Carts.Update(currentCart);
+            }
+            else
+            {
+                _unitOfWork.Carts.Delete(currentCart);
+                _sessionService.UpdateCartSum(0);
+            }
+
+            await _unitOfWork.CompleteAsync();
         }
     }
 }
