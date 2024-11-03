@@ -171,6 +171,18 @@ namespace BookStore.Infrastructure.Data
                 entity.Property(e => e.OrderDate)
                     .HasDefaultValueSql("(getdate())")
                     .HasColumnName("order_date");
+                entity.Property(e => e.OrderNotes)
+                    .HasMaxLength(1000);
+                entity.Property(e => e.ReceivedAddress)
+                    .HasMaxLength(1000);
+                entity.Property(e => e.ReceivedName)
+                    .HasMaxLength(255);
+                entity.Property(e => e.ReceivedPhone)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
                 entity.Property(e => e.TotalPrice)
                     .HasColumnType("decimal(10, 2)")
                     .HasColumnName("total_price");
