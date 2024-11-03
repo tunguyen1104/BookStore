@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Shopping Cart ";
+﻿@model BookStore.Application.DTOs.CartSummaryDto
+
+@{
+    ViewData["Title"] = "Shopping Cart";
 }
 <section class="shoping-cart spad">
     <div class="container">
@@ -17,45 +19,71 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="img/cart/cart-1.jpg" alt="">
-                                    <h5>Vegetable’s Package</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    $55.00
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    $110.00
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
-                                </td>
-                            </tr>
+                            @if (Model == null || Model.CartDetails == null || Model.CartDetails.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">Your cart is empty.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                int index = 0;
+                                foreach (var cartDetail in Model.CartDetails)
+                                {
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img src="~/img/product/@cartDetail.Book.Image" alt="@cartDetail.Book.Name" style="max-width: 24%">
+                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@cartDetail.Book.Id" target="_blank">
+                                                <h5>@cartDetail.Book.Name</h5>
+                                            </a>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @cartDetail.Price.ToString("N0")
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="pro-qty">
+                                                    <input type="text" value="@cartDetail.Quantity"
+                                                           data-cart-detail-id="@cartDetail.Id"
+                                                           data-cart-detail-price="@cartDetail.Price"
+                                                           data-cart-detail-discount="@cartDetail.Book.Discount"
+                                                           data-cart-detail-index="@index">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="shoping__cart__total" data-cart-detail-id="@cartDetail.Id">
+                                            @((cartDetail.Price * cartDetail.Quantity).ToString("N0"))
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <span class="icon_close">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    ++index;
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Cart Total</h5>
-                    <ul>
-                        <li>Subtotal <span id="subtotal">$454.98</span></li>
-                        <li>Discount <span id="discount">-$0.00</span></li>
-                        <li>Total <span id="total">$454.98</span></li>
-                    </ul>
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+        @if (Model != null && Model.CartDetails != null && Model.CartDetails.Count > 0)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul>
+                            <li>Subtotal <span id="subtotal" data-cart-total-price="@Model.TotalPrice">@Model.TotalPrice.ToString("N0")</span></li>
+                            <li>Discount <span id="discount" data-cart-total-discount="@Model.TotalDiscount">-@Model.TotalDiscount.ToString("N0")</span></li>
+                            <li>Total <span id="total">@((Model.TotalPrice - Model.TotalDiscount).ToString("N0"))</span></li>
+                        </ul>
+                            <button class="primary-btn" style="border: none" type="submit">
+                                PROCEED TO CHECKOUT
+                            </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </section>

@@ -5,10 +5,12 @@ namespace BookStore.Application.Services
 {
     public interface IBookService
     {
-        Task<Book> GetByIdAsync(long id);
+        Task<Book?> GetByIdAsync(long id);
         Task<IEnumerable<Book>> GetAllAsync();
         (IEnumerable<BookDto> Books, int TotalCount) Find(string search, int page, int pageSize);
         IEnumerable<Category> GetAllBookCategories();
         int getTotal();
+        Task<CartSummaryDto?> HandleGetCartPageAsync();
+        Task AddBookToCartAsync(long bookId, long quantity);
     }
 }

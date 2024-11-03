@@ -205,21 +205,6 @@
     var proQty = $('.pro-qty');
     proQty.prepend('<span class="dec qtybtn">-</span>');
     proQty.append('<span class="inc qtybtn">+</span>');
-    proQty.on('click', '.qtybtn', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        $button.parent().find('input').val(newVal);
-    });
     $(document).ready(function () {
         $('#userIcon').click(function (event) {
             event.preventDefault();
@@ -231,5 +216,150 @@
                 $('#menuLink').hide();
             }
         });
+
+        $('.quantity .pro-qty span').on('click', function () {
+            const button = $(this);
+            const input = button.closest('.quantity').find('input');
+            const oldValue = parseFloat(input.val());
+            const index = input.data("cart-detail-index");
+            const price = parseFloat(input.data("cart-detail-price"));
+            const discountRate = parseFloat(input.data("cart-detail-discount") / 100);
+            const id = input.data("cart-detail-id");
+            let newVal = oldValue;
+            let change = 0;
+
+            if (button.hasClass('dec') && oldValue > 1) {
+                newVal = oldValue - 1;
+                change = -1;
+            } else if (!button.hasClass('dec')) {
+                newVal = oldValue + 1;
+                change = 1;
+            }
+            input.val(newVal);
+            $(`#CartDetails_${index}__Quantity`).val(newVal);
+
+            const priceTotalElement = $(`td[data-cart-detail-id='${id}']`);
+            priceTotalElement.text(formatCurrency(price * newVal));
+
+            const totalPriceElement = $("span[data-cart-total-price]");
+            const totalDiscountElement = $("span[data-cart-total-discount]");
+            let totalPrice = parseFloat(totalPriceElement.attr("data-cart-total-price"));
+            let totalDiscount = parseFloat(totalDiscountElement.attr("data-cart-total-discount"));
+
+            if (change !== 0) {
+                totalPrice += change * price;
+                totalDiscount += change * price * discountRate;
+            }
+
+            totalPriceElement.text(formatCurrency(totalPrice)).attr("data-cart-total-price", totalPrice);
+            totalDiscountElement.text(`- ${formatCurrency(totalDiscount)}`).attr("data-cart-total-discount", totalDiscount);
+
+            $("#total").text(formatCurrency(totalPrice - totalDiscount));
+        });
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        $('.btnAddToCartHomepage').click(function (event) {
+            event.preventDefault();
+
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'You need to log in to your account',
+                    position: 'top-right',
+                    icon: 'error'
+                })
+                return;
+            }
+
+            const bookId = $(this).attr('data-book-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                url: `${window.location.origin}/api/CartApi/add-book-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ Quantity: 1, BookId: bookId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    console.log(response)
+                    const sum = +response;
+                    //update cart
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Cart',
+                        text: 'Product added to cart successfully',
+                        position: 'top-right',
+
+                    })
+
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        });
+
+        $('.btnAddToCartDetail').click(function (event) {
+            event.preventDefault();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'You need to log in to your account',
+                    position: 'top-right',
+                    icon: 'error'
+                })
+                return;
+            }
+
+            const bookId = $(this).attr('data-book-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const quantity = $("#CartDetails_0__Quantity").val();
+            $.ajax({
+                url: `${window.location.origin}/api/CartApi/add-book-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ Quantity: quantity, BookId: bookId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    const sum = +response;
+                    $("#sumCart").text(sum)
+                    $.toast({
+                        heading: 'Cart',
+                        text: 'Product added to cart successfully',
+                        position: 'top-right',
+                    })
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        });
+
+        function isLogin() {
+            const navElement = $("#navbarCheck");
+            const childLogin = navElement.find('.check-login');
+            if (childLogin.length > 0) {
+                return false;
+            }
+            return true;
+        }
     });
 })(jQuery);
