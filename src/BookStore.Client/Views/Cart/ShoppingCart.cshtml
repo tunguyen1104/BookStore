@@ -82,7 +82,7 @@
                             <li>Discount <span id="discount" data-cart-total-discount="@Model.TotalDiscount">-@Model.TotalDiscount.ToString("N0")</span></li>
                             <li>Total <span id="total">@((Model.TotalPrice - Model.TotalDiscount).ToString("N0"))</span></li>
                         </ul>
-                        <form asp-controller="Cart" asp-action="Checkout" method="post">
+                        <form asp-controller="Cart" asp-action="ConfirmCheckout" method="post">
                             @Html.AntiForgeryToken()
                             <div style="display: none;">
                                 @for (int i = 0; i < Model.CartDetailDtos.Count; i++)

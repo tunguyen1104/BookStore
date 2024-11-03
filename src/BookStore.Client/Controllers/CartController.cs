@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Application.Services;
+using BookStore.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Client.Controllers
@@ -27,6 +28,17 @@ namespace BookStore.Client.Controllers
         {
             await _bookService.HandleRemoveCartDetail(cartDetailId);
             return RedirectToAction("ShoppingCart");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmCheckout(CartSummaryDto cart)
+        {
+            if (cart.CartDetailDtos == null)
+            {
+                return BadRequest("CartDetailDto cannot be null.");
+            }
+            await _bookService.HandleUpdateCartBeforeCheckout(cart.CartDetailDtos);
+
+            return RedirectToAction("Checkout");
         }
     }
 }

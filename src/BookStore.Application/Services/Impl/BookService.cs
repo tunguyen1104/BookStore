@@ -180,5 +180,22 @@ namespace BookStore.Application.Services.Impl
 
             await _unitOfWork.CompleteAsync();
         }
+        public async Task HandleUpdateCartBeforeCheckout(List<CartDetailDto> cartDetailDtos)
+        {
+            if (cartDetailDtos == null)
+            {
+                throw new ArgumentNullException(nameof(cartDetailDtos), "CartDetailDtos cannot be null.");
+            }
+            foreach (CartDetailDto cartDetailDto in cartDetailDtos)
+            {
+                CartDetail? cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(cartDetailDto.Id);
+                if (cartDetail != null)
+                {
+                    cartDetail.Quantity = cartDetail.Quantity;
+                    _unitOfWork.CartDetails.Update(cartDetail);
+                }
+            }
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }
