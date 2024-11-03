@@ -86,6 +86,7 @@ namespace BookStore.Application.Services.Impl
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity), authProperties);
             }
+            SetCartTotalInSession(user);
             return true;
         }
         public Task<bool> ValidateHashPassword(string value, string hash)
@@ -128,6 +129,9 @@ namespace BookStore.Application.Services.Impl
                 Avatar = user?.Avatar ?? "/img/avatar/default.png"
             };
         }
-
+        public void SetCartTotalInSession(User user)
+        {
+            _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", _unitOfWork.Carts.GetSumByUserId(user.Id));
+        }
     }
 }

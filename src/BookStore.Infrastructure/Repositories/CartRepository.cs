@@ -16,5 +16,12 @@ namespace BookStore.Infrastructure.Repositories
                 .Include(c => c.CartDetails)
                 .FirstOrDefaultAsync(c => c.User.Id == id);
         }
+        public int GetSumByUserId(long userId)
+        {
+            return _context.Carts
+                .Where(c => c.UserId == userId)
+                .Select(c => c.Sum)
+                .FirstOrDefault();
+        }
     }
 }

@@ -21,7 +21,8 @@ namespace BookStore.Client.Controllers
                 return BadRequest("Invalid cart request.");
             }
             await _bookService.AddBookToCartAsync(cartRequest.BookId, cartRequest.Quantity);
-            return Ok();
+            int sum = HttpContext.Session.GetInt32("sum-cart-detail") ?? 0;
+            return Ok(sum);
         }
     }
 }

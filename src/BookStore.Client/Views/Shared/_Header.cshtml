@@ -152,7 +152,10 @@
             <li>
               <a asp-controller="Cart" asp-action="ShoppingCart"><i class="fa fa-shopping-bag"></i>
                   <span id="sumCart">
-                      0
+                      @{
+                            var sumCartDetail = user != null ? Context.Session.GetInt32("sum-cart-detail") ?? 0 : 0;
+                       }
+                       @sumCartDetail
                   </span>
               </a>
             </li>

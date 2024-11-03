@@ -151,6 +151,7 @@ namespace BookStore.Application.Services.Impl
                         if (_httpContextAccessor.HttpContext != null)
                         {
                             int sum = cart.Sum + 1;
+                            _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", sum);
                             cart.Sum = sum;
                             _unitOfWork.Carts.Update(cart);
                         }
