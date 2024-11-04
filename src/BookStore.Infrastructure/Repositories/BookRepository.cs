@@ -13,7 +13,7 @@ namespace BookStore.Infrastructure.Repositories
 
         public int count()
         {
-            return _context.Books.Count();
+            return _context.Books.AsQueryable().Where(b => !b.IsDeleted.HasValue || !b.IsDeleted.Value).Count();
         }
 
         public IEnumerable<Book> Find(Expression<Func<Book, bool>> predicate, int pageNumber, int pageSize)

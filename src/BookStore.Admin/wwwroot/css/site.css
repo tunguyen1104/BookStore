@@ -10,9 +10,33 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+.dataTables_filter{
+    text-align: right;
+}
+.user-action{
+    display: flex;
+    gap: .25rem !important;
+    align-items: center !important;
+    white-space: nowrap;
+}
+.user-action a {
+    font-size: 16px;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    line-height: 25px;
+    margin: 0 3px;
+    display: inline-block;
+    border-radius: 0.25rem;
+}
+    .user-action a i {
+        font-size: 16px;
+    }
+.description-column{
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -52,7 +52,11 @@ namespace BookStore.Application.Services.Impl
                 ShortDesc = book.ShortDesc,
                 Sold = book.Sold,
                 Discount = book.Discount,
-                CategoryIds = book.Categories.Select(c => c.Id).ToList()
+                Categories = book.Categories.Select(category => new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                }).ToList()
             });
             return bookList;
         }
@@ -60,14 +64,13 @@ namespace BookStore.Application.Services.Impl
         public (IEnumerable<BookDto> Books, int TotalCount) Find(string search, int page, int pageSize)
         {
             if (page < 1) page = 1;
-            IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll();
-            // Apply filtering if search term is provided
+            IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll().OrderBy(b => b.Id).Where(b => !b.IsDeleted.HasValue || !b.IsDeleted.Value);
+
             if (!string.IsNullOrWhiteSpace(search))
             {
-                booksQuery = booksQuery.Where(book => book.Name.Contains(search) || book.Author.Contains(search));
+                booksQuery = booksQuery.Where(book => (book.Name.Contains(search) || book.Author.Contains(search)));
             }
 
-            // Get the total count of books that match the criteria (for pagination)
             var totalCount = booksQuery.Count();
 
             // Apply paging
@@ -260,6 +263,70 @@ namespace BookStore.Application.Services.Impl
                     _sessionService.UpdateCartSum(0);
                 }
             }
+        }
+
+        public async Task<int> CreateNewBookAsync(BookDto bookdto)
+        {
+            var categories = bookdto.Categories.Select(category => new Category
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+            }).ToList();
+
+            Book book = new Book
+            {
+                Name = bookdto.Name,
+                Author = bookdto.Author,
+                DetailDesc = bookdto.DetailDesc,
+                Categories = categories,
+                Factory = bookdto.Factory,
+                IsDeleted = false,
+                Quantity = bookdto.Quantity,
+                Price = bookdto.Price,
+                Image = bookdto.Image,
+                ShortDesc = bookdto.ShortDesc,
+                Sold = 0,
+            };
+            await _unitOfWork.Books.AddAsync(book);
+            return await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task<bool> DeleteBookAsync(long id)
+        {
+            var book = await _unitOfWork.Books.GetByIdAsync(id);
+            if (book != null)
+            {
+                book.IsDeleted = true;
+                _unitOfWork.Books.Update(book);
+                return await _unitOfWork.CompleteAsync() > 0;
+            }
+            return false;
+        }
+
+        public async Task<bool> UpdateBookAsync(BookDto bookdto)
+        {
+            var book = await _unitOfWork.Books.GetByIdAsync(bookdto.Id);
+            if (book != null)
+            {
+                _mapper.Map(bookdto, book);
+                if (bookdto.Categories.Any())
+                {
+                    book.Categories.Clear();
+
+                    foreach (var categoryDto in bookdto.Categories)
+                    {
+                        var category = await _unitOfWork.Categories.GetByIdAsync(categoryDto.Id);
+                        if (category != null)
+                        {
+                            book.Categories.Add(category);
+                        }
+                    }
+                }
+                _unitOfWork.Books.Update(book);
+                return await _unitOfWork.CompleteAsync() > 0;
+            }
+            return false;
         }
     }
 }

@@ -14,6 +14,7 @@ table.dataTable {
         border-bottom: 1px solid #e0e0e0; /* Thin separator line */
         padding: 12px 8px; /* Padding for cells */
         cursor: pointer;
+        overflow-wrap: normal;
     }
     table.dataTable tr.selected {
         background-color: var(--bs-primary) !important;
