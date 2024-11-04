@@ -1,9 +1,12 @@
 ﻿using BookStore.Application.DTOs;
 using BookStore.Application.Services;
+using BookStore.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Client.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IBookService _bookService;
@@ -27,6 +30,39 @@ namespace BookStore.Client.Controllers
         {
             await _bookService.HandleRemoveCartDetail(cartDetailId);
             return RedirectToAction("ShoppingCart");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmCheckout(CartSummaryDto cart)
+        {
+            if (cart.CartDetailDtos == null)
+            {
+                return BadRequest("CartDetailDto cannot be null.");
+            }
+            await _bookService.HandleUpdateCartBeforeCheckout(cart.CartDetailDtos);
+
+            return RedirectToAction("Checkout");
+        }
+        public async Task<IActionResult> Checkout()
+        {
+            CartSummaryDto? cartSummary = await _bookService.HandleGetCartPageAsync();
+            CheckoutDto? checkout = await _bookService.GetUserCheckoutDataAsync();
+            if (checkout == null || cartSummary == null)
+            {
+                throw new Exception("Cart summary could not be retrieved.");
+            }
+            checkout.CartSummary = cartSummary;
+            return View(checkout);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder(CheckoutDto checkoutDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Checkout", checkoutDto);
+            }
+            await _bookService.HandleAddOrderAndOrderDetail(checkoutDto.ReceivedName, checkoutDto.ReceivedPhone, checkoutDto.ReceivedAddress, checkoutDto.OrderNotes);
+            return RedirectToAction("ThankYou");
         }
     }
 }

@@ -11,6 +11,8 @@ namespace BookStore.Infrastructure.Repositories
         public IUserRepository Users { get; private set; }
         public ICartRepository Carts { get; private set; }
         public ICartDetailRepository CartDetails { get; private set; }
+        public IOrderRepository Orders { get; private set; }
+        public IOrderDetailRepository OrderDetails { get; private set; }
         public UnitOfWork(BookStoreDbContext context)
         {
             _context = context;
@@ -19,6 +21,8 @@ namespace BookStore.Infrastructure.Repositories
             Users = new UserRepository(_context);
             Carts = new CartRepository(_context);
             CartDetails = new CartDetailRepository(_context);
+            Orders = new OrderRepository(_context);
+            OrderDetails = new OrderDetailRepository(_context);
         }
         public int Complete()
         {
