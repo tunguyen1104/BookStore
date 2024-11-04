@@ -90,9 +90,10 @@
               </ul>
             </div>
                 <div class="header__top__right__auth no-select" id="navbarCheck">
-                @inject IUserService UserService
+                @inject IUserService userService
                 @{
-                    var user = UserService.GetCurrentUser();
+                    var user = userService.GetCurrentUser();
+                    int quantity = user != null ? userService.SetCartDetailTotalInSession(user) : 0;
                 }
                 @if (user != null)
                 {
@@ -152,10 +153,7 @@
             <li>
               <a asp-controller="Cart" asp-action="ShoppingCart"><i class="fa fa-shopping-bag"></i>
                   <span id="sumCart">
-                      @{
-                            var sumCartDetail = user != null ? Context.Session.GetInt32("sum-cart-detail") ?? 0 : 0;
-                       }
-                       @sumCartDetail
+                       @quantity
                   </span>
               </a>
             </li>
