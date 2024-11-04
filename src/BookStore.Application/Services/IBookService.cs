@@ -17,5 +17,8 @@ namespace BookStore.Application.Services
         Task<CheckoutDto?> GetUserCheckoutDataAsync();
         Task HandleAddOrderAndOrderDetail(string receivedName, string receivedPhone,
             string receivedAddress, string orderNotes);
+        Task<int> CreateNewBookAsync(BookDto bookdto);
+        Task<bool> DeleteBookAsync(long id);
+        Task<bool> UpdateBookAsync(BookDto bookdto);
     }
 }

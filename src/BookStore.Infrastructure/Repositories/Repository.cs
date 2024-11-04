@@ -34,10 +34,7 @@ namespace BookStore.Infrastructure.Repositories
 
         public void Update(T entity)
         {
-            if (_context.Entry(entity).State == EntityState.Modified)
-            {
-                _context.Set<T>().Update(entity);
-            }
+            _context.Set<T>().Update(entity);
         }
 
         public void Delete(T entity)

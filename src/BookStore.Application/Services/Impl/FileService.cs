@@ -61,7 +61,7 @@ namespace BookStore.Application.Services.Impl
             {
                 await file.CopyToAsync(fileStream);
             }
-            return uniqueFileName;
+            return GetImageUrl(uniqueFileName);
         }
     }
 }

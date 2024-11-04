@@ -3,9 +3,30 @@
 @{
     ViewData["Title"] = "Create New Book";
 }
+<style>
+    .upload-box {
+        width: 150px;
+        height: 150px;
+        border: 2px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+        .upload-box:hover {
+            background-color: #f7f7f7;
+        }
+
+    .plus-sign {
+        font-size: 36px;
+        color: #aaa;
+    }
+</style>
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800">@ViewData["Title"]</h1>
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
+    <form asp-action="CreateBook" method="post" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label asp-for="Name" class="control-label">Tên Sách</label>
@@ -46,10 +67,19 @@
 
         <div class="form-group">
             <label asp-for="Image" class="control-label"></label>
-            <input asp-for="Image" class="form-control" type="file" />
+
+            <!-- Upload Box -->
+            <div id="uploadBox" class="upload-box">
+                <span class="plus-sign">+</span>
+            </div>
+
+            <img id="uploadedImagePlaceholder" src="" alt="Uploaded Image" style="display:none; width:150px; margin-top:15px;" />
+
+            <!-- Hidden File Input -->
+            <input class="form-control" type="file" id="imageUpload" style="display:none;" />
+            <input asp-for="Image" type="hidden" id="imageUrl" name="Image" />
             <span asp-validation-for="Image" class="text-danger"></span>
         </div>
-
         <div class="form-group">
             <label asp-for="Factory" class="control-label"></label>
             <input asp-for="Factory" class="form-control" />
@@ -61,5 +91,54 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('uploadBox').addEventListener('click', function () {
+            document.getElementById('imageUpload').click();
+        });
+
+        document.getElementById('imageUpload').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                // AJAX call with fetch for file upload
+                fetch('/Books/UploadImage', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Display success notification
+                            toastr.success("Image uploaded successfully!");
+
+                            // Show uploaded image in the placeholder and hide the upload box
+                            const placeholder = document.getElementById('uploadedImagePlaceholder');
+                            placeholder.src = data.imageUrl;
+                            placeholder.style.display = 'block';
+                            document.getElementById('uploadBox').style.display = 'none';
+
+                            // Store image URL for form submission
+                            document.getElementById('imageUrl').value = data.imageUrl;
+                            console.log(data.imageUrl);
+                        } else {
+                            toastr.error("Image upload failed: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        toastr.error("An error occurred during upload.");
+                        console.error('Upload error:', error);
+                    });
+            }
+        });
+    </script>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastr.success('<a asp-action="BookList" style="color: #fff; text-decoration: underline;">@TempData["SuccessMessage"]</a>');
+            });
+        </script>
     }
 }

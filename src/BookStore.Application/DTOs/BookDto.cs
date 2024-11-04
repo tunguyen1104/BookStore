@@ -24,7 +24,6 @@ namespace BookStore.Application.DTOs
 
         public long? Sold { get; set; }
 
-        [Url]
         public string Image { get; set; } = null!;
 
         [Required]
@@ -34,6 +33,6 @@ namespace BookStore.Application.DTOs
 
         [Range(0, 100, ErrorMessage = "Discount must be between 0 and 100")]
         public decimal Discount { get; set; }
-        public List<long> CategoryIds { get; set; } = new List<long>();
+        public IEnumerable<CategoryDto> Categories { get; set; } = null!;
     }
 }

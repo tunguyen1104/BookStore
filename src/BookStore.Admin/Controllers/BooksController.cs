@@ -8,15 +8,13 @@ namespace BookStore.Admin.Controllers
     public class BooksController : Controller
     {
         private readonly IBookService _bookService;
-        public BooksController(IBookService bookService)
+        private readonly IFileService _fileService;
+        public BooksController(IBookService bookService, IFileService fileService)
         {
             _bookService = bookService;
+            _fileService = fileService;
         }
         public IActionResult BookList()
-        {
-            return View();
-        }
-        public IActionResult TestUploadImage()
         {
             return View();
         }
@@ -34,6 +32,24 @@ namespace BookStore.Admin.Controllers
                 data = books
             });
         }
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return Json(new { success = false, message = "No file selected" });
+            }
+
+            try
+            {
+                var imageUrl = await _fileService.UploadImageAsync(file);
+                return Json(new { success = true, imageUrl });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
         public IActionResult CreateBook()
         {
             var categories = _bookService.GetAllBookCategories()
@@ -44,6 +60,18 @@ namespace BookStore.Admin.Controllers
                 });
             ViewBag.Categories = categories;
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateBook(BookDto book)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _bookService.CreateNewBookAsync(book);
+                TempData["SuccessMessage"] = "Book added successfully! Click here to view the book list.";
+
+                return RedirectToAction("CreateBook");
+            }
+            return View(book);
         }
         [HttpGet]
         public async Task<JsonResult> GetBook(long id)
@@ -64,14 +92,14 @@ namespace BookStore.Admin.Controllers
                 detailDesc = book.DetailDesc,
                 price = book.Price,
                 quantity = book.Quantity,
-                image = book.Image,
+                image = _fileService.GetImageUrl(book.Image),
                 factory = book.Factory,
                 discount = book.Discount,
             });
         }
 
         [HttpPost]
-        public async Task<JsonResult> EditBookAsync([FromBody] BookDto bookDto)
+        public async Task<JsonResult> EditBook([FromBody] BookDto bookDto)
         {
             if (ModelState.IsValid)
             {
@@ -81,15 +109,22 @@ namespace BookStore.Admin.Controllers
                     return Json(new { success = false, message = "Book not found" });
                 }
 
-                book.Name = bookDto.Name;
-                book.Author = bookDto.Author;
+                var result = _bookService.UpdateBookAsync(bookDto);
 
-                //_bookService.Update(book);
-
-                return Json(new { success = true });
+                return Json(new { success = result });
             }
 
             return Json(new { success = false, message = "Invalid data" });
+        }
+        [HttpPost]
+        public async Task<JsonResult> Delete(long bookId)
+        {
+            var result = await _bookService.DeleteBookAsync(bookId);
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, message = "Error when delete" });
         }
     }
 }

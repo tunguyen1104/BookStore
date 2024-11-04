@@ -14,12 +14,12 @@
                 <h4 class="mb-0">Book Lists</h4>
             </div>
             <div class="iq-card-header-toolbar d-flex align-items-center">
-                <a href="#" class="btn btn-primary view-more">Add New Book</a>
+                <a asp-controller="Books" asp-action="CreateBook" class="btn btn-primary view-more">Add New Book</a>
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="dataTable table" id="bookTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="bookTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -27,8 +27,8 @@
                             <th>Name</th>
                             <th>Author</th>
                             <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Sold</th>
+                            <th>Mô tả Ngắn</th>
+                            <th>Mô tả chi tiết</th>
                             <th>Factory</th>
                             <th>Actions</th>
                         </tr>
@@ -104,10 +104,9 @@
                         <input type="number" class="form-control" id="bookPrice" step="0.01" required />
                     </div>
 
-                    <!-- Image URL -->
                     <div class="form-group">
-                        <label for="bookImage">Image URL</label>
-                        <input type="url" class="form-control" id="bookImage" />
+                        <label for="bookImage">Book's Image</label>
+                        <img id="bookImage" style="width: 150px; height: 150px; object-fit: cover;"/>
                     </div>
 
                     <!-- Factory -->
@@ -145,11 +144,11 @@
             $('#bookTable').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "searching": true,            // Enable global search
+                "searching": true,
                 "paging": true,
-                "responsive":true,
-                "pageLength": 10,             // Default page size
-                "lengthMenu": [5, 10, 25, 50], // Options for changing page size
+                "responsive": true,
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50],
                 "ajax": {
                     "url": '@Url.Action("GetProducts", "Books")',
                     "type": "GET",
@@ -167,19 +166,41 @@
                     },
                     { "data": "name" },
                     { "data": "author" },
-                    { "data": "price", "render": $.fn.dataTable.render.number(',', '.', 2, '$') }, // Formatting price
-                    { "data": "quantity" },
-                    { "data": "sold" },
+                    {
+                        "data": "price", "render": function (data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND',
+                                    minimumFractionDigits: 0
+                                }).format(data);
+                            }
+                            return data;
+                        }
+                    },
+                    { "data": "shortDesc" },
+                    { 
+                        "data": "detailDesc",
+                        "createdCell": function (cell, cellData, rowData, rowIndex, colIndex) {
+                            if (cellData) {
+                                $(cell).addClass('description-column');
+                            }
+                        },
+                    },
                     { "data": "factory" },
                     {
                         "data": null,
                         "render": function (data, type, row) {
                             return `
-                            <div class="row"">
-                    <button class="btn btn-primary btn-sm" onclick="updateBook(${row.id})">Update</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteBook(${row.id})">Delete</button>
-                    </div>
-                        `;
+                            <div class="user-action">
+                                <a class="bg-success btn btn-primary btn-sm d-flex align-items-center justify-content-center" onclick="updateBook(${row.id})">
+                                    <i class="fa fa-pen"></i>
+                                </a>
+                                <a class="bg-danger btn btn-danger btn-sm d-flex align-items-center justify-content-center" onclick="deleteBook(${row.id})">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                                `;
                         },
                         "orderable": false // Make this column non-sortable
                     }
@@ -191,13 +212,15 @@
         // Delete button event handler
         function deleteBook(id) {
             selectedBookId = id;
+            console.log(selectedBookId);
             $('#deleteModal').modal('show');
         }
 
         $('#confirmDelete').click(() => {
             $.ajax({
-                url: '@Url.Action("Delete", "Books")/' + selectedBookId,
+                url: '@Url.Action("Delete", "Books")',
                 type: 'POST',
+                data: {bookId: selectedBookId},
                 success: function (response) {
                     if (response.success) {
                         $('#deleteModal').modal('hide');
@@ -226,7 +249,7 @@
                     $("#bookShortDesc").val(data.shortDesc);
                     $("#bookDetailDesc").val(data.detailDesc);
                     $("#bookPrice").val(data.price);
-                    $("#bookImage").val(data.image);
+                    $("#bookImage").attr('src', data.image);
                     $("#bookFactory").val(data.factory);
                     $("#bookDiscount").val(data.discount);
 
@@ -238,10 +261,10 @@
 
                         // Append badge with toggle functionality
                         $("#categoryBadges").append(`
-                            <span class="badge ${badgeClass} m-1 category-badge" data-id="${category.id}" style="cursor:pointer;">
-                                ${category.name}
-                            </span>
-                        `);
+                                    <span class="badge ${badgeClass} m-1 category-badge" data-id="${category.id}" style="cursor:pointer;">
+                                        ${category.name}
+                                    </span>
+                                `);
                     });
 
                     // Show the modal
