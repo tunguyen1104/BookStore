@@ -93,7 +93,7 @@
                 @inject IUserService userService
                 @{
                     var user = userService.GetCurrentUser();
-                    int quantity = userService.SetCartDetailTotalInSession(user);
+                    int quantity = user != null ? userService.SetCartDetailTotalInSession(user) : 0;
                 }
                 @if (user != null)
                 {
