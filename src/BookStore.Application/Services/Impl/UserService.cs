@@ -15,11 +15,13 @@ namespace BookStore.Application.Services.Impl
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly ISessionService _sessionService;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ISessionService sessionService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _sessionService = sessionService;
         }
 
         public async Task<bool> RegisterUserAsync(RegisterDto account)
@@ -86,7 +88,6 @@ namespace BookStore.Application.Services.Impl
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity), authProperties);
             }
-            SetCartTotalInSession(user);
             return true;
         }
         public Task<bool> ValidateHashPassword(string value, string hash)
@@ -99,6 +100,8 @@ namespace BookStore.Application.Services.Impl
             if (httpContext != null)
             {
                 await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                httpContext.Session.Clear();
+                httpContext.Response.Cookies.Delete(".AspNetCore.Session");
             }
         }
         public bool IsAuthorizedRole(long roleType)
@@ -129,9 +132,11 @@ namespace BookStore.Application.Services.Impl
                 Avatar = user?.Avatar ?? "/img/avatar/default.png"
             };
         }
-        public void SetCartTotalInSession(User user)
+        public int SetCartDetailTotalInSession(User user)
         {
-            _httpContextAccessor.HttpContext.Session.SetInt32("sum-cart-detail", _unitOfWork.Carts.GetSumByUserId(user.Id));
+            int totalQuantity = _unitOfWork.Carts.GetSumByUserId(user.Id);
+            _sessionService.UpdateCartSum(totalQuantity);
+            return totalQuantity;
         }
     }
 }
