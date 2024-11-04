@@ -99,6 +99,8 @@ namespace BookStore.Application.Services.Impl
             if (httpContext != null)
             {
                 await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                httpContext.Session.Clear();
+                httpContext.Response.Cookies.Delete(".AspNetCore.Session");
             }
         }
         public bool IsAuthorizedRole(long roleType)
