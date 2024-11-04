@@ -37,7 +37,7 @@ namespace BookStore.Application.Services.Impl
 
         public string GetImageUrl(string imageName)
         {
-            return Path.Combine("/assets", imageName);
+            return Path.Combine("/assets/", imageName);
         }
 
         public async Task<string> UploadImageAsync(IFormFile file)

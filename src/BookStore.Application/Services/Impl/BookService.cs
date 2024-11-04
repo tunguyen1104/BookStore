@@ -11,12 +11,14 @@ namespace BookStore.Application.Services.Impl
         private readonly ISessionService _sessionService;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
-        public BookService(IUnitOfWork unitOfWork, ISessionService sessionService, IUserService userService, IMapper mapper)
+        private readonly IFileService _fileService;
+        public BookService(IUnitOfWork unitOfWork, ISessionService sessionService, IUserService userService, IMapper mapper, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
             _sessionService = sessionService;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
         public async Task<Book?> GetByIdAsync(long id)
@@ -79,7 +81,7 @@ namespace BookStore.Application.Services.Impl
                 Author = book.Author,
                 DetailDesc = book.DetailDesc,
                 Factory = book.Factory,
-                Image = book.Image,
+                Image = _fileService.GetImageUrl(book.Image),
                 Price = book.Price,
                 Quantity = book.Quantity,
                 ShortDesc = book.ShortDesc,
