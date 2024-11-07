@@ -1,28 +1,27 @@
 ﻿@model BookStore.Domain.Entities.Book
-<div class="col-lg-3 col-md-4 col-sm-6">
-    <div class="product__item">
-        <div class="product__item__pic set-bg"
-             data-setbg="@Url.Content("~/img/product/" + Model.Image)">
-            <ul class="product__item__pic__hover">
-                <li>
-                    <a data-book-id="@Model.Id"
-                       class="btnAddToCartHomepage">
-                        <i class="fa fa-shopping-cart"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="product__item__text">
-            <h6>
-                <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@Model.Id" target="_blank">
-                    @Model.Name
+<div class="product__item">
+    <div class="product__item__pic set-bg"
+            data-setbg="@Url.Content("~/img/product/" + Model.Image)">
+        <ul class="product__item__pic__hover">
+            <li>
+                <a data-book-id="@Model.Id"
+                    class="btnAddToCartHomepage">
+                    <i class="fa fa-shopping-cart"></i>
                 </a>
-            </h6>
-            <div class="inner-price">
-                <h5>@((Model.Price * (1 - Model.Discount / 100)).ToString("N0"))</h5>
-                <span>@Model.Price.ToString("N0")</span>
-                <div class="discount">@Model.Discount%</div>
-            </div>
+            </li>
+        </ul>
+    </div>
+    <div class="product__item__text">
+        <h6>
+            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@Model.Id" target="_blank">
+                @Model.Name
+            </a>
+        </h6>
+        <div class="inner-price">
+            <h5>@((Model.Price * (1 - Model.Discount / 100)).ToString("N0"))</h5>
+            <span>@Model.Price.ToString("N0")</span>
+            <div class="discount">@Model.Discount%</div>
         </div>
     </div>
 </div>
+
