@@ -1,5 +1,5 @@
 ﻿@model BookStore.Application.DTOs.CartSummaryDto
-
+@inject BookStore.Application.Services.IFileService fileService
 @{
     ViewData["Title"] = "Shopping Cart";
 }
@@ -32,7 +32,7 @@
                                 {
                                     <tr>
                                         <td class="shoping__cart__item">
-                                            <img src="~/img/product/@cartDetailDto.BookImage" alt="@cartDetailDto.BookName" style="max-width: 24%">
+                                            <img src="@fileService.GetImageUrl(cartDetailDto.BookImage)" alt="@cartDetailDto.BookName" style="max-width: 24%">
                                             <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@cartDetailDto.BookId" target="_blank">
                                                 <h5>@cartDetailDto.BookName</h5>
                                             </a>
