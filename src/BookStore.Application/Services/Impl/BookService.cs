@@ -244,30 +244,33 @@ namespace BookStore.Application.Services.Impl
                 if (cartDetails != null)
                 {
                     // create new order
-                    Order order = new Order();
-                    order.UserId = currentUser.Id;
-                    order.User = currentUser;
-                    order.ReceivedName = receivedName;
-                    order.ReceivedPhone = receivedPhone;
-                    order.ReceivedAddress = receivedAddress;
-                    order.OrderNotes = orderNotes;
-                    order.Status = "PENDING";
-                    decimal totalPrice = 0;
-                    foreach (CartDetail cartDetail in cartDetails)
+                    var order = new Order
                     {
-                        totalPrice += cartDetail.Book.Price * cartDetail.Quantity;
-                    }
-                    order.TotalPrice = totalPrice;
+                        UserId = currentUser.Id,
+                        User = currentUser,
+                        ReceivedName = receivedName,
+                        ReceivedPhone = receivedPhone,
+                        ReceivedAddress = receivedAddress,
+                        OrderNotes = orderNotes,
+                        Status = "PENDING",
+                        TotalPrice = cartDetails.Sum(cd => cd.Book.Price * cd.Quantity)
+                    };
+
                     await _unitOfWork.Orders.AddAsync(order);
 
-                    // create new order_detail
-                    foreach (CartDetail cartDetail in cartDetails)
+                    foreach (var cartDetail in cartDetails)
                     {
-                        OrderDetail orderDetail = new OrderDetail();
-                        orderDetail.Order = order;
-                        orderDetail.Book = cartDetail.Book;
-                        orderDetail.Quantity = cartDetail.Quantity;
+                        var orderDetail = new OrderDetail
+                        {
+                            Order = order,
+                            Book = cartDetail.Book,
+                            Quantity = cartDetail.Quantity
+                        };
                         await _unitOfWork.OrderDetails.AddAsync(orderDetail);
+
+                        // Update book stock and sales count
+                        cartDetail.Book.Quantity -= cartDetail.Quantity;
+                        cartDetail.Book.Sold += cartDetail.Quantity;
                     }
 
                     // delete cart
