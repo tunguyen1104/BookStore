@@ -1,6 +1,7 @@
 ﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace BookStore.Infrastructure.Repositories
@@ -23,5 +24,24 @@ namespace BookStore.Infrastructure.Repositories
                  .Take(pageSize);
         }
         public async Task<decimal?> FetchBookDiscountByIdAsync(long bookId) => bookId > 0 ? (await _context.Books.FindAsync(bookId))?.Discount : null;
+
+        public async Task<List<long>> GetNewArrivalBookIdsAsync()
+        {
+            return await _context.Books
+                .OrderByDescending(b => b.Id)
+                .Take(20)
+                .Select(b => b.Id)
+                .ToListAsync();
+        }
+
+        public async Task<List<long>> GetMostBuyBookIdsAsync()
+        {
+            return await _context.Books
+                .Where(b => b.Sold.HasValue && b.Sold > 0)
+                .OrderByDescending(b => b.Sold)
+                .Take(20)
+                .Select(b => b.Id)
+                .ToListAsync();
+        }
     }
 }

@@ -8,5 +8,7 @@ namespace BookStore.Domain.Repositories
         public int count();
         public IEnumerable<Book> Find(Expression<Func<Book, bool>> predicate, int pageNumber, int pageSize);
         Task<decimal?> FetchBookDiscountByIdAsync(long bookId);
+        Task<List<long>> GetNewArrivalBookIdsAsync();
+        Task<List<long>> GetMostBuyBookIdsAsync();
     }
 }
