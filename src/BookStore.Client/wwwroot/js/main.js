@@ -225,7 +225,7 @@
             const price = parseFloat(input.data("cart-detail-price"));
             const discountRate = parseFloat(input.data("cart-detail-discount") / 100);
             const id = input.data("cart-detail-id");
-            const quantityBook = input.data("data-book-quantity");
+            const quantityBook = input.data("book-quantity");
             let newVal = oldValue;
             let change = 0;
 

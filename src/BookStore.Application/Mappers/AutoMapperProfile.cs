@@ -24,7 +24,8 @@ namespace BookStore.Application.Mappers
             .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Name))
             .ForMember(dest => dest.BookPrice, opt => opt.MapFrom(src => src.Book.Price))
             .ForMember(dest => dest.BookImage, opt => opt.MapFrom(src => src.Book.Image))
-            .ForMember(dest => dest.BookDiscount, opt => opt.MapFrom(src => src.Book.Discount));
+            .ForMember(dest => dest.BookDiscount, opt => opt.MapFrom(src => src.Book.Discount))
+            .ForMember(dest => dest.BookQuantity, opt => opt.MapFrom(src => src.Book.Quantity));
 
             CreateMap<Book, BookDto>()
             .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
