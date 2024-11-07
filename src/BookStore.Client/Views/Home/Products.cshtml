@@ -294,31 +294,7 @@
                         @foreach (var item in Model)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg"
-                                         data-setbg="@Url.Content("~/img/product/" + item.Image)">
-                                        <ul class="product__item__pic__hover">
-                                            <li>
-                                                <a data-book-id="@item.Id"
-                                                   class="btnAddToCartHomepage">
-                                                    <i class="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h6>
-                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@item.Id" target="_blank">
-                                                @item.Name
-                                            </a>
-                                        </h6>
-                                        <div class="inner-price">
-                                            <h5>@((item.Price * (1 - item.Discount / 100)).ToString("N0"))</h5>
-                                            <span>@item.Price.ToString("N0")</span>
-                                            <div class="discount">@item.Discount%</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @await Html.PartialAsync("_BookList", item)
                             </div>
                         }
                     </div>
