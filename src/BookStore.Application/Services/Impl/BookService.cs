@@ -35,6 +35,22 @@ namespace BookStore.Application.Services.Impl
         {
             return _unitOfWork.Books.count();
         }
+        public async Task<IEnumerable<HomePageBookDto>> GetBooksForHomepageAsync()
+        {
+            var newArrivalBookIds = await _unitOfWork.Books.GetNewArrivalBookIdsAsync();
+            var bestSellerBookIds = await _unitOfWork.Books.GetMostBuyBookIdsAsync();
+
+            IEnumerable<BookDto> books = findAll();
+
+            var homePageBooks = books.Select(book => new HomePageBookDto
+            {
+                BookDto = book,
+                IsNewArrival = newArrivalBookIds.Contains(book.Id),
+                BestSeller = bestSellerBookIds.Contains(book.Id)
+            });
+
+            return homePageBooks;
+        }
 
         public IEnumerable<BookDto> findAll()
         {

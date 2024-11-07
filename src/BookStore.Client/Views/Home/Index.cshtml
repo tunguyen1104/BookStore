@@ -1,11 +1,11 @@
-﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+﻿@model IEnumerable<BookStore.Application.DTOs.HomePageBookDto>
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @foreach (var item in Model)
 {
-    <div class="col-lg-3 col-md-4 col-sm-6">
-        @await Html.PartialAsync("_BookList", item)
+    <div class="col-lg-3 col-md-4 col-sm-6 mix@(item.IsNewArrival ? " new-arrivals" : "")@(item.BestSeller ? " best-seller" : "")">
+        @await Html.PartialAsync("_BookList", item.BookDto)
     </div>
 }

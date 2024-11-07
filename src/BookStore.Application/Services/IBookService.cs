@@ -7,6 +7,7 @@ namespace BookStore.Application.Services
     {
         Task<Book?> GetByIdAsync(long id);
         Task<IEnumerable<Book>> GetAllAsync();
+        Task<IEnumerable<HomePageBookDto>> GetBooksForHomepageAsync();
         (IEnumerable<BookDto> Books, int TotalCount) Find(string search, int page, int pageSize);
         IEnumerable<Category> GetAllBookCategories();
         int getTotal();
