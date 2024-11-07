@@ -1,7 +1,8 @@
 ﻿@model BookStore.Domain.Entities.Book
+@inject BookStore.Application.Services.IFileService fileService
 <div class="product__item">
     <div class="product__item__pic set-bg"
-            data-setbg="@Url.Content("~/img/product/" + Model.Image)">
+         data-setbg="@fileService.GetImageUrl(Model.Image)">
         <ul class="product__item__pic__hover">
             <li>
                 <a data-book-id="@Model.Id"

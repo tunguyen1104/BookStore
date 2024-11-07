@@ -1,4 +1,5 @@
 ﻿@model BookStore.Application.DTOs.CheckoutDto
+@inject BookStore.Application.Services.IFileService fileService
 @{
     ViewData["Title"] = "Checkout";
 }
@@ -31,7 +32,7 @@
                                 {
                                     <tr>
                                         <td class="shoping__cart__item">
-                                            <img src="~/img/product/@cartDetailDto.BookImage" alt="@cartDetailDto.BookName" style="max-width: 24%">
+                                            <img src="@fileService.GetImageUrl(cartDetailDto.BookImage)" alt="@cartDetailDto.BookName" style="max-width: 24%">
                                             <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@cartDetailDto.BookId" target="_blank">
                                                 <h5>@cartDetailDto.BookName</h5>
                                             </a>
@@ -58,6 +59,7 @@
         <div class="checkout__form">
             <h4>Billing Details</h4>
             <form asp-controller="Cart" asp-action="PlaceOrder" method="post">
+                @Html.AntiForgeryToken()
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
                         <div class="row">
@@ -101,16 +103,16 @@
                             <div class="checkout__order__subtotal" style="margin-top: -15px;">Discount <span>-@Model.CartSummary.TotalDiscount.ToString("N0")</span></div>
                             <div class="checkout__order__total">Total <span>@((Model.CartSummary.TotalPrice - Model.CartSummary.TotalDiscount).ToString("N0"))</span></div>
                             
-                            <input type="hidden" asp-for="CartSummary.TotalPrice" />
-                            <input type="hidden" asp-for="CartSummary.TotalDiscount" />
+                            <input type="hidden" asp-for="@Model.CartSummary.TotalPrice" />
+                            <input type="hidden" asp-for="@Model.CartSummary.TotalDiscount" />
                             @for (int i = 0; i < Model.CartSummary.CartDetailDtos.Count; i++)
                             {
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].Id" />
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].BookName" />
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].BookId" />
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].BookImage" />
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].Quantity" />
-                                <input type="hidden" asp-for="CartSummary.CartDetailDtos[i].BookPrice" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].Id" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].BookName" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].BookId" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].BookImage" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].Quantity" />
+                                <input type="hidden" asp-for="@Model.CartSummary.CartDetailDtos[i].BookPrice" />
                             }
                             <button type="submit" class="site-btn">PLACE ORDER</button>
                         </div>
