@@ -9,5 +9,6 @@
         public string BookName { get; set; } = null!;
         public string BookImage { get; set; } = null!;
         public decimal BookDiscount { get; set; }
+        public long BookQuantity { get; set; }
     }
 }

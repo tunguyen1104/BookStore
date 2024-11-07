@@ -33,6 +33,7 @@ namespace BookStore.Application.DTOs
 
         [Range(0, 100, ErrorMessage = "Discount must be between 0 and 100")]
         public decimal Discount { get; set; }
+        public bool? IsDeleted { get; set; }
         public IEnumerable<CategoryDto> Categories { get; set; } = null!;
     }
 }
