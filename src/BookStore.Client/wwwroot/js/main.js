@@ -225,6 +225,7 @@
             const price = parseFloat(input.data("cart-detail-price"));
             const discountRate = parseFloat(input.data("cart-detail-discount") / 100);
             const id = input.data("cart-detail-id");
+            const quantityBook = input.data("data-book-quantity");
             let newVal = oldValue;
             let change = 0;
 
@@ -234,6 +235,15 @@
             } else if (!button.hasClass('dec')) {
                 newVal = oldValue + 1;
                 change = 1;
+            }
+            if (newVal > quantityBook) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'The quantity you selected exceeds the available stock limit.',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
             }
             input.val(newVal);
             $(`#CartDetailDtos_${index}__Quantity`).val(newVal);
@@ -330,11 +340,21 @@
                 })
                 return;
             }
-
+            const isDeleted = $(this).attr('data-book-isDeleted');
+            console.log(isDeleted)
+            if (isDeleted) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'This product is no longer available.',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
             const bookId = $(this).attr('data-book-id');
             const token = $("meta[name='_csrf']").attr("content");
             const header = $("meta[name='_csrf_header']").attr("content");
-            const quantity = $("#CartDetails_0__Quantity").val();
+            const quantity = $("#CartDetailDtos_0__Quantity").val();
             $.ajax({
                 url: `${window.location.origin}/api/CartApi/add-book-to-cart`,
                 beforeSend: function (xhr) {

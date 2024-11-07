@@ -37,18 +37,32 @@
                         <div class="quantity">
                             <div class="pro-qty">
                                 <input type="text" value="1"
-                                       data-cart-detail-index="0">
+                                       data-cart-detail-index="0" data-book-quantity="@Model.Quantity">
                             </div>
-                        </div>
+                        </div> 
                     </div>
                     <input class="form-control d-none" type="text" name="quantity"
                            id="CartDetailDtos_0__Quantity" value="1" />
-                    <a data-book-id="@Model.Id"
+                    <a data-book-id="@Model.Id" data-book-isDeleted="@Model.IsDeleted"
                        class="btnAddToCartDetail primary-btn">
                         <i class="fa fa-shopping-cart"></i>
                     </a>
                     <ul>
-                        <li><b>Availability</b> <span>@(Model.Quantity > 0 ? "In Stock" : "Out of Stock")</span></li>
+                        @{
+                            string text = "";
+                            long quantity = 0;
+                            if (Model.IsDeleted == false)
+                            {
+                                text = "In Stock";
+                                quantity = Model.Quantity;
+                            }
+                            else
+                            {
+                                text = "Out of Stock";
+                            }
+                        }
+                        <li><b>Availability</b> <span>@text (Remaining @quantity products)</span></li>
+                        <li><b>Sold</b> <span>@Model.Sold</span></li>
                         <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
                         <li>
                             <b>Share on</b>
