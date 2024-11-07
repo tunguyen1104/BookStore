@@ -68,6 +68,7 @@ namespace BookStore.Application.Services.Impl
                 ShortDesc = book.ShortDesc,
                 Sold = book.Sold,
                 Discount = book.Discount,
+                IsDeleted = book.IsDeleted,
                 Categories = book.Categories.Select(category => new CategoryDto
                 {
                     Id = category.Id,

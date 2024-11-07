@@ -274,7 +274,16 @@
                 })
                 return;
             }
-
+            const isDeleted = $(this).attr('data-book-isDeleted');
+            if (isDeleted) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'This product is no longer available.',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
             const bookId = $(this).attr('data-book-id');
             const token = $("meta[name='_csrf']").attr("content");
             const header = $("meta[name='_csrf_header']").attr("content");
