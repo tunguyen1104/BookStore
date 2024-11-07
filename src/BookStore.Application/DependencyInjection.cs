@@ -12,6 +12,7 @@ namespace BookStore.Application
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddHttpContextAccessor();

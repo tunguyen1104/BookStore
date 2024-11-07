@@ -1,11 +1,9 @@
-using BookStore.Application.Mappers;
-using BookStore.Application.Services;
-using BookStore.Application.Services.Impl;
-using BookStore.Domain.Repositories;
+using BookStore.Application;
+using BookStore.Infrastructure;
 using BookStore.Infrastructure.Data;
-using BookStore.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace BookStore.Client
 {
@@ -15,20 +13,14 @@ namespace BookStore.Client
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register IService -> ServiceImpl
-            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IBookService, BookService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddInfrastructure();
+            builder.Services.AddApplication();
             // Change the connection string in appsettings.json to your local sql server
             builder.Services.AddDbContext<BookStoreDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreConnection")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
@@ -58,6 +50,11 @@ namespace BookStore.Client
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "../Assets")),
+                RequestPath = "/assets"
+            });
             app.UseSession();
             app.UseRouting();
 
