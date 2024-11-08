@@ -16,7 +16,12 @@ namespace BookStore.Infrastructure.Repositories
         {
             return _context.Books.AsQueryable().Where(b => !b.IsDeleted.HasValue || !b.IsDeleted.Value).Count();
         }
-
+        public override async Task<Book?> GetByIdAsync(long id)
+        {
+            return await _context.Set<Book>()
+                                 .Include(b => b.Categories)
+                                 .FirstOrDefaultAsync(b => b.Id == id);
+        }
         public IEnumerable<Book> Find(Expression<Func<Book, bool>> predicate, int pageNumber, int pageSize)
         {
             return _context.Books.Where(predicate)
