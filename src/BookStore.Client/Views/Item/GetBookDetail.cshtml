@@ -23,6 +23,7 @@
                     </div>
                     <div class="author-info">
                         <div class="author">Author: @Model.Author</div>
+                        <div class="author">Category: @string.Join(", ", Model.Categories.Select(c => c.Name))</div>
                         <div class="factory">Factory: @Model.Factory</div>
                     </div>
                     <div class="featured__item__text">
@@ -97,3 +98,31 @@
         </div>
     </div>
 </section>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9 col-md-7">
+            <div class="product__discount">
+                <div class="section-title product__discount__title">
+                    <h2>Related Products</h2>
+                </div>
+                <div class="row">
+                    <div class="product__discount__slider owl-carousel">
+                        @if (ViewBag.RelatedBooks != null && ViewBag.RelatedBooks.Count > 0)
+                        {
+                            foreach (var item in ViewBag.RelatedBooks as IEnumerable<BookDto>)
+                            {
+                                <div class="col-lg-4">
+                                    @await Html.PartialAsync("_BookList", item)
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>No related books found.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
