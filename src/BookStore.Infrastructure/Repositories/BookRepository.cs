@@ -48,5 +48,43 @@ namespace BookStore.Infrastructure.Repositories
                 .Select(b => b.Id)
                 .ToListAsync();
         }
+
+        public async Task<List<Book>> GetRelatedBooksAsync(Book book)
+        {
+            var relatedBooks = await _context.Books
+                .Where(b => b.Id != book.Id && b.Name.Contains(book.Name))
+                .Take(10)
+                .ToListAsync();
+
+            if (relatedBooks.Count >= 10)
+                return relatedBooks;
+
+            // if < 10 -> find more books by Author
+            var booksBySameAuthor = await _context.Books
+                .Where(b => b.Id != book.Id && b.Author == book.Author)
+                .ToListAsync();
+
+            relatedBooks.AddRange(booksBySameAuthor);
+
+            relatedBooks = relatedBooks
+                .Distinct()
+                .Take(10)
+                .ToList();
+
+            if (relatedBooks.Count >= 10)
+                return relatedBooks;
+
+            // if < 10 -> find more books by Categories
+            var booksInSameCategory = await _context.Books
+                .Where(b => b.Id != book.Id && b.Categories.Any(c => book.Categories.Select(bc => bc.Id).Contains(c.Id)))
+                .ToListAsync();
+
+            relatedBooks.AddRange(booksInSameCategory);
+
+            return relatedBooks
+                .Distinct()
+                .Take(10)
+                .ToList();
+        }
     }
 }

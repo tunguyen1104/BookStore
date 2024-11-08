@@ -10,5 +10,6 @@ namespace BookStore.Domain.Repositories
         Task<decimal?> FetchBookDiscountByIdAsync(long bookId);
         Task<List<long>> GetNewArrivalBookIdsAsync();
         Task<List<long>> GetMostBuyBookIdsAsync();
+        Task<List<Book>> GetRelatedBooksAsync(Book book);
     }
 }
