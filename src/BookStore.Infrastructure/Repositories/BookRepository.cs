@@ -16,7 +16,12 @@ namespace BookStore.Infrastructure.Repositories
         {
             return _context.Books.AsQueryable().Where(b => !b.IsDeleted.HasValue || !b.IsDeleted.Value).Count();
         }
-
+        public override async Task<Book?> GetByIdAsync(long id)
+        {
+            return await _context.Set<Book>()
+                                 .Include(b => b.Categories)
+                                 .FirstOrDefaultAsync(b => b.Id == id);
+        }
         public IEnumerable<Book> Find(Expression<Func<Book, bool>> predicate, int pageNumber, int pageSize)
         {
             return _context.Books.Where(predicate)
@@ -42,6 +47,44 @@ namespace BookStore.Infrastructure.Repositories
                 .Take(20)
                 .Select(b => b.Id)
                 .ToListAsync();
+        }
+
+        public async Task<List<Book>> GetRelatedBooksAsync(Book book)
+        {
+            var relatedBooks = await _context.Books
+                .Where(b => b.Id != book.Id && b.Name.Contains(book.Name))
+                .Take(10)
+                .ToListAsync();
+
+            if (relatedBooks.Count >= 10)
+                return relatedBooks;
+
+            // if < 10 -> find more books by Author
+            var booksBySameAuthor = await _context.Books
+                .Where(b => b.Id != book.Id && b.Author == book.Author)
+                .ToListAsync();
+
+            relatedBooks.AddRange(booksBySameAuthor);
+
+            relatedBooks = relatedBooks
+                .Distinct()
+                .Take(10)
+                .ToList();
+
+            if (relatedBooks.Count >= 10)
+                return relatedBooks;
+
+            // if < 10 -> find more books by Categories
+            var booksInSameCategory = await _context.Books
+                .Where(b => b.Id != book.Id && b.Categories.Any(c => book.Categories.Select(bc => bc.Id).Contains(c.Id)))
+                .ToListAsync();
+
+            relatedBooks.AddRange(booksInSameCategory);
+
+            return relatedBooks
+                .Distinct()
+                .Take(10)
+                .ToList();
         }
     }
 }

@@ -21,5 +21,6 @@ namespace BookStore.Application.Services
         Task<int> CreateNewBookAsync(BookDto bookdto);
         Task<bool> DeleteBookAsync(long id);
         Task<bool> UpdateBookAsync(BookDto bookdto);
+        Task<List<BookDto>> GetRelatedBooksAsync(Book book);
     }
 }

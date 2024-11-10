@@ -351,5 +351,11 @@ namespace BookStore.Application.Services.Impl
             }
             return false;
         }
+
+        public async Task<List<BookDto>> GetRelatedBooksAsync(Book book)
+        {
+            var relatedBooks = await _unitOfWork.Books.GetRelatedBooksAsync(book);
+            return _mapper.Map<List<BookDto>>(relatedBooks.ToList());
+        }
     }
 }
