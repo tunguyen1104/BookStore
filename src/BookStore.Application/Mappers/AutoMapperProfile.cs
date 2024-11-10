@@ -27,11 +27,7 @@ namespace BookStore.Application.Mappers
             .ForMember(dest => dest.BookDiscount, opt => opt.MapFrom(src => src.Book.Discount))
             .ForMember(dest => dest.BookQuantity, opt => opt.MapFrom(src => src.Book.Quantity));
 
-            CreateMap<Book, BookDto>()
-            .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
 
-            CreateMap<BookDto, Book>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
 
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();

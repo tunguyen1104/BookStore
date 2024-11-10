@@ -287,13 +287,16 @@ namespace BookStore.Application.Services.Impl
 
         public async Task<int> CreateNewBookAsync(BookDto bookdto)
         {
-            var categories = bookdto.Categories.Select(category => new Category
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-            }).ToList();
+            List<Category> categories = new List<Category>();
 
+            foreach (var id in bookdto.SelectedCategoryIds)
+            {
+                var category = await _unitOfWork.Categories.GetByIdAsync(id);
+                if (category != null)
+                {
+                    categories.Add(category);
+                }
+            }
             Book book = new Book
             {
                 Name = bookdto.Name,

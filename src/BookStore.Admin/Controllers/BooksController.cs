@@ -71,6 +71,14 @@ namespace BookStore.Admin.Controllers
 
                 return RedirectToAction("CreateBook");
             }
+            var categories = _bookService.GetAllBookCategories()
+                .Select(category => new SelectListItem
+                {
+                    Text = category.Name,
+                    Value = category.Id.ToString(),
+                });
+            ViewBag.Categories = categories;
+            ViewBag.CurrentImage = book.Image;
             return View(book);
         }
         [HttpGet]
@@ -95,6 +103,12 @@ namespace BookStore.Admin.Controllers
                 image = _fileService.GetImageUrl(book.Image),
                 factory = book.Factory,
                 discount = book.Discount,
+                categories = book.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description,
+                })
             });
         }
 

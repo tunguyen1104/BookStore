@@ -22,7 +22,7 @@ namespace BookStore.Application.DTOs
         [Range(0, long.MaxValue)]
         public long Quantity { get; set; }
 
-        public long? Sold { get; set; }
+        public long? Sold { get; set; } = 0;
 
         public string Image { get; set; } = null!;
 
@@ -32,8 +32,10 @@ namespace BookStore.Application.DTOs
         public string Factory { get; set; } = null!;
 
         [Range(0, 100, ErrorMessage = "Discount must be between 0 and 100")]
-        public decimal Discount { get; set; }
-        public bool? IsDeleted { get; set; }
-        public IEnumerable<CategoryDto> Categories { get; set; } = null!;
+        public decimal Discount { get; set; } = 0;
+        public bool? IsDeleted { get; set; } = false;
+
+        public List<long> SelectedCategoryIds { get; set; } = new List<long>();
+        public IEnumerable<CategoryDto>? Categories { get; set; } = null!;
     }
 }
