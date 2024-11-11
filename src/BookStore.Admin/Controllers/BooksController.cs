@@ -61,6 +61,10 @@ namespace BookStore.Admin.Controllers
             ViewBag.Categories = categories;
             return View();
         }
+        public IActionResult Inventory()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> CreateBook(BookDto book)
         {
@@ -108,12 +112,13 @@ namespace BookStore.Admin.Controllers
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
-                })
+                }),
+                allCategories = _bookService.GetAllBookCategories()
             });
         }
 
         [HttpPost]
-        public async Task<JsonResult> EditBook([FromBody] BookDto bookDto)
+        public async Task<JsonResult> EditBook([FromBody] CreateOrUpdateBookRequest bookDto)
         {
             if (ModelState.IsValid)
             {
@@ -128,7 +133,7 @@ namespace BookStore.Admin.Controllers
                 return Json(new { success = result });
             }
 
-            return Json(new { success = false, message = "Invalid data" });
+            return Json(new { success = false, message = "BookDto is not valid", data = bookDto });
         }
         [HttpPost]
         public async Task<JsonResult> Delete(long bookId)
@@ -140,5 +145,6 @@ namespace BookStore.Admin.Controllers
             }
             return Json(new { success = false, message = "Error when delete" });
         }
+
     }
 }

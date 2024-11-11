@@ -106,7 +106,8 @@
 
                     <div class="form-group">
                         <label for="bookImage">Book's Image</label>
-                        <img id="bookImage" style="width: 150px; height: 150px; object-fit: cover;"/>
+                        <img id="bookImagePlaceholder" style="width: 150px; height: 150px; object-fit: cover;"/>
+                        <input type="hidden" id="bookImage" />
                     </div>
 
                     <!-- Factory -->
@@ -122,10 +123,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Categories</label>
-                        <div id="categoryBadges">
-                            <!-- Badges will be populated by JavaScript -->
-                        </div>
+                        <label for="bookCategories" class="control-label">Thể loại:</label>
+                        <select class="selectpicker form-control" multiple id="bookCategories" data-live-search="true">
+                            
+                        </select>
                     </div>
 
                     <button type="button" class="btn btn-primary" id="saveEdit">Save changes</button>
@@ -249,23 +250,27 @@
                     $("#bookShortDesc").val(data.shortDesc);
                     $("#bookDetailDesc").val(data.detailDesc);
                     $("#bookPrice").val(data.price);
-                    $("#bookImage").attr('src', data.image);
+                    $("#bookImagePlaceholder").attr('src', data.image);
+                    $("#bookImage").val(data.image);
                     $("#bookFactory").val(data.factory);
                     $("#bookDiscount").val(data.discount);
 
-                    $("#categoryBadges").empty(); // Clear existing badges
-                    const selectedCategoryIds = data.categoryIds; // Assume this array has the selected categories
+                    const $categorySelect = $("#bookCategories");
+                    $categorySelect.empty(); // Clear existing options
+                    selectedCategoryIds = data.categories.map(category => category.id);
+
+                    // Populate all categories and set selected options
                     $.each(data.allCategories, function (index, category) {
                         const isSelected = selectedCategoryIds.includes(category.id);
-                        const badgeClass = isSelected ? "badge-primary" : "badge-secondary";
-
-                        // Append badge with toggle functionality
-                        $("#categoryBadges").append(`
-                                    <span class="badge ${badgeClass} m-1 category-badge" data-id="${category.id}" style="cursor:pointer;">
-                                        ${category.name}
-                                    </span>
-                                `);
+                        $categorySelect.append(new Option(category.name, category.id, isSelected, isSelected));
                     });
+
+                    // Refresh the selectpicker to apply the changes
+                    $categorySelect.selectpicker('refresh');
+                    let selectedText = $categorySelect.find("option:selected").map(function () {
+                        return $(this).text();
+                    }).get().join(', ');
+                    $(".bootstrap-select .filter-option-inner-inner").text(selectedText);
 
                     // Show the modal
                     $("#editModal").modal("show");
@@ -276,54 +281,43 @@
             });
         }
 
-        $(document).on("click", ".category-badge", function () {
-            const categoryId = $(this).data("id");
-
-            // Toggle selection state
-            if (selectedCategoryIds.includes(categoryId)) {
-                // Untag category
-                selectedCategoryIds = selectedCategoryIds.filter(id => id !== categoryId);
-                $(this).removeClass("badge-primary").addClass("badge-secondary");
-            } else {
-                // Tag category
-                selectedCategoryIds.push(categoryId);
-                $(this).removeClass("badge-secondary").addClass("badge-primary");
-            }
-        });
-
         // Save Edit action
         $("#saveEdit").on("click", function () {
-            const categoryIds = $("input[name='CategoryIds']:checked").map(function () {
-                return $(this).val();
-            }).get();
-
             const bookData = {
-                Id: $("#editBookId").val(),
-                Name: $("#bookName").val(),
-                Author: $("#bookAuthor").val(),
-                ShortDesc: $("#bookShortDesc").val(),
-                DetailDesc: $("#bookDetailDesc").val(),
-                Price: $("#bookPrice").val(),
-                Quantity: $("#bookQuantity").val(),
-                Sold: $("#bookSold").val(),
-                Image: $("#bookImage").val(),
-                Factory: $("#bookFactory").val(),
-                Discount: $("#bookDiscount").val(),
-                CategoryIds: selectedCategoryIds
+                id: $("#editBookId").val(),
+                name: $("#bookName").val(),
+                author: $("#bookAuthor").val(),
+                shortDesc: $("#bookShortDesc").val(),
+                detailDesc: $("#bookDetailDesc").val(),
+                price: $("#bookPrice").val(),
+                quantity: $("#bookQuantity").val(),
+                sold: $("#bookSold").val(),
+                image: $("#bookImage").val(),
+                factory: $("#bookFactory").val(),
+                discount: $("#bookDiscount").val(),
+                selectedCategoryIds: $("#bookCategories").val()
             };
+
+            console.log(bookData);
 
             $.ajax({
                 url: "/Books/EditBook",
                 type: "POST",
                 data: JSON.stringify(bookData),
                 contentType: "application/json",
-                success: function () {
-                    toastr.success("Book updated successfully!");
-                    $("#editModal").modal("hide");
-                    $('#bookTable').DataTable().ajax.reload();
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success("Book updated successfully!");
+                        $("#editModal").modal("hide");
+                        $('#bookTable').DataTable().ajax.reload();
+                    } else {
+                        toastr.error(response.message || "Failed to update book");
+                        console.log(response.data);
+                    }
+                    
                 },
                 error: function () {
-                    toastr.error("Error updating book");
+                    toastr.error("An error occurred while saving changes.");
                 }
             });
         });

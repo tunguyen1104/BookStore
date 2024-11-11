@@ -9,7 +9,7 @@ namespace BookStore.Application.Services
         Task<IEnumerable<Book>> GetAllAsync();
         Task<IEnumerable<HomePageBookDto>> GetBooksForHomepageAsync();
         (IEnumerable<BookDto> Books, int TotalCount) Find(string search, int page, int pageSize);
-        IEnumerable<Category> GetAllBookCategories();
+        IEnumerable<CategoryDto> GetAllBookCategories();
         int getTotal();
         Task<CartSummaryDto?> HandleGetCartPageAsync();
         Task AddBookToCartAsync(long bookId, long quantity);
@@ -20,7 +20,7 @@ namespace BookStore.Application.Services
             string receivedAddress, string orderNotes);
         Task<int> CreateNewBookAsync(BookDto bookdto);
         Task<bool> DeleteBookAsync(long id);
-        Task<bool> UpdateBookAsync(BookDto bookdto);
+        Task<bool> UpdateBookAsync(CreateOrUpdateBookRequest bookdto);
         Task<List<BookDto>> GetRelatedBooksAsync(Book book);
     }
 }

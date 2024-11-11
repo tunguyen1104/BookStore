@@ -111,9 +111,14 @@ namespace BookStore.Application.Services.Impl
             return (bookDtos, totalCount);
         }
 
-        public IEnumerable<Category> GetAllBookCategories()
+        public IEnumerable<CategoryDto> GetAllBookCategories()
         {
-            return _unitOfWork.Categories.GetAll();
+            return _unitOfWork.Categories.GetAll().Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description
+            });
         }
 
         public async Task<CartSummaryDto?> HandleGetCartPageAsync()
@@ -327,19 +332,19 @@ namespace BookStore.Application.Services.Impl
             return false;
         }
 
-        public async Task<bool> UpdateBookAsync(BookDto bookdto)
+        public async Task<bool> UpdateBookAsync(CreateOrUpdateBookRequest bookdto)
         {
             var book = await _unitOfWork.Books.GetByIdAsync(bookdto.Id);
             if (book != null)
             {
                 _mapper.Map(bookdto, book);
-                if (bookdto.Categories.Any())
+                if (bookdto.SelectedCategoryIds.Any())
                 {
                     book.Categories.Clear();
 
-                    foreach (var categoryDto in bookdto.Categories)
+                    foreach (var id in bookdto.SelectedCategoryIds)
                     {
-                        var category = await _unitOfWork.Categories.GetByIdAsync(categoryDto.Id);
+                        var category = await _unitOfWork.Categories.GetByIdAsync(id);
                         if (category != null)
                         {
                             book.Categories.Add(category);
