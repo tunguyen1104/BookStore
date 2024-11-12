@@ -1,6 +1,7 @@
 using BookStore.Application;
 using BookStore.Infrastructure;
 using BookStore.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -22,6 +23,26 @@ namespace BookStore.Admin
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.LoginPath = "/auth/login";
+                options.LogoutPath = "/auth/logout";
+                options.AccessDeniedPath = "/auth/accessdenied";
+                options.SlidingExpiration = true;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,9 +56,10 @@ namespace BookStore.Admin
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "../Assets")),
                 RequestPath = "/assets"
             });
-
+            app.UseSession();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

@@ -18,6 +18,17 @@ namespace BookStore.Application.Config
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+
+            var routeData = context.ActionDescriptor.RouteValues;
+            var controller = routeData["controller"];
+            var action = routeData["action"];
+
+            // Skip authorization for the login and access denied actions to avoid a redirect loop
+            if (controller == LoginController && (action == LoginAction || action == AccessDeniedAction))
+            {
+                return;
+            }
+
             var userDataClaim = context.HttpContext.User.FindFirst(ClaimTypes.UserData)?.Value;
 
             if (string.IsNullOrEmpty(userDataClaim))
