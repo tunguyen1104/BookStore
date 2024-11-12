@@ -10,6 +10,8 @@ namespace BookStore.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IStockService, StockService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICategoryService, CategoryService>();

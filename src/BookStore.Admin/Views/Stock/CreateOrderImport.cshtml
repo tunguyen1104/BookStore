@@ -1,0 +1,118 @@
+﻿@model StockImportOrderDto
+
+@{
+    ViewData["Title"] = "Create Stock Import Order";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Create Stock Import Order</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="CreateOrder" method="post" id="stockImportForm">
+
+                <!-- Supplier Selection -->
+                <div class="form-group">
+                    <label for="SupplierId">Nhà cung cấp:</label>
+                    <select asp-for="SupplierId" class="form-control" required>
+                        <option value="">Select Supplier</option>
+                        @foreach (var supplier in ViewBag.Suppliers)
+                        {
+                            <option value="@supplier.Id">@supplier.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+
+                <!-- Import Date -->
+                <div class="form-group">
+                    <label asp-for="ImportDate">Ngày nhập: </label>
+                    <input asp-for="ImportDate" class="form-control" type="date" />
+                    <span asp-validation-for="ImportDate" class="text-danger"></span>
+                </div>
+
+                <!-- Products List -->
+                <h4>Danh sách sản phẩm nhập: </h4>
+                <div id="productsContainer">
+                    <!-- Placeholder for dynamically added product rows -->
+                </div>
+
+                <!-- Add Product Button -->
+                <button type="button" class="btn btn-secondary" id="addProductButton">Add Product</button>
+
+                <!-- Total Cost Calculation -->
+                <div class="form-group mt-3">
+                    <label>Total Cost</label>
+                    <input type="text" id="totalCost" class="form-control" readonly />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let productIndex = 0;
+
+        // Function to add a new product row
+        function addProductRow() {
+            const productRow = `
+                                <div class="product-row mb-3" data-index="${productIndex}">
+                                    <div class="form-row">
+                                        <div class="col-md-5">
+                                            <label>Sách:</label>
+                                            <select name="Products[${productIndex}].Id" class="form-control" required>
+                                                <option value="">Chọn Sách</option>
+        @foreach (var product in @ViewBag.Books)
+        {
+                                                            <option value="@product.Id">@product.Name</option>
+        }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Số Lượng</label>
+                                            <input type="number" name="Products[${productIndex}].Quantity" class="form-control product-quantity" min="1" required />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Giá nhập</label>
+                                            <input type="number" name="Products[${productIndex}].UnitPrice" class="form-control product-unit-price" min="0.01" step="0.01" required />
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger mt-4 remove-product">X</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            $('#productsContainer').append(productRow);
+            productIndex++;
+            calculateTotalCost();
+        }
+
+        // Add product row on button click
+        $('#addProductButton').click(addProductRow);
+
+        // Calculate total cost
+        function calculateTotalCost() {
+            let totalCost = 0;
+            $('.product-row').each(function () {
+                const quantity = parseFloat($(this).find('.product-quantity').val()) || 0;
+                const unitPrice = parseFloat($(this).find('.product-unit-price').val()) || 0;
+                totalCost += quantity * unitPrice;
+            });
+            $('#totalCost').val(new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(totalCost));
+        }
+
+        // Calculate total cost on quantity or unit price change
+        $(document).on('input', '.product-quantity, .product-unit-price', calculateTotalCost);
+
+        // Remove product row
+        $(document).on('click', '.remove-product', function () {
+            $(this).closest('.product-row').remove();
+            calculateTotalCost();
+        });
+    </script>
+}

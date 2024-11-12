@@ -1,6 +1,7 @@
 ﻿using BookStore.Domain.Repositories;
 using BookStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BookStore.Infrastructure.Repositories
 {
@@ -45,6 +46,11 @@ namespace BookStore.Infrastructure.Repositories
         public IQueryable<T> GetAll()
         {
             return _context.Set<T>().AsQueryable();
+        }
+
+        public IQueryable<T> Find(Expression<Func<T, bool>> predicate)
+        {
+            return _context.Set<T>().Where(predicate);
         }
     }
 }

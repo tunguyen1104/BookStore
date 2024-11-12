@@ -1,0 +1,106 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+    <!-- DataTales Example -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center position-relative">
+            <div class="iq-header-title">
+                <h4 class="mb-0">Book Lists</h4>
+            </div>
+            <div class="iq-card-header-toolbar d-flex align-items-center">
+                <a asp-controller="Books" asp-action="CreateBook" class="btn btn-primary view-more">Add New Book</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="StockTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>OrderID</th>
+                            <th>Tên Nhà cung cấp</th>
+                            <th>Ngày Nhập hàng</th>
+                            <th>Tổng giá trị đơn hàng</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Details will be loaded via JavaScript -->
+                <div id="orderDetailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $('#StockTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "searching": true,
+                "paging": true,
+                "responsive": true,
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50],
+                "ajax": {
+                    "url": '@Url.Action("GetStockImports", "Stock")',
+                    "type": "GET",
+                    "data": function (d) {
+                        d.searchValue = d.search.value;
+                    }
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "supplierName" },
+                    { "data": "importDate" },
+                    {
+                        "data": "totalCost", "render": function (data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND',
+                                    minimumFractionDigits: 0
+                                }).format(data);
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `
+                              <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderDetailsModal" data-order-id="${row.id}">View Details</button>
+                               `;
+                        },
+                        "orderable": false // Make this column non-sortable
+                    }
+                ],
+                "order": [[0, "asc"]] // Order by the first column (Id) ascending by default
+            });
+        });
+    </script>
+}

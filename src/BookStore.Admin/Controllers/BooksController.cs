@@ -61,10 +61,6 @@ namespace BookStore.Admin.Controllers
             ViewBag.Categories = categories;
             return View();
         }
-        public IActionResult Inventory()
-        {
-            return View();
-        }
         [HttpPost]
         public async Task<IActionResult> CreateBook(BookDto book)
         {

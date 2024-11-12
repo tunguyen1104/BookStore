@@ -8,11 +8,15 @@ namespace BookStore.Infrastructure.Repositories
         private readonly BookStoreDbContext _context;
         public IBookRepository Books { get; private set; }
         public ICategoryRepository Categories { get; private set; }
+        public ISupplierRepository Suppliers { get; private set; }
         public IUserRepository Users { get; private set; }
         public ICartRepository Carts { get; private set; }
         public ICartDetailRepository CartDetails { get; private set; }
         public IOrderRepository Orders { get; private set; }
         public IOrderDetailRepository OrderDetails { get; private set; }
+
+        public IStockRepository Stocks { get; private set; }
+
         public UnitOfWork(BookStoreDbContext context)
         {
             _context = context;
@@ -23,6 +27,8 @@ namespace BookStore.Infrastructure.Repositories
             CartDetails = new CartDetailRepository(_context);
             Orders = new OrderRepository(_context);
             OrderDetails = new OrderDetailRepository(_context);
+            Suppliers = new SupplierRepository(_context);
+            Stocks = new StockRepository(_context);
         }
         public int Complete()
         {
