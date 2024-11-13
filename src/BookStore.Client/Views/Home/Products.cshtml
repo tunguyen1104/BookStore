@@ -95,39 +95,10 @@
                 <div class="filter__item">
                     <div class="section-title product__discount__title">
                         <div class="filter-ajax">
-                            <div class="filter-text-header" style="display: block">
-                                Filter by:
-                            </div>
-
-                            <ol id="dislay_fillter_current" style="flex: 2;">
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                            </ol>
+                            <ol id="display_fillter_current" style="flex: 2;">
+                                </ol>
                         </div>
-                        <br>
+                        <br />
                         <div class="row">
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
@@ -188,6 +159,36 @@
                 await loadFilterData('/api/filter/factories', '#factoryFilter', 'factory');
             }
             loadFilters();
+
+            $(document).on('change', '.form-check-input', updateDisplayFilter);
+            function updateDisplayFilter() {
+                const displayFilter = document.getElementById('display_fillter_current');
+                if (!displayFilter) return;
+
+                displayFilter.innerHTML = '';
+                const selectedCheckboxes = document.querySelectorAll('.form-check-input:checked');
+
+                selectedCheckboxes.forEach((checkbox) => {
+                    const filterType = checkbox.closest('div').parentNode.querySelector('b').textContent;
+                    const label = checkbox.nextElementSibling.textContent;
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                            <a data-id="${checkbox.id}" title="delete" class="btn-remove">Delete</a>
+                            <span class="label">${filterType}: ${label}</span>`;
+                    displayFilter.appendChild(li);
+                });
+
+                document.querySelector('.filter-text-header').style.display = displayFilter.querySelectorAll('li').length > 0 ? 'block' : 'none';
+            }
+
+            $(document).on('click', '.btn-remove', function () {
+                const checkbox = document.getElementById($(this).data('id'));
+                if (checkbox) {
+                    checkbox.checked = false;
+                    updateDisplayFilter();
+                }
+            });
         });
     </script>  
 }
