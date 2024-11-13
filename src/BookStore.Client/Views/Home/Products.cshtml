@@ -157,6 +157,8 @@
             async function loadFilters() {
                 await loadFilterData('/api/filter/genres', '#genresFilter', 'genres');
                 await loadFilterData('/api/filter/factories', '#factoryFilter', 'factory');
+                updateCheckboxes();
+                updateDisplayFilter();
             }
             loadFilters();
 
@@ -220,6 +222,25 @@
                 return $(selector + ':checked').map(function () {
                     return $(this).val();
                 }).get();
+            }
+
+            function updateCheckboxes() {
+                const params = new URLSearchParams(window.location.search);
+                setCheckboxGroup(params, 'factory', '#factoryFilter .form-check-input');
+                setCheckboxGroup(params, 'genres', '#genresFilter .form-check-input');
+                setCheckboxGroup(params, 'price', '#priceFilter .form-check-input');
+
+                if (params.has('sort')) {
+                    $('.filter__sort select').val(params.get('sort'));
+                }
+            }
+            function setCheckboxGroup(params, paramName, selector) {
+                if (params.has(paramName)) {
+                    const values = params.get(paramName).split(',');
+                    values.forEach(value => {
+                        $(`${selector}[value="${value}"]`).prop('checked', true);
+                    });
+                }
             }
         });
     </script>  
