@@ -200,7 +200,7 @@
             }
             loadFilters();
 
-            $(document).on('change', '.form-check-input', updateDisplayFilter);
+            $(document).on('change', '.form-check-input, .filter__sort select', updateDisplayFilter);
             function updateDisplayFilter() {
                 const displayFilter = document.getElementById('display_fillter_current');
                 if (!displayFilter) return;
