@@ -179,6 +179,7 @@
                     displayFilter.appendChild(li);
                 });
 
+                updateUrlParams();
                 document.querySelector('.filter-text-header').style.display = displayFilter.querySelectorAll('li').length > 0 ? 'block' : 'none';
             }
 
@@ -189,6 +190,37 @@
                     updateDisplayFilter();
                 }
             });
+
+            function updateUrlParams(resetPage = true) {
+                const selectedFilters = {
+                    factory: getSelectedValues('#factoryFilter .form-check-input'),
+                    genres: getSelectedValues('#genresFilter .form-check-input'),
+                    price: getSelectedValues('#priceFilter .form-check-input'),
+                    sort: $('.filter__sort select').val()
+                };
+
+                const currentUrl = new URL(window.location.href);
+                const searchParams = currentUrl.searchParams;
+
+                if (resetPage) {
+                    searchParams.set('page', '1');
+                }
+                searchParams.set('sort', selectedFilters.sort || '');
+
+                ['factory', 'genres', 'price'].forEach(filterType => {
+                    searchParams.delete(filterType);
+                    if (selectedFilters[filterType].length) {
+                        searchParams.set(filterType, selectedFilters[filterType].join(','));
+                    }
+                });
+
+                window.history.pushState(null, '', currentUrl.toString());
+            }
+            function getSelectedValues(selector) {
+                return $(selector + ':checked').map(function () {
+                    return $(this).val();
+                }).get();
+            }
         });
     </script>  
 }
