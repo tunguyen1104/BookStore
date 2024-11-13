@@ -86,5 +86,14 @@ namespace BookStore.Infrastructure.Repositories
                 .Take(10)
                 .ToList();
         }
+
+        public async Task<List<Book>> GetTopDiscountedBooksAsync(int count = 10)
+        {
+            return await _context.Set<Book>()
+                .Where(book => book.IsDeleted == false)
+                .OrderByDescending(book => book.Discount)
+                .Take(count)
+                .ToListAsync();
+        }
     }
 }

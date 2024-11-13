@@ -68,27 +68,19 @@
 .hero__categories ul li a:hover {
     color: #7fad39;
 }
+
 .filter-ajax {
-    padding-left: 15px;
     display: flex;
     flex-direction: row;
 }
 
-.filter-text-header {
-    display: block;
-    margin-top: 20px;
-    font-size: 14px;
-    color: black;
-    margin-right: 10px;
-}
-
-#dislay_fillter_current li a {
+#display_fillter_current li a {
     float: right;
     margin-top: 14px;
     margin-right: 5px;
 }
 
-#dislay_fillter_current li {
+#display_fillter_current li {
     float: left;
     padding-right: 10px;
     border-radius: 5px;
@@ -101,7 +93,7 @@
     list-style-type: none;
 }
 
-#dislay_fillter_current .btn-remove {
+#display_fillter_current .btn-remove {
     display: block;
     width: 12px;
     height: 12px;
@@ -113,14 +105,14 @@
     cursor: pointer;
 }
 
-#dislay_fillter_current .label {
+#display_fillter_current .label {
     font-weight: normal;
     vertical-align: top;
     text-align: left;
     height: 40px;
     width: calc(100% + 15px);
     font-family: sans-serif;
-    color: #F7941E;
+    color: #f7941e;
     font-size: 14px !important;
     padding: 10px 16px 0px 16px;
     display: table-cell;

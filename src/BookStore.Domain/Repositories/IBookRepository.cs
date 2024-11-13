@@ -11,5 +11,6 @@ namespace BookStore.Domain.Repositories
         Task<List<long>> GetNewArrivalBookIdsAsync();
         Task<List<long>> GetMostBuyBookIdsAsync();
         Task<List<Book>> GetRelatedBooksAsync(Book book);
+        Task<List<Book>> GetTopDiscountedBooksAsync(int count = 10);
     }
 }

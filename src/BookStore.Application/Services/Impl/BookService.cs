@@ -362,5 +362,86 @@ namespace BookStore.Application.Services.Impl
 			var relatedBooks = await _unitOfWork.Books.GetRelatedBooksAsync(book);
 			return _mapper.Map<List<BookDto>>(relatedBooks.ToList());
 		}
-	}
+
+        public async Task<List<BookDto>> GetTopDiscountedBooksAsync()
+        {
+            var books = await _unitOfWork.Books.GetTopDiscountedBooksAsync();
+
+            // Chuyển đổi từ Book sang BookDto
+            var bookDtos = books.Select(book => new BookDto
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Price = book.Price,
+                Discount = book.Discount,
+                Image = book.Image
+            }).ToList();
+
+            return bookDtos;
+        }
+
+        public (IEnumerable<BookDto> Books, int TotalCount) Find(BookFilterDto filter, int pageSize)
+        {
+            int page = string.IsNullOrEmpty(filter.Page) ? 1 : int.Parse(filter.Page);
+            IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll();
+
+            if (filter.Genres != null && filter.Genres.Any())
+            {
+                booksQuery = booksQuery.Where(book => book.Categories.Any(category => filter.Genres.Contains(category.Name)));
+            }
+
+            if (filter.Factory != null && filter.Factory.Any())
+            {
+                var validFactories = filter.Factory.Where(f => !string.IsNullOrEmpty(f)).ToList();
+
+                if (validFactories.Count > 0)
+                {
+                    booksQuery = booksQuery.Where(book => validFactories.Contains(book.Factory));
+                }
+            }
+
+            if (filter.Price != null && filter.Price.Any())
+            {
+                var priceFilters = filter.Price;
+
+                booksQuery = booksQuery.Where(book =>
+                    (priceFilters.Contains("under-80") && book.Price <= 80000) ||
+                    (priceFilters.Contains("80-to-120") && book.Price > 80000 && book.Price <= 120000) ||
+                    (priceFilters.Contains("120-to-200") && book.Price > 120000 && book.Price <= 200000) ||
+                    (priceFilters.Contains("over-200") && book.Price > 200000)
+                );
+            }
+
+            if (!string.IsNullOrEmpty(filter.Sort))
+            {
+                booksQuery = filter.Sort switch
+                {
+                    "1" => booksQuery.OrderBy(book => book.Price),
+                    "2" => booksQuery.OrderByDescending(book => book.Price),
+                    _ => booksQuery
+                };
+            }
+
+            var totalCount = booksQuery.Count();
+
+            var books = booksQuery.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            var bookDtos = books.Select(book => new BookDto
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Author = book.Author,
+                DetailDesc = book.DetailDesc,
+                Factory = book.Factory,
+                Image = _fileService.GetImageUrl(book.Image),
+                Price = book.Price,
+                Quantity = book.Quantity,
+                ShortDesc = book.ShortDesc,
+                Discount = book.Discount,
+                Sold = book.Sold,
+            });
+
+            return (bookDtos, totalCount);
+        }
+    }
 }

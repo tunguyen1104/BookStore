@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+﻿@model IEnumerable<BookStore.Application.DTOs.BookDto>
+@inject BookStore.Application.Services.IFileService fileService
 @{
     ViewData["Title"] = "Products";
 }
@@ -12,224 +13,79 @@
                         <input class="form-check-input"
                                type="checkbox"
                                id="price-2"
-                               value="under-150" />
-                        <label class="form-check-label" for="price-2">0đ - 150.000đ</label>
+                               value="under-80" />
+                        <label class="form-check-label" for="price-2">0đ - 80.000đ</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="checkbox"
                                id="price-3"
-                               value="150-to-300" />
-                        <label class="form-check-label" for="price-3">150.000đ - 300.000đ</label>
+                               value="80-to-120" />
+                        <label class="form-check-label" for="price-3">80.000đ - 120.000đ</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="checkbox"
                                id="price-4"
-                               value="300-to-500" />
-                        <label class="form-check-label" for="price-4">300đ - 500đ</label>
+                               value="120-to-200" />
+                        <label class="form-check-label" for="price-4">120.000đ - 200.000đ</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="checkbox"
                                id="price-5"
-                               value="over-500" />
-                        <label class="form-check-label" for="price-5">Over 500đ</label>
+                               value="over-200" />
+                        <label class="form-check-label" for="price-5">Over 200đ</label>
                     </div>
                 </div>
 
-                <div id="genreFilter">
-                    <div class="mb-2"><b>Genre</b></div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-1"
-                               value="fiction" />
-                        <label class="form-check-label" for="genre-1">Fiction</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-2"
-                               value="non-fiction" />
-                        <label class="form-check-label" for="genre-2">Non-fiction</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-3"
-                               value="fantasy" />
-                        <label class="form-check-label" for="genre-3">Fantasy</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-4"
-                               value="science-fiction" />
-                        <label class="form-check-label" for="genre-4">Science Fiction</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-5"
-                               value="mystery" />
-                        <label class="form-check-label" for="genre-5">Mystery</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-6"
-                               value="romance" />
-                        <label class="form-check-label" for="genre-6">Romance</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-7"
-                               value="thriller" />
-                        <label class="form-check-label" for="genre-7">Thriller</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-8"
-                               value="horror" />
-                        <label class="form-check-label" for="genre-8">Horror</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-9"
-                               value="biography" />
-                        <label class="form-check-label" for="genre-9">Biography</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-10"
-                               value="self-help" />
-                        <label class="form-check-label" for="genre-10">Self-help</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-11"
-                               value="historical" />
-                        <label class="form-check-label" for="genre-11">Historical</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="genre-12"
-                               value="poetry" />
-                        <label class="form-check-label" for="genre-12">Poetry</label>
-                    </div>
+                <div id="genresFilter">
+                    <div class="mb-2"><b>Genres</b></div>
                 </div>
 
-                <div id="manufacturerFilter">
+                <div id="factoryFilter">
                     <div class="mb-2"><b>Manufacturer</b></div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="manufacturer-1"
-                               value="kim-dong" />
-                        <label class="form-check-label" for="manufacturer-1">Kim Dong</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="manufacturer-2"
-                               value="nha-nam" />
-                        <label class="form-check-label" for="manufacturer-2">Nha Nam</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="manufacturer-3"
-                               value="nxb-tre" />
-                        <label class="form-check-label" for="manufacturer-3">NXB Tre</label>
-                    </div>
                 </div>
                 <div class="sidebar" style="margin-top: 50px">
                     <div class="sidebar__item">
                         <div class="latest-product__text">
-                            <h4>New Products</h4>
+                            <h4>Top Discounted</h4>
                             <div class="latest-product__slider owl-carousel">
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
+                                @{
+                                    int productCount = 0;
+                                    int count = Model?.Count() ?? 0;
+                                }
+
+                                @if (Model != null && count > 0)
+                                {
+                                    <div class="latest-product__slider__item">
+                                        @foreach (var item in Model)
+                                        {
+                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@item.Id" target="_blank" class="latest-product__item">
+                                                <div class="latest-product__item__pic">
+                                                    <img src="@fileService.GetImageUrl(item.Image)" alt="@item.Name" />
+                                                </div>
+                                                <div class="latest-product__item__text">
+                                                    <h6>@item.Name</h6>
+                                                    <span>@item.Price</span>
+                                                </div>
+                                            </a>
+                                            productCount++;
+                                            if (productCount % 3 == 0 && productCount < count)
+                                            {
+                                                @:</div>
+                                                @:<div class="latest-prdouct__slider__item">
+                                            }
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span>No products found</span>
+                                }
                             </div>
                         </div>
                     </div>
@@ -239,73 +95,341 @@
                 <div class="filter__item">
                     <div class="section-title product__discount__title">
                         <div class="filter-ajax">
-                            <div class="filter-text-header" style="display: block">
-                                Filter by:
-                            </div>
-
-                            <ol id="dislay_fillter_current" style="flex: 2;">
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                                <li>
-                                    <a onclick="catalog_ajax.removeFilter_click('genres','1161215')"
-                                       title="delete"
-                                       class="btn-remove">Delete</a><span class="label">Genres: Comedy</span>
-                                </li>
-                            </ol>
+                            <ol id="display_fillter_current" style="flex: 2;">
+                                </ol>
                         </div>
-                        <br>
+                        <br />
                         <div class="row">
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
                                     <span>Sort By</span>
                                     <select>
-                                        <option value="0">ASC</option>
-                                        <option value="0">DESC</option>
                                         <option value="0">DEFAULT</option>
+                                        <option value="1">ASC</option>
+                                        <option value="2">DESC</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="filter__found">
-                                    <h6><span>16</span> Products found</h6>
+                                    <h6><span id="totalCount"></span> Products found</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        @foreach (var item in Model)
-                        {
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                @await Html.PartialAsync("_BookList", item)
-                            </div>
-                        }
+                    <div class="row" id="showBookFilter">
                     </div>
-                    <div class="product__pagination">
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                    <div id="pagination">
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                          </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+@section Styles {
+    <style>
+        .filter__sort {
+            display: flex;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .filter__sort span {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .filter__sort select {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter__sort select:hover {
+            border-color: #888;
+        }
+
+        .filter__sort select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+}
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+
+            // render checkbox
+            async function loadFilterData(url, containerId, inputName) {
+                try {
+                    const response = await $.ajax({
+                        url: url,
+                        method: 'GET'
+                    });
+
+                    response.forEach(item => {
+                        const checkboxHtml = `
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="${inputName}-${item.id}" value="${item.name}" />
+                                            <label class="form-check-label" for="${inputName}-${item.id}">${item.name}</label>
+                                        </div>`;
+                        $(containerId).append(checkboxHtml);
+                    });
+                } catch (error) {
+                    console.error(`Failed to load data from ${url}`);
+                }
+            }
+            async function loadFilters() {
+                await loadFilterData('/api/filter/genres', '#genresFilter', 'genres');
+                await loadFilterData('/api/filter/factories', '#factoryFilter', 'factory');
+                updateCheckboxes();
+                updateDisplayFilter();
+            }
+            loadFilters();
+
+            $(document).on('change', '.form-check-input, .filter__sort select', updateDisplayFilter);
+            function updateDisplayFilter() {
+                const displayFilter = document.getElementById('display_fillter_current');
+                if (!displayFilter) return;
+
+                displayFilter.innerHTML = '';
+                const selectedCheckboxes = document.querySelectorAll('.form-check-input:checked');
+
+                selectedCheckboxes.forEach((checkbox) => {
+                    const filterType = checkbox.closest('div').parentNode.querySelector('b').textContent;
+                    const label = checkbox.nextElementSibling.textContent;
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                            <a data-id="${checkbox.id}" title="delete" class="btn-remove">Delete</a>
+                            <span class="label">${filterType}: ${label}</span>`;
+                    displayFilter.appendChild(li);
+                });
+
+                updateUrlParams();
+                handleSearchBooks();
+            }
+
+            $(document).on('click', '.btn-remove', function () {
+                const checkbox = document.getElementById($(this).data('id'));
+                if (checkbox) {
+                    checkbox.checked = false;
+                    updateDisplayFilter();
+                }
+            });
+
+            function updateUrlParams(resetPage = true) {
+                const selectedFilters = {
+                    factory: getSelectedValues('#factoryFilter .form-check-input'),
+                    genres: getSelectedValues('#genresFilter .form-check-input'),
+                    price: getSelectedValues('#priceFilter .form-check-input'),
+                    sort: $('.filter__sort select').val()
+                };
+
+                const currentUrl = new URL(window.location.href);
+                const searchParams = currentUrl.searchParams;
+
+                if (resetPage) {
+                    searchParams.set('page', '1');
+                }
+                searchParams.set('sort', selectedFilters.sort || '');
+
+                ['factory', 'genres', 'price'].forEach(filterType => {
+                    searchParams.delete(filterType);
+                    if (selectedFilters[filterType].length) {
+                        searchParams.set(filterType, selectedFilters[filterType].join(','));
+                    }
+                });
+
+                window.history.pushState(null, '', currentUrl.toString());
+            }
+            function getSelectedValues(selector) {
+                return $(selector + ':checked').map(function () {
+                    return $(this).val();
+                }).get();
+            }
+
+            function updateCheckboxes() {
+                const params = new URLSearchParams(window.location.search);
+                setCheckboxGroup(params, 'factory', '#factoryFilter .form-check-input');
+                setCheckboxGroup(params, 'genres', '#genresFilter .form-check-input');
+                setCheckboxGroup(params, 'price', '#priceFilter .form-check-input');
+
+                if (params.has('sort')) {
+                    $('.filter__sort select').val(params.get('sort'));
+                }
+            }
+            function setCheckboxGroup(params, paramName, selector) {
+                if (params.has(paramName)) {
+                    const values = params.get(paramName).split(',');
+                    values.forEach(value => {
+                        $(`${selector}[value="${value}"]`).prop('checked', true);
+                    });
+                }
+            }
+
+            function displayBooks(books, count) {
+                const bookContainer = document.getElementById('showBookFilter');
+                bookContainer.innerHTML = '';
+                document.getElementById('totalCount').innerText = count;
+
+                if (count === 0) {
+                    bookContainer.innerHTML = '<p>No books found.</p>';
+                    return;
+                }
+                
+                books.forEach(book => {
+                    const bookHtml = `
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" style="background-image: url('${book.image}');">
+                                    <ul class="product__item__pic__hover">
+                                        <li>
+                                            <a data-book-id="${book.id}" class="btnAddToCartHomepage">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>
+                                        <a href="/Item/GetBookDetail/${book.id}" target="_blank">
+                                            ${book.name}
+                                        </a>
+                                    </h6>
+                                    <div class="inner-price">
+                                        <h5>${(book.price * (1 - book.discount / 100)).toLocaleString()}</h5>
+                                        <span>${book.price.toLocaleString()}</span>
+                                        <div class="discount">${book.discount.toFixed(2)}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    bookContainer.innerHTML += bookHtml;
+                });
+            }
+            function searchBooks(filter) {
+                $.ajax({
+                    url: '/api/filter/search',
+                    method: 'GET',
+                    data: filter,
+                    traditional: true,
+                    success: function(response) {
+                        displayBooks(response.books, response.filterCount);
+                        const totalPages = Math.ceil(response.filterCount / response.pageSize);
+                        renderPagination(totalPages, filter.page);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching books:', error);
+                    }
+                });
+            }
+            function handleSearchBooks() {
+                const searchParams = new URLSearchParams(window.location.search);
+
+                var filter = {
+                    page: searchParams.has('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : '1',
+                    sort: searchParams.has('sort') && !isNaN(searchParams.get('sort')) ? searchParams.get('sort') : '0',
+                    factory: searchParams.has('factory') && searchParams.get('factory').trim() !== '' ? searchParams.get('factory').split(',') : [],
+                    genres: searchParams.has('genres') && searchParams.get('genres').trim() !== '' ? searchParams.get('genres').split(',') : [],
+                    price: searchParams.has('price') && searchParams.get('price').trim() !== '' ? searchParams.get('price').split(',') : []
+                };
+                searchBooks(filter);
+            }
+
+            function renderPagination(totalPages, currentPage) {
+                const paginationList = document.querySelector('#pagination .pagination');
+                paginationList.innerHTML = '';
+
+                // Previous
+                const previousPageItem = document.createElement('li');
+                previousPageItem.classList.add('page-item');
+    
+                const previousLink = document.createElement('a');
+                previousLink.className = 'page-link';
+                previousLink.textContent = 'Previous';
+                previousLink.href = "#";
+
+                previousLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (currentPage >= 1) {
+                        updatePage(+currentPage - 1);
+                        updatePaginationButtons(totalPages, +currentPage - 1);
+                    }
+                });
+
+                previousPageItem.appendChild(previousLink);
+                paginationList.appendChild(previousPageItem);
+
+                // Mid
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageItem = document.createElement('li');
+                    pageItem.classList.add('page-item');
+                    const pageLink = document.createElement('a');
+                    pageLink.className = 'page-link';
+                    pageLink.textContent = i;
+                    pageLink.href = "#";
+
+                    pageLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updatePage(i);
+                        updatePaginationButtons(totalPages, i);
+                    });
+
+                    pageItem.appendChild(pageLink);
+                    paginationList.appendChild(pageItem);
+                }
+
+                // Next
+                const nextPageItem = document.createElement('li');
+                nextPageItem.classList.add('page-item');
+                const nextLink = document.createElement('a');
+                nextLink.className = 'page-link';
+                nextLink.textContent = 'Next';
+                nextLink.href = "#";
+
+                nextLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (currentPage <= totalPages) {
+                        updatePage(+currentPage + 1);
+                        updatePaginationButtons(totalPages, currentPage + 1);
+                    }
+                });
+
+                nextPageItem.appendChild(nextLink);
+                paginationList.appendChild(nextPageItem);
+
+                function updatePaginationButtons(totalPages, newPage) {
+                    previousPageItem.className = +newPage === 1 ? 'page-item disabled' : 'page-item';
+                    nextPageItem.className = +newPage === totalPages || totalPages == 0 ? 'page-item disabled' : 'page-item';
+                    if (newPage < 1 || newPage > totalPages) return;
+
+                    paginationList.children[newPage].classList.add('active');
+                }
+
+                updatePaginationButtons(totalPages, currentPage);
+            }
+
+            function updatePage(page) {
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('page', page);
+                window.history.pushState(null, '', currentUrl.toString());
+                handleSearchBooks();
+            }
+        });
+    </script>  
+}
