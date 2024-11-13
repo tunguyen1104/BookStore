@@ -362,5 +362,22 @@ namespace BookStore.Application.Services.Impl
 			var relatedBooks = await _unitOfWork.Books.GetRelatedBooksAsync(book);
 			return _mapper.Map<List<BookDto>>(relatedBooks.ToList());
 		}
-	}
+
+        public async Task<List<BookDto>> GetTopDiscountedBooksAsync()
+        {
+            var books = await _unitOfWork.Books.GetTopDiscountedBooksAsync();
+
+            // Chuyển đổi từ Book sang BookDto
+            var bookDtos = books.Select(book => new BookDto
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Price = book.Price,
+                Discount = book.Discount,
+                Image = book.Image
+            }).ToList();
+
+            return bookDtos;
+        }
+    }
 }

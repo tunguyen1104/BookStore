@@ -22,8 +22,8 @@ namespace BookStore.Client.Controllers
         }
         public async Task<IActionResult> Products()
         {
-            IEnumerable<Book> books = await _bookService.GetAllAsync();
-            return View(books);
+            var topDiscountedBooks = await _bookService.GetTopDiscountedBooksAsync();
+            return View(topDiscountedBooks);
         }
         public IActionResult Privacy()
         {

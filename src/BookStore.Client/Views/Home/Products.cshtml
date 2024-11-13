@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+﻿@model IEnumerable<BookStore.Application.DTOs.BookDto>
+@inject BookStore.Application.Services.IFileService fileService
 @{
     ViewData["Title"] = "Products";
 }
@@ -170,66 +171,40 @@
                 <div class="sidebar" style="margin-top: 50px">
                     <div class="sidebar__item">
                         <div class="latest-product__text">
-                            <h4>New Products</h4>
+                            <h4>Top Discounted</h4>
                             <div class="latest-product__slider owl-carousel">
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-1.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-2.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="~/img/latest-product/lp-3.jpg" alt="" />
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
+                                @{
+                                    int productCount = 0;
+                                    int count = Model?.Count() ?? 0;
+                                }
+
+                                @if (Model != null && count > 0)
+                                {
+                                    <div class="latest-product__slider__item">
+                                        @foreach (var item in Model)
+                                        {
+                                            <a asp-controller="Item" asp-action="GetBookDetail" asp-route-id="@item.Id" target="_blank" class="latest-product__item">
+                                                <div class="latest-product__item__pic">
+                                                    <img src="@fileService.GetImageUrl(item.Image)" alt="@item.Name" />
+                                                </div>
+                                                <div class="latest-product__item__text">
+                                                    <h6>@item.Name</h6>
+                                                    <span>@item.Price</span>
+                                                </div>
+                                            </a>
+                                            productCount++;
+                                            if (productCount % 3 == 0 && productCount < count)
+                                            {
+                                                @:</div>
+                                                @:<div class="latest-prdouct__slider__item">
+                                            }
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span>No products found</span>
+                                }
                             </div>
                         </div>
                     </div>
@@ -291,12 +266,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        @foreach (var item in Model)
-                        {
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                @await Html.PartialAsync("_BookList", item)
-                            </div>
-                        }
                     </div>
                     <div class="product__pagination">
                         <a href="#">1</a>
