@@ -112,12 +112,12 @@
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="filter__found">
-                                    <h6><span>16</span> Products found</h6>
+                                    <h6><span id="totalCount"></span> Products found</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="showBookFilter">
                     </div>
                     <div class="product__pagination">
                         <a href="#">1</a>
@@ -220,7 +220,7 @@
                 });
 
                 updateUrlParams();
-                document.querySelector('.filter-text-header').style.display = displayFilter.querySelectorAll('li').length > 0 ? 'block' : 'none';
+                handleSearchBooks();
             }
 
             $(document).on('click', '.btn-remove', function () {
@@ -279,6 +279,74 @@
                         $(`${selector}[value="${value}"]`).prop('checked', true);
                     });
                 }
+            }
+
+            function displayBooks(books, count) {
+                const bookContainer = document.getElementById('showBookFilter');
+                bookContainer.innerHTML = '';
+                document.getElementById('totalCount').innerText = count;
+
+                if (count === 0) {
+                    bookContainer.innerHTML = '<p>No books found.</p>';
+                    return;
+                }
+                
+                books.forEach(book => {
+                    const bookHtml = `
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" style="background-image: url('${book.image}');">
+                                    <ul class="product__item__pic__hover">
+                                        <li>
+                                            <a data-book-id="${book.id}" class="btnAddToCartHomepage">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>
+                                        <a href="/Item/GetBookDetail/${book.id}" target="_blank">
+                                            ${book.name}
+                                        </a>
+                                    </h6>
+                                    <div class="inner-price">
+                                        <h5>${(book.price * (1 - book.discount / 100)).toLocaleString()}</h5>
+                                        <span>${book.price.toLocaleString()}</span>
+                                        <div class="discount">${book.discount.toFixed(2)}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    bookContainer.innerHTML += bookHtml;
+                });
+            }
+            function searchBooks(filter) {
+                $.ajax({
+                    url: '/api/filter/search',
+                    method: 'GET',
+                    data: filter,
+                    traditional: true,
+                    success: function(response) {
+                        displayBooks(response.books, response.filterCount);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching books:', error);
+                    }
+                });
+            }
+            function handleSearchBooks() {
+                const searchParams = new URLSearchParams(window.location.search);
+
+                var filter = {
+                    page: searchParams.has('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : '1',
+                    sort: searchParams.has('sort') && !isNaN(searchParams.get('sort')) ? searchParams.get('sort') : '0',
+                    factory: searchParams.has('factory') && searchParams.get('factory').trim() !== '' ? searchParams.get('factory').split(',') : [],
+                    genres: searchParams.has('genres') && searchParams.get('genres').trim() !== '' ? searchParams.get('genres').split(',') : [],
+                    price: searchParams.has('price') && searchParams.get('price').trim() !== '' ? searchParams.get('price').split(',') : []
+                };
+                searchBooks(filter);
             }
         });
     </script>  

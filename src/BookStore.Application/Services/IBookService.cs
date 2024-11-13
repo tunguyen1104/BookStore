@@ -23,5 +23,6 @@ namespace BookStore.Application.Services
         Task<bool> UpdateBookAsync(CreateOrUpdateBookRequest bookdto);
         Task<List<BookDto>> GetRelatedBooksAsync(Book book);
         Task<List<BookDto>> GetTopDiscountedBooksAsync();
+        (IEnumerable<BookDto> Books, int TotalCount) Find(BookFilterDto filter, int pageSize);
     }
 }
