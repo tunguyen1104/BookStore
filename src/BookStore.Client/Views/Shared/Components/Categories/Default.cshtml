@@ -7,7 +7,7 @@
     <ul>
         @foreach (var category in Model)
         {
-            <li><a href="#">@category.Name</a></li>
+            <li><a href="/home/products?page=1&sort=0&genres=@category.Name">@category.Name</a></li>
         }
     </ul>
 </div>
