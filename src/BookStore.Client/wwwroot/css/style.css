@@ -644,6 +644,7 @@ ol {
 	border: 1px solid #ebebeb;
 	position: relative;
 	float: left;
+	z-index: 1000;
 }
 
 .hero__search__form form .hero__search__categories {
@@ -675,7 +676,7 @@ ol {
 }
 
 .hero__search__form form input {
-	width: 70%;
+	width: 100%;
 	border: none;
 	height: 48px;
 	font-size: 16px;

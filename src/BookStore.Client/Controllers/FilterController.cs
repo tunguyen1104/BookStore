@@ -43,6 +43,13 @@ namespace BookStore.Client.Controllers
             var (books, filterCount) = _bookService.Find(filter, pageSize);
             return Ok(new { books, filterCount, pageSize });
         }
+
+        [HttpGet("searchNav")]
+        public IActionResult SearchNav(string searchVal)
+        {
+            var (books, filterCount) = _bookService.Find(searchVal, -1, -1);
+            return Ok(new { books });
+        }
     }
 }
 
