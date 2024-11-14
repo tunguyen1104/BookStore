@@ -452,5 +452,15 @@
                 });
             }
         }
+        function adjustContainerWidth() {
+            const searchForm = document.querySelector('.hero__search__form');
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+
+            if (searchForm && searchResultsContainer) {
+                searchResultsContainer.style.width = `${searchForm.offsetWidth}px`;
+                searchResultsContainer.style.left = `${searchForm.offsetLeft}px`;
+            }
+        }
+        window.addEventListener('resize', adjustContainerWidth);
     });
 })(jQuery);
