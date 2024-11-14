@@ -82,7 +82,9 @@ namespace BookStore.Application.Services.Impl
 		{
 			if (page < 1) page = 1;
 			IQueryable<Book> booksQuery = _unitOfWork.Books.GetAll().OrderBy(b => b.Id).Where(b => !b.IsDeleted.HasValue || !b.IsDeleted.Value);
-
+			
+			if(pageSize < 0) pageSize = booksQuery.Count();
+			
 			if (!string.IsNullOrWhiteSpace(search))
 			{
 				booksQuery = booksQuery.Where(book => (book.Name.Contains(search) || book.Author.Contains(search)));

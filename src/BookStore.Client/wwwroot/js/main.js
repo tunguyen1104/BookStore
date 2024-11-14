@@ -384,5 +384,73 @@
             }
             return true;
         }
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsContainer = document.getElementById('searchResultsContainer');
+        const overlay = document.getElementById('overlay');
+
+        searchInput.addEventListener('input', toggleBoxInput);
+        searchInput.addEventListener('focus', toggleBoxFocus);
+
+        document.addEventListener('click', function (e) {
+            if (
+                !searchInput.contains(e.target) &&
+                !searchResultsContainer.contains(e.target)
+            ) {
+                searchResultsContainer.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+
+        function showHideBox(query) {
+            if (query !== '') {
+                searchResultsContainer.style.display = 'block';
+                overlay.style.display = 'block';
+            } else {
+                searchResultsContainer.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        } 
+        function toggleBoxFocus() {
+            const query = searchInput.value.trim();
+            showHideBox(query);
+            return query;
+        }
+        function toggleBoxInput() {
+            const query = toggleBoxFocus();
+            if (query !== '') {
+                searchResultsContainer.innerHTML = `
+                            <div class="search-advanced">
+                                <i class="fa fa-search"></i>
+                                <p>Advanced search for: <strong>${query}</strong></p>
+                                </div>`;
+
+                $.ajax({
+                    url: '/api/filter/searchNav',
+                    method: 'GET',
+                    data: { searchVal: query },
+                    success: function (response) {
+                        console.log('check')
+                        response.books.forEach((item) => {
+                            searchResultsContainer.innerHTML += `
+                                <a href="/Item/GetBookDetail/${item.id}" target="_blank">
+                                    <div class="search-suggestion-item">
+                                        <img src="${item.image}" alt="${item.name}" class="book-image" />
+                                        <div class="book-details">
+                                            <span class="book-title">${item.name}</span>
+                                            <span class="book-author">Author: ${item.author}</span>
+                                            <span class="book-price">Price: ${formatCurrency(item.price)} đ</span>
+                                        </div>
+                                    </div>
+                                </a>`;
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching books:', error);
+                    }
+                });
+            }
+        }
     });
 })(jQuery);
