@@ -267,7 +267,7 @@
             }).format(value);
         }
 
-        $('.btnAddToCartHomepage').click(function (event) {
+        $(document).on('click', '.btnAddToCartHomepage', function (event) {
             event.preventDefault();
 
             if (!isLogin()) {
