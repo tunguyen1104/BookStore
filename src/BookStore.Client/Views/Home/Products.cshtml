@@ -290,7 +290,7 @@
                     bookContainer.innerHTML = '<p>No books found.</p>';
                     return;
                 }
-                
+
                 books.forEach(book => {
                     const bookHtml = `
                         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -298,7 +298,8 @@
                                 <div class="product__item__pic set-bg" style="background-image: url('${book.image}');">
                                     <ul class="product__item__pic__hover">
                                         <li>
-                                            <a data-book-id="${book.id}" class="btnAddToCartHomepage">
+                                            <a data-book-id="${book.id}" data-book-isDeleted="${book.isDeleted}"
+                                                class="btnAddToCartHomepage">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </li>
