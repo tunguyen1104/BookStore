@@ -336,8 +336,7 @@
                 return;
             }
             const isDeleted = $(this).attr('data-book-isDeleted');
-            console.log(isDeleted)
-            if (isDeleted) {
+            if (isDeleted === "true" || isDeleted === "True") {
                 $.toast({
                     heading: 'Error',
                     text: 'This product is no longer available.',
