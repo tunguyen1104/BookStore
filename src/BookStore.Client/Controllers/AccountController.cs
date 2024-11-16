@@ -62,5 +62,12 @@ namespace BookStore.Client.Controllers
             userDto.Avatar ??= "/img/avatar/default.png";
             return View("MyProfile", userDto);
         }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            var input = new ChangePasswordDto();
+            return View(input);
+        }
     }
 }
