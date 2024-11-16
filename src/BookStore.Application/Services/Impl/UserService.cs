@@ -65,29 +65,7 @@ namespace BookStore.Application.Services.Impl
                 return false;
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(user)),
-                new Claim(ClaimTypes.Role, IsAuthorizedRole(user.RoleId) ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString())
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                AllowRefresh = true,
-                IsPersistent = account.RememberMe,
-                ExpiresUtc = account.RememberMe ? DateTimeOffset.UtcNow.AddMinutes(60) : DateTimeOffset.UtcNow.AddMinutes(1)
-            };
-
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null)
-            {
-                await httpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity), authProperties);
-            }
+            await CreateAndSignInClaimsAsync(user, account.RememberMe);
             return true;
         }
         public Task<bool> ValidateHashPassword(string value, string hash)
@@ -129,7 +107,9 @@ namespace BookStore.Application.Services.Impl
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
-                Avatar = user?.Avatar ?? "/img/avatar/default.png"
+                Avatar = user?.Avatar ?? "/img/avatar/default.png",
+                Address = user?.Address,
+                Phone = user?.Phone
             };
         }
         public int SetCartDetailTotalInSession(User user)
@@ -137,6 +117,100 @@ namespace BookStore.Application.Services.Impl
             int totalQuantity = _unitOfWork.Carts.GetSumByUserId(user.Id);
             _sessionService.UpdateCartSum(totalQuantity);
             return totalQuantity;
+        }
+
+        private async Task CreateAndSignInClaimsAsync(User user, bool rememberMe)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(user)),
+                new Claim(ClaimTypes.Role, IsAuthorizedRole(user.RoleId) ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString()),
+                new Claim("RememberMe", rememberMe.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = rememberMe,
+                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddMinutes(60) : DateTimeOffset.UtcNow.AddMinutes(1)
+            };
+
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null)
+            {
+                await httpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity), authProperties);
+            }
+        }
+
+        private bool IsRememberMeEnabled()
+        {
+            var userClaims = _httpContextAccessor.HttpContext.User?.Claims;
+            var rememberMeClaim = userClaims?.FirstOrDefault(c => c.Type == "RememberMe");
+
+            return rememberMeClaim != null && rememberMeClaim.Value.Equals("true", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private async Task UpdateClaimsAndSignInAsync(User user)
+        {
+            bool rememberMe = IsRememberMeEnabled();
+            await CreateAndSignInClaimsAsync(user, rememberMe);
+        }
+
+        public async Task<bool> UpdateUserAsync(UserDto userDto)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userDto.Id);
+            if (user == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(userDto, user);
+            _unitOfWork.Users.Update(user);
+
+            //save
+            if (await _unitOfWork.CompleteAsync() <= 0)
+            {
+                return false;
+            }
+
+            await UpdateClaimsAndSignInAsync(user);
+
+            return true;
+        }
+
+        public async Task<bool> ChangePasswordAsync(ChangePasswordDto changePasswordDto)
+        {
+            if (changePasswordDto == null)
+            {
+                throw new ArgumentNullException(nameof(changePasswordDto), "ChangePasswordDto cannot be null.");
+            }
+
+            long userId = GetCurrentUser().Id;
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            bool isOldPasswordValid = await ValidateHashPassword(changePasswordDto.OldPassword, user.Password);
+            if (!isOldPasswordValid)
+            {
+                return false;
+            }
+
+            user.Password = await HashPassword(changePasswordDto.NewPassword);
+
+            _unitOfWork.Users.Update(user);
+
+            bool isUpdateSuccessful = await _unitOfWork.CompleteAsync() > 0;
+
+            return isUpdateSuccessful;
         }
     }
 }

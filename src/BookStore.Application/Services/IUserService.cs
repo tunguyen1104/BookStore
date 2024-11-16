@@ -15,5 +15,7 @@ namespace BookStore.Application.Services
         bool IsAuthorizedRole(long roleType);
         User GetCurrentUser();
         int SetCartDetailTotalInSession(User user);
+        Task<bool> UpdateUserAsync(UserDto userDto);
+        Task<bool> ChangePasswordAsync(ChangePasswordDto changePasswordDto);
     }
 }

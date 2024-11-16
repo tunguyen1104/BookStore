@@ -34,6 +34,8 @@ namespace BookStore.Application.Mappers
 
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
+
+            CreateMap<UserDto, User>();
         }
     }
 }
