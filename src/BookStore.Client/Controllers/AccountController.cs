@@ -7,9 +7,11 @@ namespace BookStore.Client.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
-        public AccountController(IUserService userService)
+        private readonly IFileService _fileService;
+        public AccountController(IUserService userService, IFileService fileService)
         {
             _userService = userService;
+            _fileService = fileService;
         }
 
         [Route("my-profile")]
@@ -30,5 +32,23 @@ namespace BookStore.Client.Controllers
             return View(userDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return Json(new { success = false, message = "No file selected" });
+            }
+
+            try
+            {
+                var imageUrl = await _fileService.UploadImageAsync(file);
+                return Json(new { success = true, imageUrl });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
     }
 }

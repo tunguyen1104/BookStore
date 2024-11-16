@@ -64,3 +64,45 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('uploadBox').addEventListener('click', function () {
+            document.getElementById('imageUpload').click();
+        });
+
+        document.getElementById('imageUpload').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                // AJAX call with fetch for file upload
+                fetch('/Account/UploadImage', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Display success notification
+                            toastr.success("Image uploaded successfully!");
+                            // Show uploaded image in the placeholder and hide the upload box
+                            const imgElement = document.getElementById('selectedImage');
+                            imgElement.src = data.imageUrl;
+
+                            // Store image URL for form submission
+                            document.getElementById('imageUrl').value = data.imageUrl;
+                        } else {
+                            toastr.error("Image upload failed: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        toastr.error("An error occurred during upload.");
+                        console.error('Upload error:', error);
+                    });
+            }
+        });
+    </script>
+}
