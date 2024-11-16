@@ -129,7 +129,9 @@ namespace BookStore.Application.Services.Impl
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
-                Avatar = user?.Avatar ?? "/img/avatar/default.png"
+                Avatar = user?.Avatar ?? "/img/avatar/default.png",
+                Address = user?.Address,
+                Phone = user?.Phone
             };
         }
         public int SetCartDetailTotalInSession(User user)
