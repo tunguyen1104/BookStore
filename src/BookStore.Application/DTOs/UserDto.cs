@@ -13,11 +13,9 @@ namespace BookStore.Application.DTOs
         [Required(ErrorMessage = "Full Name is required")]
         public string? FullName { get; set; }
 
-        [Required(ErrorMessage = "Phone is required")]
         [Phone(ErrorMessage = "Invalid phone number format")]
         public string? Phone { get; set; }
 
-        [Required(ErrorMessage = "Address is required")]
         public string? Address { get; set; }
     }
 }
