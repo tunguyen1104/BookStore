@@ -26,6 +26,7 @@
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
                     <form asp-action="EditUser" asp-controller="Account" method="post">
+                        @Html.AntiForgeryToken()
                         <input asp-for="Id" type="hidden">
                         <input asp-for="Avatar" type="hidden" id="imageUrl" />
                         <div class="mb-3">

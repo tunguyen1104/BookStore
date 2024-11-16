@@ -52,6 +52,7 @@ namespace BookStore.Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(UserDto userDto)
         {
             if (ModelState.IsValid)
@@ -71,6 +72,7 @@ namespace BookStore.Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             TempData["StatusUpdated"] = false;
