@@ -49,11 +49,9 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                @Html.CheckBoxFor(m => m.RememberMe, new { @id = "rememberMe", @class = "custom-control-input" })
-                                                <label class="custom-control-label" for="customCheck">
-                                                    Remember
-                                                    Me
+                                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "custom-control-input" })
+                                                <label class="custom-control-label" for="RememberMe">
+                                                    Remember Me
                                                 </label>
                                             </div>
                                         </div>
