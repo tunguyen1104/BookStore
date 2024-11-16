@@ -140,5 +140,60 @@ namespace BookStore.Application.Services.Impl
             _sessionService.UpdateCartSum(totalQuantity);
             return totalQuantity;
         }
+
+        private async Task CreateAndSignInClaimsAsync(User user, bool rememberMe)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(user)),
+                new Claim(ClaimTypes.Role, IsAuthorizedRole(user.RoleId) ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString()),
+                new Claim("RememberMe", rememberMe.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = rememberMe,
+                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddMinutes(60) : DateTimeOffset.UtcNow.AddMinutes(1)
+            };
+
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null)
+            {
+                await httpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity), authProperties);
+            }
+        }
+
+        private async Task UpdateClaimsAndSignInAsync(User user)
+        {
+            await CreateAndSignInClaimsAsync(user, true);
+        }
+
+        public async Task<bool> UpdateUserAsync(UserDto userDto)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userDto.Id);
+            if (user == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(userDto, user);
+            _unitOfWork.Users.Update(user);
+
+            //save
+            if (await _unitOfWork.CompleteAsync() <= 0)
+            {
+                return false;
+            }
+
+            await UpdateClaimsAndSignInAsync(user);
+
+            return true;
+        }
     }
 }

@@ -50,5 +50,17 @@ namespace BookStore.Client.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(UserDto userDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.UpdateUserAsync(userDto);
+                TempData["StatusUpdated"] = result;
+            }
+            userDto.Avatar ??= "/img/avatar/default.png";
+            return View("MyProfile", userDto);
+        }
     }
 }
