@@ -182,5 +182,35 @@ namespace BookStore.Application.Services.Impl
 
             return true;
         }
+
+        public async Task<bool> ChangePasswordAsync(ChangePasswordDto changePasswordDto)
+        {
+            if (changePasswordDto == null)
+            {
+                throw new ArgumentNullException(nameof(changePasswordDto), "ChangePasswordDto cannot be null.");
+            }
+
+            long userId = GetCurrentUser().Id;
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            bool isOldPasswordValid = await ValidateHashPassword(changePasswordDto.OldPassword, user.Password);
+            if (!isOldPasswordValid)
+            {
+                return false;
+            }
+
+            user.Password = await HashPassword(changePasswordDto.NewPassword);
+
+            _unitOfWork.Users.Update(user);
+
+            bool isUpdateSuccessful = await _unitOfWork.CompleteAsync() > 0;
+
+            return isUpdateSuccessful;
+        }
     }
 }

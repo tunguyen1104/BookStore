@@ -69,5 +69,22 @@ namespace BookStore.Client.Controllers
             var input = new ChangePasswordDto();
             return View(input);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            TempData["StatusUpdated"] = false;
+            if (ModelState.IsValid)
+            {
+                bool isSuccess = await _userService.ChangePasswordAsync(changePasswordDto);
+
+                if (isSuccess)
+                {
+                    TempData["StatusUpdated"] = true;
+                    return RedirectToAction("ChangePassword");
+                }
+            }
+            return View(changePasswordDto);
+        }
     }
 }
