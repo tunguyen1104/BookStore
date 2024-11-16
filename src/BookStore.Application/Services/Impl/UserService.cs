@@ -65,29 +65,7 @@ namespace BookStore.Application.Services.Impl
                 return false;
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(user)),
-                new Claim(ClaimTypes.Role, IsAuthorizedRole(user.RoleId) ? RoleEnum.ADMIN.ToString() : RoleEnum.USER.ToString())
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                AllowRefresh = true,
-                IsPersistent = account.RememberMe,
-                ExpiresUtc = account.RememberMe ? DateTimeOffset.UtcNow.AddMinutes(60) : DateTimeOffset.UtcNow.AddMinutes(1)
-            };
-
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null)
-            {
-                await httpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity), authProperties);
-            }
+            await CreateAndSignInClaimsAsync(user, account.RememberMe);
             return true;
         }
         public Task<bool> ValidateHashPassword(string value, string hash)
@@ -169,9 +147,18 @@ namespace BookStore.Application.Services.Impl
             }
         }
 
+        private bool IsRememberMeEnabled()
+        {
+            var userClaims = _httpContextAccessor.HttpContext.User?.Claims;
+            var rememberMeClaim = userClaims?.FirstOrDefault(c => c.Type == "RememberMe");
+
+            return rememberMeClaim != null && rememberMeClaim.Value.Equals("true", StringComparison.OrdinalIgnoreCase);
+        }
+
         private async Task UpdateClaimsAndSignInAsync(User user)
         {
-            await CreateAndSignInClaimsAsync(user, true);
+            bool rememberMe = IsRememberMeEnabled();
+            await CreateAndSignInClaimsAsync(user, rememberMe);
         }
 
         public async Task<bool> UpdateUserAsync(UserDto userDto)
