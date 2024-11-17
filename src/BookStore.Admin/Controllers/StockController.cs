@@ -23,10 +23,10 @@ namespace BookStore.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetStockImportsAsync(int draw, string searchValue, int start, int length)
+        public ActionResult GetStockImports(int draw, string searchValue, int start, int length)
         {
             int page = (start / length) + 1;
-            var (stocks, filterCount, totalCount) = await _stockService.FindAsync(searchValue, page, length);
+            var (stocks, filterCount, totalCount) = _stockService.FindAsync(searchValue, page, length);
             return Json(new
             {
                 draw = draw,
@@ -57,6 +57,16 @@ namespace BookStore.Admin.Controllers
             ViewBag.Products = await _bookService.GetAllAsync();
 
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetOrderDetailsAsync(long orderId)
+        {
+            var order = await _stockService.GetImportDetails(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return PartialView("_OrderDetails", order);
         }
     }
 }

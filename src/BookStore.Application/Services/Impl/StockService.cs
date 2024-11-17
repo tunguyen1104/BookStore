@@ -26,10 +26,10 @@ namespace BookStore.Application.Services.Impl
             _unitOfWork.Stocks.Add(stockImport);
             return await _unitOfWork.CompleteAsync() > 0;
         }
-        public async Task<(IEnumerable<StockImportOrderDto> stockImportOrders, int FilteredCount, int TotalCount)> FindAsync(string search, int page, int pageSize)
+        public (IEnumerable<StockImportOrderDto> stockImportOrders, int FilteredCount, int TotalCount) FindAsync(string search, int page, int pageSize)
         {
             if (page < 1) page = 1;
-            IQueryable<StockImport> stockImportQuery = _unitOfWork.Stocks.GetAll().OrderBy(s => s.ImportDate);
+            IQueryable<StockImport> stockImportQuery = _unitOfWork.Stocks.GetStockImportAsync().OrderBy(s => s.ImportDate);
             var totalCount = stockImportQuery.Count();
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -48,12 +48,37 @@ namespace BookStore.Application.Services.Impl
                 Id = stock.Id,
                 ImportDate = stock.ImportDate ?? DateTime.MinValue,
                 SupplierId = stock.SupplierId,
-                SupplierName = _unitOfWork.Suppliers.GetByIdAsync(stock.SupplierId).Result.Name,
+                SupplierName = stock.Supplier.Name,
                 TotalCost = stock.TotalCost,
             })
             .ToList();
 
             return (stockDto, filteredCount, totalCount);
+        }
+
+        public async Task<StockImportOrderDto?> GetImportDetails(long stockImportId)
+        {
+            var order = await _unitOfWork.Stocks.GetStockImportWithDetailsAsync(stockImportId);
+            var bookImports = order.StockImportDetails.Select(sid => new ProductImportDto
+            {
+                Id = sid.BookId,
+                Quantity = sid.Quantity,
+                UnitPrice = sid.Price,
+                Name = sid.Book.Name
+            });
+            if (order != null)
+            {
+                return new StockImportOrderDto
+                {
+                    Id = order.Id,
+                    ImportDate = order.ImportDate ?? DateTime.MinValue,
+                    SupplierId = order.Supplier.Id,
+                    SupplierName = order.Supplier.Name,
+                    Products = bookImports,
+                    TotalCost = order.TotalCost,
+                };
+            }
+            return null;
         }
     }
 }

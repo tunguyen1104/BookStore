@@ -45,7 +45,7 @@ namespace BookStore.Infrastructure.Repositories
 
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>().AsQueryable();
+            return _context.Set<T>();
         }
 
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate)

@@ -5,6 +5,7 @@ namespace BookStore.Application.Services
     public interface IStockService
     {
         Task<bool> CreateImportOrder(StockImportOrderDto request);
-        Task<(IEnumerable<StockImportOrderDto> stockImportOrders, int FilteredCount, int TotalCount)> FindAsync(string search, int page, int pageSize);
+        (IEnumerable<StockImportOrderDto> stockImportOrders, int FilteredCount, int TotalCount) FindAsync(string search, int page, int pageSize);
+        Task<StockImportOrderDto?> GetImportDetails(long stockImportId);
     }
 }

@@ -24,5 +24,5 @@ public partial class User
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual Role Role { get; set; } = null!;
+    public Role Role { get; set; } = null!;
 }

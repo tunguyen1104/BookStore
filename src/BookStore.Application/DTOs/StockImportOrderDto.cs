@@ -12,7 +12,7 @@ namespace BookStore.Application.DTOs
         [Required]
         public DateTime ImportDate { get; set; } = DateTime.Now;
 
-        public IEnumerable<ProductImportRequest> Products { get; set; } = Enumerable.Empty<ProductImportRequest>();
+        public IEnumerable<ProductImportDto> Products { get; set; } = Enumerable.Empty<ProductImportDto>();
 
         public decimal TotalCost { get; set; } = 0;
     }
