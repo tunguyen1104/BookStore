@@ -8,10 +8,12 @@ namespace BookStore.Client.Controllers
     {
         private readonly IUserService _userService;
         private readonly IFileService _fileService;
-        public AccountController(IUserService userService, IFileService fileService)
+        private readonly IOrderService _orderService;
+        public AccountController(IUserService userService, IFileService fileService, IOrderService orderService)
         {
             _userService = userService;
             _fileService = fileService;
+            _orderService = orderService;
         }
 
         [Route("my-profile")]
@@ -87,6 +89,26 @@ namespace BookStore.Client.Controllers
                 }
             }
             return View(changePasswordDto);
+        }
+
+        [HttpGet]
+        public ActionResult MyPurchase()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetMyPurchase(int draw, string searchValue, int start, int length)
+        {
+            int page = (start / length) + 1;
+            var (orderDtos, filterCount, totalCount) =  _orderService.Find(searchValue, page, length);
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalCount,
+                recordsFiltered = filterCount,
+                data = orderDtos
+            });
         }
     }
 }
