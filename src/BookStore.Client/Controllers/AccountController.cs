@@ -110,5 +110,18 @@ namespace BookStore.Client.Controllers
                 data = orderDtos
             });
         }
+
+
+        [HttpGet("Account/GetOrderDetailAsync")]
+        public async Task<IActionResult> GetOrderDetailAsync(long orderId)
+        {
+            var orderDetailDto = await _orderService.GetOrderDetailsByOrderIdAsync(orderId);
+            if (orderDetailDto == null || !orderDetailDto.Any())
+            {
+                return Json(new { success = false, message = "Order details not found" });
+            }
+
+            return Json(new { success = true, data = orderDetailDto });
+        }
     }
 }

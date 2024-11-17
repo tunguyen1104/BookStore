@@ -136,7 +136,7 @@
                         "orderable": false,
                         "render": function (data, type, row) {
                             return `
-                                    <button class="btn btn-primary btn-sm">View Details</button>
+                                    <button class="btn btn-primary btn-sm" onclick="loadOrderDetails(${row.orderId})">View Details</button>
                                 `;
                         },
                     }
@@ -144,6 +144,47 @@
                 "order": [[0, "asc"]]
             });
         });
-        
+        function loadOrderDetails(orderId) {
+            $.ajax({
+                url: '@Url.Action("GetOrderDetailAsync", "Account")?orderId=' + orderId,
+                type: 'GET',
+                success: function (response) {
+                    if (!response.success) {
+                        alert(response.message || "Order details not found.");
+                        return;
+                    }
+
+                    const orderDetails = response.data;
+                    let content = `<table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Book Name</th>
+                                            <th>Image</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                    orderDetails.forEach(detail => {
+                        content += `
+                                <tr>
+                                    <td><img src="${detail.bookImage}" alt="${detail.bookName}" style="width:100px;height:100px;"></td>
+                                    <td>${detail.bookName}</td>
+                                    <td>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.bookPrice)}</td>
+                                    <td>${detail.quantity}</td>
+                                </tr>`;
+                    });
+
+                    content += `</tbody></table>`;
+
+                    $('#orderDetailsContent').html(content);
+                    $('#orderDetailsModal').modal('show');
+                },
+                error: function () {
+                    alert("Failed to load order details. Please try again later.");
+                }
+            });
+        }
     </script>
 }
