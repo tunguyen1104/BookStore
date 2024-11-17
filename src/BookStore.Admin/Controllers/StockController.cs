@@ -43,7 +43,7 @@ namespace BookStore.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateOrderAsync(StockImportOrderDto model)
+        public async Task<IActionResult> CreateOrderImport(StockImportOrderDto model)
         {
             if (ModelState.IsValid)
             {
@@ -59,14 +59,14 @@ namespace BookStore.Admin.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> GetOrderDetailsAsync(long orderId)
+        public async Task<IActionResult> GetOrderDetails(long orderId)
         {
             var order = await _stockService.GetImportDetails(orderId);
             if (order == null)
             {
                 return NotFound();
             }
-            return PartialView("_OrderDetails", order);
+            return PartialView("_StockDetails", order);
         }
     }
 }

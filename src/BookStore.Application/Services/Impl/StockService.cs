@@ -59,15 +59,16 @@ namespace BookStore.Application.Services.Impl
         public async Task<StockImportOrderDto?> GetImportDetails(long stockImportId)
         {
             var order = await _unitOfWork.Stocks.GetStockImportWithDetailsAsync(stockImportId);
-            var bookImports = order.StockImportDetails.Select(sid => new ProductImportDto
-            {
-                Id = sid.BookId,
-                Quantity = sid.Quantity,
-                UnitPrice = sid.Price,
-                Name = sid.Book.Name
-            });
             if (order != null)
             {
+                var bookImports = order.StockImportDetails.Select(sid => new ProductImportDto
+                {
+                    Id = sid.BookId,
+                    Quantity = sid.Quantity,
+                    UnitPrice = sid.Price,
+                    Name = sid.Book.Name,
+                }
+                );
                 return new StockImportOrderDto
                 {
                     Id = order.Id,

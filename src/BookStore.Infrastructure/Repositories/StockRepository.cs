@@ -20,6 +20,7 @@ namespace BookStore.Infrastructure.Repositories
         {
             return await _context.StockImports
                 .Include(si => si.StockImportDetails)
+                    .ThenInclude(sid => sid.Book)
                 .Include(si => si.Supplier)
                 .FirstOrDefaultAsync(si => si.Id == stockImportId);
         }

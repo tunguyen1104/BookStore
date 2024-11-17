@@ -99,7 +99,7 @@
 
                 // Load order details via AJAX
                 $.ajax({
-                    url: '@Url.Action("GetOrderDetailsAsync", "Stock")',
+                    url: '@Url.Action("GetOrderDetails", "Stock")',
                     type: 'GET',
                     data: { orderId: orderId },
                     success: function (data) {

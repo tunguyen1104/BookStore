@@ -1,0 +1,31 @@
+﻿@model StockImportOrderDto
+
+<div class="container-fluid">
+    <h5>Nhà cung cấp: @Model.SupplierName</h5> <!-- Replace with actual supplier name -->
+    <p>Ngày nhập hàng: @Model.ImportDate.ToString("dd-MM-yyyy")</p>
+    <h6>Hàng nhập:</h6>
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Mã Sách</th>
+                <th>Tên Sách</th>
+                <th>Số Lượng</th>
+                <th>Đơn giá</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.UnitPrice.ToString("N0") VNĐ</td>
+                    <td>@product.TotalPriceFormatted</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h5 class="text-danger">Thành tiền: @Model.TotalCost.ToString("N0") VNĐ</h5>
+</div>

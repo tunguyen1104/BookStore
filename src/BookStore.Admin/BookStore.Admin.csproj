@@ -7,32 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Stock\_OrderDetails.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.35">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BookStore.Application\BookStore.Application.csproj" />
     <ProjectReference Include="..\BookStore.Infrastructure\BookStore.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Stock\_OrderDetails.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Stock\_OrderDetails.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Stock\_OrderDetails.cshtml" />
   </ItemGroup>
 
 </Project>
