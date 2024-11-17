@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.Application.DTOs;
+using BookStore.Application.DTOs.Order;
 using BookStore.Domain.Entities;
 
 namespace BookStore.Application.Mappers
@@ -36,6 +37,16 @@ namespace BookStore.Application.Mappers
             CreateMap<CategoryDto, Category>();
 
             CreateMap<UserDto, User>();
+
+            CreateMap<Order, OrderDto>()
+            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => src.OrderDate ?? DateTime.MinValue));
+
+            CreateMap<OrderDetail, OrderDetailDto>()
+            .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Name))
+            .ForMember(dest => dest.BookImage, opt => opt.MapFrom(src => src.Book.Image))
+            .ForMember(dest => dest.BookPrice, opt => opt.MapFrom(src => src.Book.Price))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
         }
     }
 }
