@@ -1,0 +1,75 @@
+﻿@model BookStore.Application.DTOs.CheckoutDto
+
+<div class="thank-you-container">
+    <h1 class="thank-you-header">Thank you for your order!</h1>
+    <p class="thank-you-details">
+        Your order will be delivered to: <br>
+        <strong>@Model.ReceivedName</strong> - <strong>@Model.ReceivedPhone</strong> <br>
+        <strong>@Model.ReceivedAddress</strong>
+    </p>
+    <p class="thank-you-details">
+        Notes: <br>
+        <strong>@Model.OrderNotes</strong>
+    </p>
+    <div class="thank-you-actions">
+        <a href="/" class="btn">Back to Home</a>
+        <a href="/home/products" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+</div>
+@section Styles {
+    <style>
+        .thank-you-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .thank-you-header {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .thank-you-details {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .thank-you-details strong {
+            color: #000;
+        }
+
+        .thank-you-actions {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #007BFF;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+}
