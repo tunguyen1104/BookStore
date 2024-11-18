@@ -234,3 +234,15 @@ button:hover {
     font-weight: bold;
     color: #333;
 }
+
+@media (min-width: 992px) {
+    .col-lg-9 {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero__categories {
+        display: none;
+    }
+}
