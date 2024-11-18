@@ -25,6 +25,11 @@ namespace BookStore.Client.Controllers
             var topDiscountedBooks = await _bookService.GetTopDiscountedBooksAsync();
             return View(topDiscountedBooks);
         }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
