@@ -60,8 +60,12 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Chức năng:</h6>
-                <a class="collapse-item" asp-controller="Stock" asp-action="ListOrder">Xem đơn nhập</a>
-                <a class="collapse-item" asp-controller="Stock" asp-action="CreateOrderImport">Nhập sách</a>
+                <a class="collapse-item" asp-controller="Stock" asp-action="ListOrder">
+                    <i class="fa fa-list"></i> Xem đơn nhập
+                </a>
+                <a class="collapse-item" asp-controller="Stock" asp-action="CreateOrderImport">
+                    <i class="fa fa-file-invoice"></i> Nhập sách
+                </a>
             </div>
         </div>
     </div>
@@ -72,54 +76,15 @@
             <span>Quản lý tài khoản</span>
         </a>
     </div>
+    <div class="nav-item @Html.IsActive("Order")">
+        <a class="nav-link" asp-controller="Order" asp-action="OrderManagement">
+            <i class="fa fa-fw fa-truck-moving"></i>
+            <span>Quản lý Đơn hàng</span>
+        </a>
+    </div>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Addons
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <div class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-           aria-expanded="true" aria-controls="collapsePages">
-            <i class="fa fa-fw fa-folder"></i>
-            <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nav Item - Charts -->
-    <div class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fa fa-fw fa-chart-area"></i>
-            <span>Charts</span>
-        </a>
-    </div>
-
-    <!-- Nav Item - Tables -->
-    <div class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fa fa-fw fa-table"></i>
-            <span>Tables</span>
-        </a>
-    </div>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
