@@ -3,6 +3,7 @@ using BookStore.Application.Services;
 using BookStore.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BookStore.Client.Controllers
 {
@@ -62,7 +63,13 @@ namespace BookStore.Client.Controllers
                 return View("Checkout", checkoutDto);
             }
             await _bookService.HandleAddOrderAndOrderDetail(checkoutDto.ReceivedName, checkoutDto.ReceivedPhone, checkoutDto.ReceivedAddress, checkoutDto.OrderNotes);
-            return RedirectToAction("ThankYou");
+            return RedirectToAction("ThankYou", checkoutDto);
+        }
+
+        [HttpGet]
+        public IActionResult ThankYou(CheckoutDto checkoutDto)
+        {
+            return View(checkoutDto);
         }
     }
 }
