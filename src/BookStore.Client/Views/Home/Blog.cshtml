@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Book Blog";
+}
+<section class="blog spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-5">
+                <div class="blog__sidebar">
+                    <div class="blog__sidebar__search">
+                        <form action="#">
+                            <input type="text" placeholder="Search books...">
+                            <button type="submit"><span class="icon_search"></span></button>
+                        </form>
+                    </div>
+                    <div class="blog__sidebar__item">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="#">All Books</a></li>
+                            <li><a href="#">Fiction (20)</a></li>
+                            <li><a href="#">Non-Fiction (15)</a></li>
+                            <li><a href="#">Science (10)</a></li>
+                            <li><a href="#">Children's Books (8)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="blog__item">
+                            <div class="blog__item__pic">
+                                <img src="~/img/blog/blog1.jpg" alt="">
+                            </div>
+                            <div class="blog__item__text">
+                                <ul>
+                                    <li><i class="fa fa-calendar-o"></i> Nov 5, 2024</li>
+                                    <li><i class="fa fa-comment-o"></i> 12 Comments</li>
+                                </ul>
+                                <h5><a href="#">The Journey of Writing a Bestseller</a></h5>
+                                <p>
+                                    Discover the challenges and triumphs authors face when crafting their stories.
+                                </p>
+                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="blog__item">
+                            <div class="blog__item__pic">
+                                <img src="~/img/blog/blog2.jpg" alt="">
+                            </div>
+                            <div class="blog__item__text">
+                                <ul>
+                                    <li><i class="fa fa-calendar-o"></i> Nov 4, 2024</li>
+                                    <li><i class="fa fa-comment-o"></i> 8 Comments</li>
+                                </ul>
+                                <h5><a href="#">The Science Behind Engaging Stories</a></h5>
+                                <p>
+                                    Explore how storytelling techniques captivate readers from all walks of life.
+                                </p>
+                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="product__pagination blog__pagination">
+                            <a href="#">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
