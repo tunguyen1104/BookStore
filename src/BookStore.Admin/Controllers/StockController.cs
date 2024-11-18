@@ -43,7 +43,7 @@ namespace BookStore.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateOrderImport(StockImportOrderDto model)
+        public async Task<IActionResult> CreateOrderImport([FromBody] StockImportOrderDto model)
         {
             if (ModelState.IsValid)
             {

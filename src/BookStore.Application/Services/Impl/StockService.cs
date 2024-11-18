@@ -21,6 +21,7 @@ namespace BookStore.Application.Services.Impl
                 BookId = b.Id,
                 Price = b.UnitPrice,
                 Quantity = b.Quantity,
+                StockImport = stockImport,
             }).ToList();
             stockImport.StockImportDetails = details;
             _unitOfWork.Stocks.Add(stockImport);

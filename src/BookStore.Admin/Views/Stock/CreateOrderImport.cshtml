@@ -55,35 +55,36 @@
 @section Scripts {
     <script>
         let productIndex = 0;
+        const listOrderUrl = '@Url.Action("ListOrder", "Stock")';
 
         // Function to add a new product row
         function addProductRow() {
             const productRow = `
-                                <div class="product-row mb-3" data-index="${productIndex}">
-                                    <div class="form-row">
-                                        <div class="col-md-5">
-                                            <label>Sách:</label>
-                                            <select name="Products[${productIndex}].Id" class="form-control" required>
-                                                <option value="">Chọn Sách</option>
-        @foreach (var product in @ViewBag.Books)
+                        <div class="product-row mb-3" data-index="${productIndex}">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Sách:</label>
+                                    <select name="Products[${productIndex}].Id" class="form-control product-id" required>
+                                        <option value="">Chọn Sách</option>
+        @foreach (var product in ViewBag.Books)
         {
-                                                            <option value="@product.Id">@product.Name</option>
+                                                <option value="@product.Id">@product.Name</option>
         }
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Số Lượng</label>
-                                            <input type="number" name="Products[${productIndex}].Quantity" class="form-control product-quantity" min="1" required />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Giá nhập</label>
-                                            <input type="number" name="Products[${productIndex}].UnitPrice" class="form-control product-unit-price" min="0.01" step="0.01" required />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <button type="button" class="btn btn-danger mt-4 remove-product">X</button>
-                                        </div>
-                                    </div>
-                                </div>`;
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Số Lượng</label>
+                                    <input type="number" name="Products[${productIndex}].Quantity" class="form-control product-quantity" min="1" required />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Giá nhập</label>
+                                    <input type="number" name="Products[${productIndex}].UnitPrice" class="form-control product-unit-price" min="0.01" step="0.01" required />
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger mt-4 remove-product">X</button>
+                                </div>
+                            </div>
+                        </div>`;
             $('#productsContainer').append(productRow);
             productIndex++;
             calculateTotalCost();
@@ -113,6 +114,61 @@
         $(document).on('click', '.remove-product', function () {
             $(this).closest('.product-row').remove();
             calculateTotalCost();
+        });
+
+        // Submit form via AJAX
+        $('#stockImportForm').submit(function (e) {
+            e.preventDefault();
+
+            const formData = {
+                SupplierId: parseInt($('#SupplierId').val()),
+                ImportDate: $('#ImportDate').val(),
+                Products: [],
+                TotalCost: 0
+            };
+
+            $('.product-row').each(function () {
+                const productId = parseInt($(this).find('.product-id').val());
+                const quantity = parseFloat($(this).find('.product-quantity').val());
+                const unitPrice = parseFloat($(this).find('.product-unit-price').val());
+
+                if (productId && quantity && unitPrice) {
+                    formData.Products.push({
+                        Id: productId,
+                        Quantity: quantity,
+                        UnitPrice: unitPrice
+                    });
+                }
+            });
+
+            formData.TotalCost = formData.Products.reduce((sum, product) => sum + (product.Quantity * product.UnitPrice), 0);
+
+            $.ajax({
+                url: '@Url.Action("CreateOrderImport", "Stock")', // Replace with your actual action URL
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    toastr.success(`Tạo đơn nhập hàng thành công, Bấm <a href="${listOrderUrl}" style="color: #fff; text-decoration: underline;">vào đây để xem chi tiết</a>`);
+                    // Reset the form
+                    $('#stockImportForm')[0].reset();
+
+                    // Clear dynamically added product rows
+                    $('#productsContainer').empty();
+
+                    // Reset total cost
+                    $('#totalCost').val('');
+
+                    // Clear validation errors
+                    $('.text-danger').text('');
+
+                    // Optionally reinitialize fields
+                    $('#SupplierId').val('');
+                },
+                error: function (xhr) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
         });
     </script>
 }
