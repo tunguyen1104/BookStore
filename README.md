@@ -1,3 +1,17 @@
+- [BookStore Solution](#bookstore-solution)
+  - [Project Structure](#project-structure)
+  - [How It Works](#how-it-works)
+    - [Layer Interaction](#layer-interaction)
+    - [Example Flow](#example-flow)
+  - [Benefits of Clean Architecture](#benefits-of-clean-architecture)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Steps](#steps)
+  - [ScreenShots](#screenshots)
+    - [Diagram project](#diagram-project)
+    - [Client](#client)
+    - [Admin](#admin)
+
 # BookStore Solution
 
 This solution follows **Clean Architecture** principles with an **N-Layered Architecture** structure. The project is divided into five layers: `Domain`, `Application`, `Infrastructure`, `Web (Client)`, and `Admin`, each with specific responsibilities to ensure maintainability, scalability, and clear separation of concerns.
@@ -96,3 +110,40 @@ This solution follows **Clean Architecture** principles with an **N-Layered Arch
     ```bash
     dotnet run --project BookStore.Client
     dotnet run --project BookStore.Admin
+
+## ScreenShots
+### Diagram project
+
+![diagram](./src/Assets/readme/diagram.png)
+
+### Client
+
+**Account**
+  ![](./src/Assets/readme/sign-in.png)
+  ![](./src/Assets/readme/my-profile.png)
+  ![](./src/Assets/readme/order-history.png)
+  ![](./src/Assets/readme/blog.png)
+
+**Home**
+  ![](./src/Assets/readme/home1.png)
+  ![](./src/Assets/readme/home2.png)
+  ![](./src/Assets/readme/product-detail.png)
+
+**Search**
+  ![](./src/Assets/readme/search.png)
+  ![](./src/Assets/readme/filter.png)
+
+**Cart**
+  ![](./src/Assets/readme/shopping-cart.png)
+  ![](./src/Assets/readme/checkout.png)
+
+### Admin
+
+  ![](./src/Assets/readme/account-manage.png)
+  ![](./src/Assets/readme/add-product.png)
+  ![](./src/Assets/readme/edit-product.png)
+  ![](./src/Assets/readme/order-manage.png)
+  ![](./src/Assets/readme/view-detail-order.png)
+  ![](./src/Assets/readme/orderDetail-manage.png)
+  ![](./src/Assets/readme/create-order-import-product.png)
+  ![](./src/Assets/readme/import-product.png)
